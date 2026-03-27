@@ -71,10 +71,10 @@ export default function ContactoPage() {
             {state.succeeded ? (
               <div className="bg-green-500/10 border border-green-500/30 rounded p-6 text-center">
                 <div className="text-green-400 text-lg font-semibold mb-2">
-                  ¡Mensaje enviado!
+                  Message sent!
                 </div>
                 <p className="text-gray-300 text-sm">
-                  Gracias por contactarme. Te responderé pronto.
+                  Thank you for contacting me. I will respond soon.
                 </p>
               </div>
             ) : (
@@ -84,7 +84,7 @@ export default function ContactoPage() {
                     htmlFor="name"
                     className="block text-xs uppercase tracking-wider text-gray-500 mb-2"
                   >
-                    Nombre
+                    Name
                   </label>
                   <input
                     type="text"
@@ -120,7 +120,7 @@ export default function ContactoPage() {
                     htmlFor="message"
                     className="block text-xs uppercase tracking-wider text-gray-500 mb-2"
                   >
-                    Mensaje
+                    Message
                   </label>
                   <textarea
                     id="message"
