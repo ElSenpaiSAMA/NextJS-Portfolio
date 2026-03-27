@@ -75,7 +75,7 @@ export default function LoadingScreen() {
         <div className="mb-8 text-center">
           <div className="inline-block px-6 py-3 border-2 border-purple-500/50 rounded-lg mb-4">
             <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 font-mono">
-              SISTEMA DE ACCESO
+              ACCESS SYSTEM
             </h1>
           </div>
         </div>
