@@ -1,6 +1,6 @@
 "use client";
 
-// Componente de pantalla de carga con efecto de terminal animado
+// Componente de pantalla de carga 
 
 import { useState, useEffect, useMemo } from "react";
 
