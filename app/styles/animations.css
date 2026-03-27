@@ -1,0 +1,63 @@
+/* Animaciones personalizadas para el portfolio */
+
+@keyframes gradient {
+  /* Animación gradiente en títulos de páginas */
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes float {
+  /* Animación de flote de robot en Hero */
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes fadeOut {
+  /* Animación de transiciones en ProjectCarousel */
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes wave {
+  /* Animación de onda similar al gradiente - usada en ProjectCarousel */
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  /* Clase para aplicar animación de gradiente */
+  animation: gradient 3s ease infinite;
+  background-size: 200% 200%;
+}
+
+.animate-float {
+  /* Clase para aplicar animación de flote */
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-fadeOut {
+  /* Clase para aplicar animación de desvanecimiento */
+  animation: fadeOut 700ms ease-in-out forwards;
+}
+
+.animate-wave {
+  /* Clase para aplicar animación de onda */
+  animation: wave 3s ease-in-out infinite;
+  background-size: 200% 100%;
+}
