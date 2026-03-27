@@ -1,7 +1,6 @@
 "use client";
 
-// Componente personalizado de carrusel de proyectos
-// Implementación manual del slider con navegación automática
+// carrusel de proyectos
 
 import { useState, useEffect } from "react";
 import Link from "next/link";

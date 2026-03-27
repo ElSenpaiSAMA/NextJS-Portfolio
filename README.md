@@ -2,14 +2,14 @@
 
 Personal portfolio developed with Next.js 16, React 19 and TypeScript.
 
-## Technologies Used
+Technologies Used:
 
 -  Next.js, React, TypeScript, Tailwind CSS
 
-## API
+API:
 - Formspree
 
-## Architecture
+Architecture:
 
 The project uses Next.js App Router with the following structure:
 
@@ -19,25 +19,25 @@ The project uses Next.js App Router with the following structure:
 - `app/styles/`: Separate style sheets
 - `public/`: Static files
 
-## Installation
+ Installation:
 
 1. Clone the repository
 2. Install dependencies: `npm install`
 3. Run the development server: `npm run dev`
 
-## Deployment
+Deployment:
 
 The project is optimized for Vercel. To deploy:
 
 1. Connect your repository to Vercel
 2. Deploy automatically
 
-## Development
+Development:
 
 - `npm run dev`: Start development server
 - `npm run build`: Build for production
 - `npm run lint`: Run ESLint
 
-## Contribution
+Contribution:
 
 Code developed with attention to design and functionality details.

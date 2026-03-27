@@ -71,10 +71,10 @@ export default function ContactoPage() {
             {state.succeeded ? (
               <div className="bg-green-500/10 border border-green-500/30 rounded p-6 text-center">
                 <div className="text-green-400 text-lg font-semibold mb-2">
-                  ¡Mensaje enviado!
+                  Message sent!
                 </div>
                 <p className="text-gray-300 text-sm">
-                  Gracias por contactarme. Te responderé pronto.
+                  Thank you for contacting me. I will respond soon.
                 </p>
               </div>
             ) : (
@@ -84,7 +84,7 @@ export default function ContactoPage() {
                     htmlFor="name"
                     className="block text-xs uppercase tracking-wider text-gray-500 mb-2"
                   >
-                    Nombre
+                    Name
                   </label>
                   <input
                     type="text"
@@ -93,7 +93,8 @@ export default function ContactoPage() {
                     required
                     disabled={state.submitting}
                     className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded text-white text-sm sm:text-base focus:border-purple-500/50 focus:outline-none transition-colors disabled:opacity-50"
-                    placeholder="Tu nombre"
+                    placeholder="Your name
+                    "
                   />
                   <ValidationError prefix="Name" field="name" errors={state.errors} className="text-red-400 text-xs mt-1" />
                 </div>
@@ -111,7 +112,7 @@ export default function ContactoPage() {
                     required
                     disabled={state.submitting}
                     className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded text-white text-sm sm:text-base focus:border-purple-500/50 focus:outline-none transition-colors disabled:opacity-50"
-                    placeholder="tu@email.com"
+                    placeholder="your@email.com"
                   />
                   <ValidationError prefix="Email" field="email" errors={state.errors} className="text-red-400 text-xs mt-1" />
                 </div>
@@ -120,7 +121,7 @@ export default function ContactoPage() {
                     htmlFor="message"
                     className="block text-xs uppercase tracking-wider text-gray-500 mb-2"
                   >
-                    Mensaje
+                    Message
                   </label>
                   <textarea
                     id="message"
@@ -129,7 +130,7 @@ export default function ContactoPage() {
                     rows={5}
                     disabled={state.submitting}
                     className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded text-white text-sm sm:text-base focus:border-purple-500/50 focus:outline-none resize-none transition-colors disabled:opacity-50"
-                    placeholder="Escribe tu mensaje..."
+                    placeholder="Write your message..."
                   />
                   <ValidationError prefix="Message" field="message" errors={state.errors} className="text-red-400 text-xs mt-1" />
                 </div>
@@ -138,7 +139,7 @@ export default function ContactoPage() {
                   disabled={state.submitting}
                   className="w-full px-4 sm:px-6 py-2.5 sm:py-3 bg-white/5 border border-white/10 text-white rounded hover:border-purple-500/50 hover:bg-white/10 transition-all font-medium text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {state.submitting ? "Enviando..." : "Enviar mensaje"}
+                  {state.submitting ? "Sending..." : "Send message"}
                 </button>
               </form>
             )}

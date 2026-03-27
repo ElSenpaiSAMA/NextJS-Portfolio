@@ -55,7 +55,7 @@ export default function ProyectosPage() {
                   href={project.link}
                   className="inline-flex items-center gap-1 text-purple-400 hover:text-purple-300 text-xs sm:text-sm font-medium transition-colors mt-auto"
                 >
-                  Ver proyecto
+                  View Project
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </a>
               </div>
