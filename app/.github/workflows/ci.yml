@@ -1,0 +1,36 @@
+name: CI - Portfolio Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    name: Lint & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Descarga el código del repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Configura Node.js (versión LTS estable)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      # 3. Instala dependencias (usa cache automáticamente)
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Ejecuta ESLint — detecta errores de código y estilo
+      - name: Run ESLint
+        run: npx eslint .
+
+      # 5. Compila el proyecto — valida TypeScript y que no haya errores de build
+      - name: Build project
+        run: npm run build
