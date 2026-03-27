@@ -1,5 +1,8 @@
 # Matias Speroni Portfolio
 
+![CI](https://github.com/ElSenpaiSAMA/NextJS-Portfolio/actions/workflows/ci.yml/badge.svg)
+
+
 Personal portfolio developed with Next.js 16, React 19 and TypeScript.
 
 Technologies Used:
