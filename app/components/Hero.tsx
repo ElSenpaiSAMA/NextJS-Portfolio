@@ -1,6 +1,6 @@
 "use client";
 
-// Componente principal de la página de inicio con elementos interactivos
+// Componente Hero de la página de inicio
 
 import Image from "next/image";
 import Link from "next/link";
