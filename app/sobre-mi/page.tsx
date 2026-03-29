@@ -34,6 +34,10 @@ export default function SobreMiPage() {
     { src: "/tecnologias/git-svgrepo-com.svg", name: "Git", category: "Version Control" },
     { src: "/tecnologias/firebase.svg", name: "Firebase", category: "Database" },
     { src: "/tecnologias/jupyter.svg", name: "Jupyter", category: "Data" },
+    { src: "/tecnologias/Pandas.svg", name: "Pandas", category: "Data" },
+    { src: "/tecnologias/Numpy.svg", name: "Numpy", category: "Data" },
+
+
 
 
   ];
