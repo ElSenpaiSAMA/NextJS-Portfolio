@@ -36,10 +36,7 @@ export default function SobreMiPage() {
     { src: "/tecnologias/jupyter.svg", name: "Jupyter", category: "Data" },
     { src: "/tecnologias/Pandas.svg", name: "Pandas", category: "Data" },
     { src: "/tecnologias/Numpy.svg", name: "Numpy", category: "Data" },
-
-
-
-
+    { src: "/tecnologias/GitHub Actions.svg", name: "GitHub Actions", category: "Automation" },
   ];
 
   const skills = activeTab === "fullstack" ? fullstackSkills : dataSkills;
