@@ -1,9 +1,8 @@
 "use client";
 
-// Componente de página About Me
-
 import Image from "next/image";
 import { useState } from "react";
+import GitHubChart from "../components/GitHubChart";
 
 export default function SobreMiPage() {
   const [activeTab, setActiveTab] = useState("data");
@@ -53,7 +52,7 @@ export default function SobreMiPage() {
           </h2>
           <div className="h-1 w-16 sm:w-24 bg-gradient-to-r from-purple-500 to-pink-500 mt-2" />
         </div>
-        
+
         <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start md:items-start mb-12 md:mb-16">
           <div className="relative group w-full sm:w-[220px] max-w-[220px] mx-auto md:mx-0 flex-shrink-0">
             <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 rounded-lg opacity-75 blur group-hover:opacity-100 transition duration-500"></div>
@@ -76,13 +75,15 @@ export default function SobreMiPage() {
                 Junior developer specialized in <span className="text-purple-400">.NET</span> and <span className="text-pink-400">React</span>.
               </p>
               <p className="text-sm sm:text-base text-gray-400 leading-relaxed">
-                Hi, I&apos;m Matias, a junior developer specialized in .NET and React. 
-                I currently work at Novicell ES as a junior backend developer. 
+                Hi, I&apos;m Matias, a junior developer specialized in .NET and React.
+                I currently work at Novicell ES as a junior backend developer.
                 I&apos;m currently training in <span className="text-purple-400">Data Engineering</span>.
               </p>
-              <p className="text-sm sm:text-base text-gray-400 leading-relaxed">I really like technology so I like to stay up to date and informed.
+              <p className="text-sm sm:text-base text-gray-400 leading-relaxed">
+                I really like technology so I like to stay up to date and informed.
                 Outside of computing, I really like going to the cinema and listening to music, they are two things I adore.
-                I am passionate about traveling and discovering new places, I really like discovering the culture and especially the food of each country haha</p> 
+                I am passionate about traveling and discovering new places, I really like discovering the culture and especially the food of each country haha
+              </p>
             </div>
 
             <div className="flex flex-wrap gap-4 sm:gap-6 text-xs sm:text-sm text-gray-400">
@@ -139,6 +140,8 @@ export default function SobreMiPage() {
             ))}
           </div>
         </div>
+
+        <GitHubChart />
 
       </div>
     </section>
