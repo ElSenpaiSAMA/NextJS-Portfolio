@@ -13,6 +13,16 @@ export const projects: Project[] = [
 
   {
     id: 1,
+    title: "Spotify Track",
+    description:
+      "Personal data pipeline that tracks my Spotify listening habits weekly. Pulls data from the Spotify API, cleans it with Pandas, stores it in a SQLite database, and auto-updates the chart every Monday via GitHub Actions.",
+    tech: ["Python", "Pandas", "NumPy","Github Actions", "Spotify API", "Plotly", "SQlite "],
+    link: "https://github.com/ElSenpaiSAMA/Spotify-Track",
+    image: "/top10.png",
+  },
+
+  {
+    id: 2,
     title: "Mundo del Libro",
     description:
       "Online bookstore.",
@@ -22,7 +32,7 @@ export const projects: Project[] = [
   },
 
   {
-    id: 2,
+    id: 3,
     title: "Portfolio",
     description:
       "Personal website.",
@@ -32,7 +42,7 @@ export const projects: Project[] = [
   },
 
   {
-    id: 3,
+    id: 4,
     title: "Sala de reservas",
     description:
       "Page for booking and creating rooms with admin and user roles.",
@@ -42,7 +52,7 @@ export const projects: Project[] = [
   },
 
   {
-    id: 4,
+    id: 5,
     title: "The Legend of Marina",
     description:
       "The Legend of Marina game, a 2D platformer based on Zelda.",
@@ -52,7 +62,7 @@ export const projects: Project[] = [
   },
 
   {
-    id: 5,
+    id: 6,
     title: "Study Bot",
     description:
       "Academic assistant with AI for studying.",
