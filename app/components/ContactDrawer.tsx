@@ -241,15 +241,19 @@ export default function ContactDrawer() {
                     Open to backend and fullstack opportunities.
                   </p>
 
-                  {formspreeState.succeeded ? (
-                    <div style={{ padding: "20px", background: "#F3F9F3", border: "1px solid #C6DEC5", borderRadius: "3px" }}>
-                      <p style={{ fontSize: "14px", color: "#3A6B38", fontWeight: 500 }}>Message sent!</p>
-                      <p style={{ fontSize: "13px", color: "#5B7F58", marginTop: "4px" }}>Thanks for reaching out — I&apos;ll get back to you soon.</p>
-                    </div>
-                  ) : (
+                  {/* Wrapper keeps fixed dimensions regardless of state */}
+                  <div style={{ position: "relative" }}>
+                    {/* Form — fades out on success but stays in DOM to hold the height */}
                     <form
                       onSubmit={handleFormspreeSubmit}
-                      style={{ display: "flex", flexDirection: "column", gap: "12px" }}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "12px",
+                        opacity: formspreeState.succeeded ? 0 : 1,
+                        pointerEvents: formspreeState.succeeded ? "none" : "auto",
+                        transition: "opacity 0.35s ease",
+                      }}
                     >
                       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                         <div>
@@ -267,7 +271,7 @@ export default function ContactDrawer() {
                             className={inputCls}
                             style={{ borderRadius: "2px", color: "#1B1A17" }}
                           />
-                          <ValidationError prefix="Name" field="name" errors={formspreeState.errors} className="text-xs mt-1" style={{ color: "#A8642E", fontSize: "11px" }} />
+                          <ValidationError prefix="Name" field="name" errors={formspreeState.errors} style={{ color: "#A8642E", fontSize: "11px", display: "block", marginTop: "3px" }} />
                         </div>
                         <div>
                           <label htmlFor="drawer-email" style={{ display: "block", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.08em", color: "#9C988E", marginBottom: "5px" }}>
@@ -283,7 +287,7 @@ export default function ContactDrawer() {
                             className={inputCls}
                             style={{ borderRadius: "2px", color: "#1B1A17" }}
                           />
-                          <ValidationError prefix="Email" field="email" errors={formspreeState.errors} style={{ color: "#A8642E", fontSize: "11px" }} />
+                          <ValidationError prefix="Email" field="email" errors={formspreeState.errors} style={{ color: "#A8642E", fontSize: "11px", display: "block", marginTop: "3px" }} />
                         </div>
                       </div>
 
@@ -301,7 +305,7 @@ export default function ContactDrawer() {
                           className={inputCls}
                           style={{ borderRadius: "2px", color: "#1B1A17", resize: "none" }}
                         />
-                        <ValidationError prefix="Message" field="message" errors={formspreeState.errors} style={{ color: "#A8642E", fontSize: "11px" }} />
+                        <ValidationError prefix="Message" field="message" errors={formspreeState.errors} style={{ color: "#A8642E", fontSize: "11px", display: "block", marginTop: "3px" }} />
                       </div>
 
                       <button
@@ -313,7 +317,40 @@ export default function ContactDrawer() {
                         {formspreeState.submitting ? "Sending…" : "Send message"}
                       </button>
                     </form>
-                  )}
+
+                    {/* Success overlay — same space, fades in on top */}
+                    {formspreeState.succeeded && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          opacity: formspreeState.succeeded ? 1 : 0,
+                          transition: "opacity 0.35s ease",
+                        }}
+                      >
+                        <div style={{ width: "32px", height: "1px", background: "#1B1A17", marginBottom: "18px" }} />
+                        <p
+                          style={{
+                            fontFamily: "var(--font-serif)",
+                            fontStyle: "italic",
+                            fontSize: "22px",
+                            fontWeight: 400,
+                            letterSpacing: "-0.02em",
+                            color: "#1B1A17",
+                            marginBottom: "8px",
+                          }}
+                        >
+                          Message sent.
+                        </p>
+                        <p style={{ fontSize: "13px", color: "#6E6A62", lineHeight: 1.5 }}>
+                          Thanks for reaching out —<br />I&apos;ll get back to you soon.
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
