@@ -1,29 +1,47 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import GitHubChart from "../components/GitHubChart";
 
-const STACK: { src: string; name: string; category: string }[] = [
-  { src: "/tecnologias/dotnet-svgrepo-com.svg", name: ".NET", category: "Framework" },
-  { src: "/tecnologias/c--4.svg", name: "C#", category: "Language" },
-  { src: "/tecnologias/react-svgrepo-com.svg", name: "React", category: "Framework" },
-  { src: "/tecnologias/nextjs-icon-svgrepo-com.svg", name: "Next.js", category: "Framework" },
-  { src: "/tecnologias/typescript-official-svgrepo-com.svg", name: "TypeScript", category: "Language" },
-  { src: "/tecnologias/python-svgrepo-com.svg", name: "Python", category: "Language" },
-  { src: "/tecnologias/fastapi.svg", name: "FastAPI", category: "Framework" },
-  { src: "/tecnologias/Pandas.svg", name: "Pandas", category: "Data" },
-  { src: "/tecnologias/NumPy.svg", name: "NumPy", category: "Data" },
-  { src: "/tecnologias/jupyter.svg", name: "Jupyter", category: "Data" },
-  { src: "/tecnologias/ollama.svg", name: "Ollama", category: "AI" },
-  { src: "/tecnologias/n8n-color.svg", name: "n8n", category: "Automation" },
-  { src: "/tecnologias/sql server-svgrepo-com.svg", name: "SQL Server", category: "Database" },
-  { src: "/tecnologias/postgresql.svg", name: "PostgreSQL", category: "Database" },
-  { src: "/tecnologias/supabase.svg", name: "Supabase", category: "Database" },
-  { src: "/tecnologias/firebase.svg", name: "Firebase", category: "Database" },
-  { src: "/tecnologias/docker.svg", name: "Docker", category: "DevOps" },
-  { src: "/tecnologias/GitHub Actions.svg", name: "GitHub Actions", category: "Automation" },
-  { src: "/tecnologias/git-svgrepo-com.svg", name: "Git", category: "Version Control" },
+type StackItem = { src: string; name: string; category: string };
+
+const STACK_TABS: { label: string; key: string; items: StackItem[] }[] = [
+  {
+    label: "Backend & Fullstack",
+    key: "fullstack",
+    items: [
+      { src: "/tecnologias/dotnet-svgrepo-com.svg", name: ".NET", category: "Framework" },
+      { src: "/tecnologias/c--4.svg", name: "C#", category: "Language" },
+      { src: "/tecnologias/react-svgrepo-com.svg", name: "React", category: "Framework" },
+      { src: "/tecnologias/nextjs-icon-svgrepo-com.svg", name: "Next.js", category: "Framework" },
+      { src: "/tecnologias/typescript-official-svgrepo-com.svg", name: "TypeScript", category: "Language" },
+      { src: "/tecnologias/fastapi.svg", name: "FastAPI", category: "Framework" },
+      { src: "/tecnologias/sql server-svgrepo-com.svg", name: "SQL Server", category: "Database" },
+      { src: "/tecnologias/postgresql.svg", name: "PostgreSQL", category: "Database" },
+      { src: "/tecnologias/supabase.svg", name: "Supabase", category: "Database" },
+      { src: "/tecnologias/firebase.svg", name: "Firebase", category: "Database" },
+      { src: "/tecnologias/docker.svg", name: "Docker", category: "DevOps" },
+      { src: "/tecnologias/git-svgrepo-com.svg", name: "Git", category: "Version Control" },
+    ],
+  },
+  {
+    label: "Data & AI",
+    key: "data",
+    items: [
+      { src: "/tecnologias/python-svgrepo-com.svg", name: "Python", category: "Language" },
+      { src: "/tecnologias/Pandas.svg", name: "Pandas", category: "Data" },
+      { src: "/tecnologias/NumPy.svg", name: "NumPy", category: "Data" },
+      { src: "/tecnologias/jupyter.svg", name: "Jupyter", category: "Data" },
+      { src: "/tecnologias/ollama.svg", name: "Ollama", category: "AI" },
+      { src: "/tecnologias/n8n-color.svg", name: "n8n", category: "Automation" },
+      { src: "/tecnologias/GitHub Actions.svg", name: "GitHub Actions", category: "Automation" },
+      { src: "/tecnologias/sql server-svgrepo-com.svg", name: "SQL Server", category: "Database" },
+      { src: "/tecnologias/postgresql.svg", name: "PostgreSQL", category: "Database" },
+      { src: "/tecnologias/supabase.svg", name: "Supabase", category: "Database" },
+      { src: "/tecnologias/firebase.svg", name: "Firebase", category: "Database" },
+    ],
+  },
 ];
 
 const AT_A_GLANCE = [
@@ -64,9 +82,12 @@ function SectionHeader({ number, title }: { number: string; title: string }) {
 }
 
 export default function SobreMiPage() {
+  const [activeTab, setActiveTab] = useState("fullstack");
   const bioRef = useRef<HTMLDivElement>(null);
   const stackRef = useRef<HTMLDivElement>(null);
   const githubRef = useRef<HTMLDivElement>(null);
+
+  const activeStack = STACK_TABS.find((t) => t.key === activeTab)?.items ?? [];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -152,8 +173,27 @@ export default function SobreMiPage() {
       <section ref={stackRef} className="motion-safe">
         <SectionHeader number="02" title="Stack" />
 
+        {/* Tabs */}
+        <div className="flex gap-2 mb-8">
+          {STACK_TABS.map(({ label, key }) => (
+            <button
+              key={key}
+              onClick={() => setActiveTab(key)}
+              className="px-4 py-2 text-sm font-medium border transition-colors duration-150"
+              style={{
+                borderRadius: "var(--radius-sm)",
+                backgroundColor: activeTab === key ? "var(--color-ink)" : "transparent",
+                color: activeTab === key ? "var(--color-paper)" : "var(--color-muted)",
+                borderColor: activeTab === key ? "var(--color-ink)" : "var(--color-hairline)",
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-          {STACK.map(({ src, name, category }) => (
+          {activeStack.map(({ src, name, category }) => (
             <div
               key={name}
               className="flex flex-col items-center gap-2 p-4 bg-surface border border-hairline hover:border-hairline-hover transition-colors duration-200"
