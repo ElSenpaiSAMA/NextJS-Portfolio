@@ -38,7 +38,6 @@ export default function ContactDrawer() {
   const [pillH, setPillH] = useState(44);
   const firstFieldRef = useRef<HTMLInputElement>(null);
 
-  // Measure actual pill height after mount so translateY is exact
   useEffect(() => {
     if (pillRef.current) setPillH(pillRef.current.offsetHeight);
   }, []);
@@ -89,7 +88,7 @@ export default function ContactDrawer() {
   }
 
   const inputBase =
-    "w-full px-3 py-2.5 text-sm bg-paper border outline-none transition-colors duration-150";
+    "w-full px-3 py-2.5 text-sm bg-white border outline-none transition-colors duration-150";
   const field = (f: keyof FormState) =>
     `${inputBase} ${errors[f] ? "border-accent" : "border-hairline"} focus:border-ink`;
 
@@ -111,7 +110,7 @@ export default function ContactDrawer() {
         }}
       />
 
-      {/* Drawer — single container: pill + panel move together */}
+      {/* Drawer */}
       <div
         role="dialog"
         aria-modal="true"
@@ -126,11 +125,8 @@ export default function ContactDrawer() {
           transition: "transform 0.42s cubic-bezier(0.32, 0.72, 0, 1)",
         }}
       >
-        {/* Pill — measured to get exact height */}
-        <div
-          ref={pillRef}
-          style={{ display: "flex", justifyContent: "center" }}
-        >
+        {/* Pill */}
+        <div ref={pillRef} style={{ display: "flex", justifyContent: "center" }}>
           <button
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
@@ -167,7 +163,7 @@ export default function ContactDrawer() {
           </button>
         </div>
 
-        {/* Panel — visibility: hidden after close so no white strip */}
+        {/* Panel */}
         <div
           style={{
             visibility: open ? "visible" : "hidden",
@@ -179,108 +175,216 @@ export default function ContactDrawer() {
               background: "#FFFFFF",
               borderTop: "1px solid #E7E4DC",
               boxShadow: "0 -8px 40px rgba(27, 26, 23, 0.08)",
-              maxHeight: "50vh",
-              overflowY: "auto",
+              // Extend bg above to cover elastic scroll bounce
+              paddingBottom: "env(safe-area-inset-bottom)",
             }}
           >
-            <div style={{ maxWidth: "560px", margin: "0 auto", padding: "36px 24px 40px" }}>
-              <h2
+            {/* Scrollable area — overscroll-behavior contains the bounce */}
+            <div
+              style={{
+                maxHeight: "50vh",
+                overflowY: "auto",
+                overscrollBehavior: "contain",
+                // Extra bg so elastic bounce above content shows white, not transparent
+                background: "#FFFFFF",
+              }}
+            >
+              <div
                 style={{
-                  fontFamily: "var(--font-serif)",
-                  fontSize: "24px",
-                  fontWeight: 400,
-                  letterSpacing: "-0.02em",
-                  color: "#1B1A17",
-                  marginBottom: "4px",
+                  maxWidth: "700px",
+                  margin: "0 auto",
+                  padding: "32px 28px 40px",
+                  display: "flex",
+                  gap: "48px",
+                  alignItems: "flex-start",
                 }}
               >
-                Let&apos;s talk
-              </h2>
-              <p style={{ fontSize: "13px", color: "#6E6A62", marginBottom: "28px" }}>
-                Open to backend and fullstack opportunities — reach out anytime.
-              </p>
-
-              {/* Contact links */}
-              <div style={{ display: "flex", flexDirection: "column", marginBottom: "28px" }}>
-                {CONTACT_LINKS.map(({ label, value, href, external }, i) => (
-                  <a
-                    key={label}
-                    href={href}
-                    {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                {/* LEFT — contact links */}
+                <div style={{ flexShrink: 0, width: "180px" }}>
+                  <p
                     style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      padding: "12px 0",
-                      borderTop: "1px solid #E7E4DC",
-                      borderBottom: i === CONTACT_LINKS.length - 1 ? "1px solid #E7E4DC" : "none",
-                      textDecoration: "none",
-                      color: "inherit",
-                      gap: "24px",
-                      transition: "opacity 0.15s ease",
+                      fontSize: "11px",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.08em",
+                      color: "#9C988E",
+                      marginBottom: "16px",
                     }}
-                    onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.55"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
                   >
-                    <span style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em", color: "#9C988E", flexShrink: 0, minWidth: "68px" }}>
-                      {label}
-                    </span>
-                    <span style={{ fontSize: "13px", color: "#1B1A17", fontFamily: "var(--font-sans)", flex: 1 }}>
-                      {value}
-                    </span>
-                    <span style={{ fontSize: "11px", color: "#9C988E", flexShrink: 0 }}>↗</span>
-                  </a>
-                ))}
-              </div>
+                    Find me at
+                  </p>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
+                    {CONTACT_LINKS.map(({ label, value, href, external }, i) => (
+                      <a
+                        key={label}
+                        href={href}
+                        {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          padding: "10px 0",
+                          borderTop: i === 0 ? "1px solid #E7E4DC" : "1px solid #E7E4DC",
+                          borderBottom:
+                            i === CONTACT_LINKS.length - 1 ? "1px solid #E7E4DC" : "none",
+                          textDecoration: "none",
+                          gap: "2px",
+                          transition: "opacity 0.15s ease",
+                        }}
+                        onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.55"; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
+                      >
+                        <span
+                          style={{
+                            fontSize: "10px",
+                            textTransform: "uppercase",
+                            letterSpacing: "0.08em",
+                            color: "#9C988E",
+                          }}
+                        >
+                          {label}
+                        </span>
+                        <span
+                          style={{
+                            fontSize: "12px",
+                            color: "#1B1A17",
+                            fontFamily: "var(--font-sans)",
+                            wordBreak: "break-all",
+                          }}
+                        >
+                          {value}
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
 
-              {/* Form */}
-              <form onSubmit={handleSubmit} noValidate style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-                  <div>
-                    <label htmlFor="drawer-name" style={{ display: "block", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em", color: "#9C988E", marginBottom: "5px" }}>
-                      Name
-                    </label>
-                    <input
-                      ref={firstFieldRef}
-                      type="text" id="drawer-name" name="name"
-                      value={form.name} onChange={handleChange}
-                      placeholder="Your name"
-                      className={field("name")}
-                      style={{ borderRadius: "2px", color: "#1B1A17" }}
-                    />
-                    {errors.name && <p style={{ fontSize: "11px", color: "#A8642E", marginTop: "3px" }}>{errors.name}</p>}
-                  </div>
-                  <div>
-                    <label htmlFor="drawer-email" style={{ display: "block", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em", color: "#9C988E", marginBottom: "5px" }}>
-                      Email
-                    </label>
-                    <input
-                      type="email" id="drawer-email" name="email"
-                      value={form.email} onChange={handleChange}
-                      placeholder="you@example.com"
-                      className={field("email")}
-                      style={{ borderRadius: "2px", color: "#1B1A17" }}
-                    />
-                    {errors.email && <p style={{ fontSize: "11px", color: "#A8642E", marginTop: "3px" }}>{errors.email}</p>}
-                  </div>
+                {/* RIGHT — form */}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <h2
+                    style={{
+                      fontFamily: "var(--font-serif)",
+                      fontSize: "22px",
+                      fontWeight: 400,
+                      letterSpacing: "-0.02em",
+                      color: "#1B1A17",
+                      marginBottom: "4px",
+                    }}
+                  >
+                    Send a message
+                  </h2>
+                  <p style={{ fontSize: "13px", color: "#6E6A62", marginBottom: "22px" }}>
+                    Open to backend and fullstack opportunities.
+                  </p>
+
+                  <form
+                    onSubmit={handleSubmit}
+                    noValidate
+                    style={{ display: "flex", flexDirection: "column", gap: "12px" }}
+                  >
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                      <div>
+                        <label
+                          htmlFor="drawer-name"
+                          style={{
+                            display: "block",
+                            fontSize: "10px",
+                            textTransform: "uppercase",
+                            letterSpacing: "0.08em",
+                            color: "#9C988E",
+                            marginBottom: "5px",
+                          }}
+                        >
+                          Name
+                        </label>
+                        <input
+                          ref={firstFieldRef}
+                          type="text"
+                          id="drawer-name"
+                          name="name"
+                          value={form.name}
+                          onChange={handleChange}
+                          placeholder="Your name"
+                          className={field("name")}
+                          style={{ borderRadius: "2px", color: "#1B1A17" }}
+                        />
+                        {errors.name && (
+                          <p style={{ fontSize: "11px", color: "#A8642E", marginTop: "3px" }}>
+                            {errors.name}
+                          </p>
+                        )}
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="drawer-email"
+                          style={{
+                            display: "block",
+                            fontSize: "10px",
+                            textTransform: "uppercase",
+                            letterSpacing: "0.08em",
+                            color: "#9C988E",
+                            marginBottom: "5px",
+                          }}
+                        >
+                          Email
+                        </label>
+                        <input
+                          type="email"
+                          id="drawer-email"
+                          name="email"
+                          value={form.email}
+                          onChange={handleChange}
+                          placeholder="you@example.com"
+                          className={field("email")}
+                          style={{ borderRadius: "2px", color: "#1B1A17" }}
+                        />
+                        {errors.email && (
+                          <p style={{ fontSize: "11px", color: "#A8642E", marginTop: "3px" }}>
+                            {errors.email}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="drawer-message"
+                        style={{
+                          display: "block",
+                          fontSize: "10px",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.08em",
+                          color: "#9C988E",
+                          marginBottom: "5px",
+                        }}
+                      >
+                        Message
+                      </label>
+                      <textarea
+                        id="drawer-message"
+                        name="message"
+                        value={form.message}
+                        onChange={handleChange}
+                        rows={3}
+                        placeholder="What would you like to talk about?"
+                        className={field("message")}
+                        style={{ borderRadius: "2px", color: "#1B1A17", resize: "none" }}
+                      />
+                      {errors.message && (
+                        <p style={{ fontSize: "11px", color: "#A8642E", marginTop: "3px" }}>
+                          {errors.message}
+                        </p>
+                      )}
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="btn-primary"
+                      style={{ alignSelf: "flex-start" }}
+                    >
+                      Send message
+                    </button>
+                  </form>
                 </div>
-                <div>
-                  <label htmlFor="drawer-message" style={{ display: "block", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em", color: "#9C988E", marginBottom: "5px" }}>
-                    Message
-                  </label>
-                  <textarea
-                    id="drawer-message" name="message"
-                    value={form.message} onChange={handleChange}
-                    rows={3} placeholder="What would you like to talk about?"
-                    className={field("message")}
-                    style={{ borderRadius: "2px", color: "#1B1A17", resize: "none" }}
-                  />
-                  {errors.message && <p style={{ fontSize: "11px", color: "#A8642E", marginTop: "3px" }}>{errors.message}</p>}
-                </div>
-                <button type="submit" className="btn-primary" style={{ alignSelf: "flex-start" }}>
-                  Send message
-                </button>
-              </form>
+              </div>
             </div>
           </div>
         </div>
