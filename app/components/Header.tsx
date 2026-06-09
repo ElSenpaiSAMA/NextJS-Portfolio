@@ -17,6 +17,7 @@ export default function Header() {
       className={`fixed top-0 left-0 right-0 z-50 bg-paper transition-shadow duration-200 ${
         scrolled ? "border-b border-hairline" : ""
       }`}
+      style={{ viewTransitionName: "site-header" }}
     >
       <Navbar />
     </header>
