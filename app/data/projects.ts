@@ -46,4 +46,22 @@ export const projects: Project[] = [
     link: "https://github.com/ElSenpaiSAMA/SalaReservas",
     image: "/salareserva.jpg",
   },
+  {
+    id: 5,
+    title: "Mundo del Libro",
+    description:
+      "Online bookstore with book search powered by the OpenLibrary API, real-time inventory and authentication via Firebase.",
+    tech: ["Next.js", "TypeScript", "Tailwind", "Firebase", "OpenLibrary API"],
+    link: "https://mundolibro-bay.vercel.app",
+    image: "/mundo del libro.png",
+  },
+  {
+    id: 6,
+    title: "Portfolio",
+    description:
+      "This site. Personal portfolio built with Next.js, Tailwind CSS and TypeScript — designed with an editorial aesthetic and a step-by-step Git workflow.",
+    tech: ["Next.js", "TypeScript", "Tailwind"],
+    link: "https://github.com/ElSenpaiSAMA/NextJS-Portfolio",
+    image: "/pagina.png",
+  },
 ];
