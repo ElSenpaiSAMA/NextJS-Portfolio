@@ -1,167 +1,222 @@
 "use client";
 
-import { useForm, ValidationError } from "@formspree/react";
+import { useState } from "react";
 
-export default function ContactoPage() {
-  const [state, handleSubmit] = useForm("mrbzwjdp");
+interface FormState {
+  name: string;
+  email: string;
+  message: string;
+}
 
+const INITIAL_FORM: FormState = { name: "", email: "", message: "" };
+
+const CONTACT_LINKS = [
+  {
+    label: "Email",
+    value: "mnicolas03sp@gmail.com",
+    href: "mailto:mnicolas03sp@gmail.com",
+  },
+  {
+    label: "GitHub",
+    value: "github.com/ElSenpaiSAMA",
+    href: "https://github.com/ElSenpaiSAMA",
+  },
+  {
+    label: "LinkedIn",
+    value: "linkedin.com/in/matias-speroni",
+    href: "https://linkedin.com/in/matias-speroni",
+  },
+];
+
+function SectionHeader({ number, title }: { number: string; title: string }) {
   return (
-    <section className="min-h-screen relative overflow-hidden bg-black px-4 sm:px-6 py-24 sm:py-32">
-      <div className="absolute top-20 right-0 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-purple-600/30 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[250px] sm:w-[500px] h-[250px] sm:h-[500px] bg-pink-600/20 rounded-full blur-[150px] pointer-events-none" />
-
-      <div className="max-w-4xl mx-auto relative z-10">
-        <div className="mb-12 sm:mb-16 md:mb-20">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 animate-gradient">
-            Contact
-          </h2>
-          <div className="h-1 w-16 sm:w-24 bg-gradient-to-r from-purple-500 to-pink-500 mt-2" />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-          <div className="space-y-4 sm:space-y-6">
-            <h3 className="text-xs sm:text-sm uppercase tracking-wider text-gray-500">
-              Contact Information
-            </h3>
-            <div className="space-y-3 sm:space-y-4">
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0">
-                  <div className="w-2 h-2 rounded-full bg-purple-500 mt-2" />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">Email</p>
-                  <p className="text-white text-sm sm:text-base break-all">mnicolas03sp@gmail.com</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0">
-                  <div className="w-2 h-2 rounded-full bg-pink-500 mt-2" />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">LinkedIn</p>
-                  <a
-                    href="https://www.linkedin.com/in/matías-speroni"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-purple-400 hover:text-purple-300 transition-colors text-sm sm:text-base break-all"
-                  >
-                    linkedin.com/in/matías-speroni
-                  </a>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0">
-                  <div className="w-2 h-2 rounded-full bg-blue-500 mt-2" />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">GitHub</p>
-                  <a
-                    href="https://github.com/ElSenpaiSAMA"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-purple-400 hover:text-purple-300 transition-colors text-sm sm:text-base break-all"
-                  >
-                    github.com/ElSenpaiSAMA
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            {state.succeeded ? (
-              <div className="bg-green-500/10 border border-green-500/30 rounded p-6 text-center">
-                <div className="text-green-400 text-lg font-semibold mb-2">
-                  Message sent!
-                </div>
-                <p className="text-gray-300 text-sm">
-                  Thank you for contacting me. I will respond soon.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-xs uppercase tracking-wider text-gray-500 mb-2"
-                  >
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    disabled={state.submitting}
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded text-white text-sm sm:text-base focus:border-purple-500/50 focus:outline-none transition-colors disabled:opacity-50"
-                    placeholder="Your name
-                    "
-                  />
-                  <ValidationError prefix="Name" field="name" errors={state.errors} className="text-red-400 text-xs mt-1" />
-                </div>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-xs uppercase tracking-wider text-gray-500 mb-2"
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    disabled={state.submitting}
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded text-white text-sm sm:text-base focus:border-purple-500/50 focus:outline-none transition-colors disabled:opacity-50"
-                    placeholder="your@email.com"
-                  />
-                  <ValidationError prefix="Email" field="email" errors={state.errors} className="text-red-400 text-xs mt-1" />
-                </div>
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-xs uppercase tracking-wider text-gray-500 mb-2"
-                  >
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    required
-                    rows={5}
-                    disabled={state.submitting}
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-white/5 border border-white/10 rounded text-white text-sm sm:text-base focus:border-purple-500/50 focus:outline-none resize-none transition-colors disabled:opacity-50"
-                    placeholder="Write your message..."
-                  />
-                  <ValidationError prefix="Message" field="message" errors={state.errors} className="text-red-400 text-xs mt-1" />
-                </div>
-                <button
-                  type="submit"
-                  disabled={state.submitting}
-                  className="w-full px-4 sm:px-6 py-2.5 sm:py-3 bg-white/5 border border-white/10 text-white rounded hover:border-purple-500/50 hover:bg-white/10 transition-all font-medium text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {state.submitting ? "Sending..." : "Send message"}
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
+    <div className="mb-12">
+      <div className="flex items-baseline gap-4 mb-3">
+        <span
+          className="font-serif text-sm"
+          style={{
+            fontFamily: "var(--font-serif)",
+            color: "var(--color-accent)",
+            letterSpacing: "-0.01em",
+          }}
+        >
+          {number}
+        </span>
+        <h1
+          className="font-serif text-3xl sm:text-4xl font-normal"
+          style={{
+            fontFamily: "var(--font-serif)",
+            color: "var(--color-ink)",
+            letterSpacing: "-0.02em",
+          }}
+        >
+          {title}
+        </h1>
       </div>
-      
-      <style jsx>{`
-        @keyframes gradient {
-          0%, 100% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-        }
-        .animate-gradient {
-          background-size: 200% 200%;
-          animation: gradient 3s ease infinite;
-        }
-      `}</style>
-    </section>
+      <div className="hairline" />
+    </div>
   );
 }
 
+export default function ContactoPage() {
+  const [form, setForm] = useState<FormState>(INITIAL_FORM);
+  const [errors, setErrors] = useState<Partial<FormState>>({});
+
+  function validate(): boolean {
+    const next: Partial<FormState> = {};
+    if (!form.name.trim()) next.name = "Name is required.";
+    if (!form.email.trim()) {
+      next.email = "Email is required.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      next.email = "Please enter a valid email.";
+    }
+    if (!form.message.trim()) next.message = "Message is required.";
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!validate()) return;
+    const subject = encodeURIComponent("Portfolio contact");
+    const body = encodeURIComponent(
+      `Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`
+    );
+    window.location.href = `mailto:mnicolas03sp@gmail.com?subject=${subject}&body=${body}`;
+  }
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    if (errors[name as keyof FormState]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
+  }
+
+  const inputClass = (field: keyof FormState) =>
+    `w-full px-3 py-2.5 text-sm bg-surface border transition-colors duration-150 outline-none focus:border-ink ${
+      errors[field] ? "border-accent" : "border-hairline"
+    }`;
+
+  return (
+    <div className="max-w-5xl mx-auto px-6 pt-32 pb-24">
+      <SectionHeader number="01" title="Contact" />
+
+      <p className="text-base mb-10" style={{ color: "var(--color-muted)" }}>
+        Open to backend and fullstack opportunities — let&apos;s talk.
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        {/* Contact info */}
+        <div className="space-y-6">
+          {CONTACT_LINKS.map(({ label, value, href }) => (
+            <div key={label}>
+              <p
+                className="text-xs uppercase tracking-wider mb-1"
+                style={{ color: "var(--color-faint)" }}
+              >
+                {label}
+              </p>
+              <a
+                href={href}
+                target={href.startsWith("mailto") ? undefined : "_blank"}
+                rel="noopener noreferrer"
+                className="text-sm font-medium transition-colors duration-150 hover:text-accent"
+                style={{ color: "var(--color-ink)" }}
+              >
+                {value}
+              </a>
+            </div>
+          ))}
+        </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} noValidate className="space-y-5">
+          {/* Name */}
+          <div>
+            <label
+              htmlFor="name"
+              className="block text-xs uppercase tracking-wider mb-1.5"
+              style={{ color: "var(--color-faint)" }}
+            >
+              Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              autoComplete="name"
+              className={inputClass("name")}
+              style={{ borderRadius: "var(--radius-sm)", color: "var(--color-ink)" }}
+              placeholder="Your name"
+            />
+            {errors.name && (
+              <p className="text-xs mt-1" style={{ color: "var(--color-accent)" }}>
+                {errors.name}
+              </p>
+            )}
+          </div>
+
+          {/* Email */}
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-xs uppercase tracking-wider mb-1.5"
+              style={{ color: "var(--color-faint)" }}
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              autoComplete="email"
+              className={inputClass("email")}
+              style={{ borderRadius: "var(--radius-sm)", color: "var(--color-ink)" }}
+              placeholder="you@example.com"
+            />
+            {errors.email && (
+              <p className="text-xs mt-1" style={{ color: "var(--color-accent)" }}>
+                {errors.email}
+              </p>
+            )}
+          </div>
+
+          {/* Message */}
+          <div>
+            <label
+              htmlFor="message"
+              className="block text-xs uppercase tracking-wider mb-1.5"
+              style={{ color: "var(--color-faint)" }}
+            >
+              Message
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              value={form.message}
+              onChange={handleChange}
+              rows={5}
+              className={inputClass("message")}
+              style={{ borderRadius: "var(--radius-sm)", color: "var(--color-ink)", resize: "none" }}
+              placeholder="What would you like to talk about?"
+            />
+            {errors.message && (
+              <p className="text-xs mt-1" style={{ color: "var(--color-accent)" }}>
+                {errors.message}
+              </p>
+            )}
+          </div>
+
+          <button type="submit" className="btn-primary w-full">
+            Send message
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
