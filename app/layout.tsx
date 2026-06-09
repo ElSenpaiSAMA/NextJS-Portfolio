@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Hanken_Grotesk } from "next/font/google";
+import { Fraunces, Hanken_Grotesk, Dancing_Script } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -20,6 +20,13 @@ const hankenGrotesk = Hanken_Grotesk({
   display: "swap",
 });
 
+const dancingScript = Dancing_Script({
+  variable: "--font-dancing",
+  subsets: ["latin"],
+  weight: ["600"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Matias Speroni",
   description: "Backend & Fullstack Developer — .NET, React, Data & AI",
@@ -32,7 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${fraunces.variable} ${hankenGrotesk.variable} antialiased`}>
+      <body className={`${fraunces.variable} ${hankenGrotesk.variable} ${dancingScript.variable} antialiased`}>
         <LoadingScreen />
         <Header />
         <main className="min-h-screen">{children}</main>
