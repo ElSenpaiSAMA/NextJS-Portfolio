@@ -8,7 +8,6 @@ const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/sobre-mi", label: "About" },
   { href: "/proyectos", label: "Projects" },
-  { href: "/contacto", label: "Contact" },
 ];
 
 export default function Navbar() {

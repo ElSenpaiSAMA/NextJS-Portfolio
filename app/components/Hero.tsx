@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 
 const WHAT_I_DO = [
   { label: "Backend", desc: ".NET · C# · REST APIs · SQL" },
@@ -15,6 +15,10 @@ export default function Hero() {
   useEffect(() => {
     const els = sectionRef.current?.querySelectorAll<HTMLElement>(".motion-safe");
     els?.forEach((el) => el.classList.add("animate-fade-up-hero"));
+  }, []);
+
+  const openContact = useCallback(() => {
+    window.dispatchEvent(new CustomEvent("open-contact-drawer"));
   }, []);
 
   return (
@@ -68,7 +72,7 @@ export default function Hero() {
       {/* CTA buttons */}
       <div className="motion-safe stagger-5 flex flex-wrap gap-3 mb-20">
         <Link href="/proyectos" className="btn-primary">View projects</Link>
-        <Link href="/contacto" className="btn-ghost">Get in touch</Link>
+        <button onClick={openContact} className="btn-ghost">Get in touch</button>
       </div>
 
       {/* What I do strip */}
