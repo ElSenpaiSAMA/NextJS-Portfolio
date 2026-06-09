@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef, useCallback } from "react";
+import TransitionLink from "./TransitionLink";
 
 const WHAT_I_DO = [
   { label: "Backend", desc: ".NET · C# · REST APIs · SQL" },
@@ -71,7 +71,7 @@ export default function Hero() {
 
       {/* CTA buttons */}
       <div className="motion-safe stagger-5 flex flex-wrap gap-3 mb-10">
-        <Link href="/proyectos" className="btn-primary">View projects</Link>
+        <TransitionLink href="/proyectos" className="btn-primary">View projects</TransitionLink>
         <button onClick={openContact} className="btn-ghost">Get in touch</button>
       </div>
 

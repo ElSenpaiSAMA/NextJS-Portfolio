@@ -55,3 +55,36 @@
 .motion-safe {
   opacity: 0;
 }
+
+/* ── Page transitions (View Transitions API) ─────────────────────────────── */
+/* Forward: new page slides in from right, old slides out to left            */
+/* Backward: new page slides in from left, old slides out to right           */
+
+@keyframes vt-slide-out-left {
+  to { transform: translateX(-60px); opacity: 0; }
+}
+@keyframes vt-slide-in-right {
+  from { transform: translateX(60px); opacity: 0; }
+}
+@keyframes vt-slide-out-right {
+  to { transform: translateX(60px); opacity: 0; }
+}
+@keyframes vt-slide-in-left {
+  from { transform: translateX(-60px); opacity: 0; }
+}
+
+/* Default / forward */
+::view-transition-old(root) {
+  animation: 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94) both vt-slide-out-left;
+}
+::view-transition-new(root) {
+  animation: 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94) both vt-slide-in-right;
+}
+
+/* Backward */
+[data-nav-dir="back"]::view-transition-old(root) {
+  animation: 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94) both vt-slide-out-right;
+}
+[data-nav-dir="back"]::view-transition-new(root) {
+  animation: 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94) both vt-slide-in-left;
+}

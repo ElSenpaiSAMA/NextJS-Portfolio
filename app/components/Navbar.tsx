@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import TransitionLink from "./TransitionLink";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -29,13 +29,12 @@ export default function Navbar() {
   return (
     <nav className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
       {/* Brand */}
-      <Link
+      <TransitionLink
         href="/"
         className="font-serif text-lg text-ink tracking-tight hover:text-accent transition-colors duration-200"
-        style={{ fontFamily: "var(--font-serif)" }}
       >
         Matias Speroni
-      </Link>
+      </TransitionLink>
 
       {/* Desktop links */}
       <ul className="hidden md:flex items-center gap-8">
@@ -43,7 +42,7 @@ export default function Navbar() {
           const active = pathname === href;
           return (
             <li key={href}>
-              <Link
+              <TransitionLink
                 href={href}
                 className={`text-sm font-medium transition-colors duration-200 ${
                   active
@@ -52,7 +51,7 @@ export default function Navbar() {
                 }`}
               >
                 {label}
-              </Link>
+              </TransitionLink>
             </li>
           );
         })}
@@ -90,7 +89,7 @@ export default function Navbar() {
               const active = pathname === href;
               return (
                 <li key={href}>
-                  <Link
+                  <TransitionLink
                     href={href}
                     className={`block text-sm font-medium transition-colors duration-200 ${
                       active
@@ -99,7 +98,7 @@ export default function Navbar() {
                     }`}
                   >
                     {label}
-                  </Link>
+                  </TransitionLink>
                 </li>
               );
             })}
