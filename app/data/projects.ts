@@ -53,6 +53,7 @@ export const projects: Project[] = [
     description:
       "Online bookstore with book search powered by the OpenLibrary API, real-time inventory and authentication via Firebase.",
     tech: ["Next.js", "TypeScript", "Tailwind", "Firebase", "OpenLibrary API"],
+    github: "https://github.com/ElSenpaiSAMA/libreria",
     siteLink: "https://mundolibro-bay.vercel.app",
     image: "/mundo del libro.png",
   },
