@@ -2,28 +2,52 @@
 
 import { useEffect, useRef, useState } from "react";
 
-interface WordPaths {
-  matias: { d: string; viewBox: string };
-  speroni: { d: string; viewBox: string };
-}
-
 const FONT_SIZE = 90;
 const PAD = 20;
+// ms per path-length unit — lower = faster writing
+const SPEED = 0.55;
+// minimum duration per letter in ms
+const MIN_DUR = 120;
+// gap between "Matias" and "Speroni" in ms
+const WORD_GAP = 150;
 
-async function buildPaths(): Promise<WordPaths> {
+interface WordData {
+  letters: string[]; // one SVG path `d` per letter
+  viewBox: string;
+}
+
+async function buildPaths(): Promise<{ matias: WordData; speroni: WordData }> {
   const { parse } = await import("opentype.js");
   const res = await fetch("/fonts/DancingScript.ttf");
   const buf = await res.arrayBuffer();
   const font = parse(buf);
+  const scale = FONT_SIZE / font.unitsPerEm;
 
-  function wordData(text: string) {
-    const path = font.getPath(text, PAD, FONT_SIZE + PAD, FONT_SIZE);
-    const bb = path.getBoundingBox();
-    const vbX = (bb.x1 - PAD).toFixed(1);
-    const vbY = (bb.y1 - PAD).toFixed(1);
-    const vbW = (bb.x2 - bb.x1 + PAD * 2).toFixed(1);
-    const vbH = (bb.y2 - bb.y1 + PAD * 2).toFixed(1);
-    return { d: path.toPathData(2), viewBox: `${vbX} ${vbY} ${vbW} ${vbH}` };
+  function wordData(text: string): WordData {
+    const glyphs = font.stringToGlyphs(text);
+    const letters: string[] = [];
+    let x = PAD;
+
+    for (let i = 0; i < glyphs.length; i++) {
+      const g = glyphs[i];
+      const path = g.getPath(x, FONT_SIZE + PAD, FONT_SIZE);
+      letters.push(path.toPathData(2));
+      x += (g.advanceWidth ?? 0) * scale;
+      if (i < glyphs.length - 1) {
+        x += font.getKerningValue(glyphs[i], glyphs[i + 1]) * scale;
+      }
+    }
+
+    const full = font.getPath(text, PAD, FONT_SIZE + PAD, FONT_SIZE);
+    const bb = full.getBoundingBox();
+    const viewBox = [
+      (bb.x1 - PAD).toFixed(1),
+      (bb.y1 - PAD).toFixed(1),
+      (bb.x2 - bb.x1 + PAD * 2).toFixed(1),
+      (bb.y2 - bb.y1 + PAD * 2).toFixed(1),
+    ].join(" ");
+
+    return { letters, viewBox };
   }
 
   return { matias: wordData("Matias"), speroni: wordData("Speroni") };
@@ -32,63 +56,66 @@ async function buildPaths(): Promise<WordPaths> {
 export default function LoadingScreen() {
   const [visible, setVisible] = useState(true);
   const [fading, setFading] = useState(false);
-  const [paths, setPaths] = useState<WordPaths | null>(null);
-  const ref1 = useRef<SVGPathElement>(null);
-  const ref2 = useRef<SVGPathElement>(null);
+  const [data, setData] = useState<Awaited<ReturnType<typeof buildPaths>> | null>(null);
+  const svg1 = useRef<SVGSVGElement>(null);
+  const svg2 = useRef<SVGSVGElement>(null);
+  // keep timeout refs so we can clean them up
+  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  // Load font and generate paths on mount
   useEffect(() => {
-    buildPaths().then(setPaths).catch(() => {
-      // If font fails to load, skip loading screen after a short delay
-      setTimeout(() => setFading(true), 300);
-      setTimeout(() => setVisible(false), 800);
+    buildPaths().then(setData).catch(() => {
+      setFading(true);
+      setTimeout(() => setVisible(false), 500);
     });
+    return () => timers.current.forEach(clearTimeout);
   }, []);
 
-  // Start animations once paths are rendered
   useEffect(() => {
-    if (!paths || !ref1.current || !ref2.current) return;
+    if (!data || !svg1.current || !svg2.current) return;
 
-    const p1 = ref1.current;
-    const p2 = ref2.current;
-    const len1 = p1.getTotalLength();
-    const len2 = p2.getTotalLength();
+    const paths1 = Array.from(svg1.current.querySelectorAll<SVGPathElement>("path"));
+    const paths2 = Array.from(svg2.current.querySelectorAll<SVGPathElement>("path"));
 
-    const DUR1 = 1500;  // ms — "Matias"
-    const GAP  = 180;
-    const DUR2 = 1700;  // ms — "Speroni"
-    const TOTAL = DUR1 + GAP + DUR2;
+    // Hide all paths initially
+    [...paths1, ...paths2].forEach((el) => {
+      const len = el.getTotalLength();
+      el.style.strokeDasharray = `${len}`;
+      el.style.strokeDashoffset = `${len}`;
+    });
 
-    // Prepare word 1 — hidden at full dashoffset
-    p1.style.strokeDasharray = `${len1}`;
-    p1.style.strokeDashoffset = `${len1}`;
+    // Animate letters one by one using setTimeout chains
+    let elapsed = 0;
 
-    // Prepare word 2
-    p2.style.strokeDasharray = `${len2}`;
-    p2.style.strokeDashoffset = `${len2}`;
+    function animateLetter(el: SVGPathElement, delay: number): number {
+      const len = el.getTotalLength();
+      const dur = Math.max(MIN_DUR, len * SPEED);
+      const t = setTimeout(() => {
+        el.style.transition = `stroke-dashoffset ${dur}ms cubic-bezier(0.3, 0, 0.2, 1)`;
+        // Double rAF ensures the transition is applied after the dashoffset is set
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          el.style.strokeDashoffset = "0";
+        }));
+      }, delay);
+      timers.current.push(t);
+      return delay + dur;
+    }
 
-    // Animate word 1 immediately
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      p1.style.transition = `stroke-dashoffset ${DUR1}ms cubic-bezier(0.4, 0, 0.2, 1)`;
-      p1.style.strokeDashoffset = "0";
-    }));
+    // Word 1 — letter by letter
+    for (const el of paths1) {
+      elapsed = animateLetter(el, elapsed);
+    }
 
-    // Animate word 2 after word 1 finishes
-    const t2 = setTimeout(() => {
-      p2.style.transition = `stroke-dashoffset ${DUR2}ms cubic-bezier(0.4, 0, 0.2, 1)`;
-      p2.style.strokeDashoffset = "0";
-    }, DUR1 + GAP);
+    // Word 2 — starts after word 1 + gap
+    elapsed += WORD_GAP;
+    for (const el of paths2) {
+      elapsed = animateLetter(el, elapsed);
+    }
 
-    // Fade out
-    const tFade = setTimeout(() => setFading(true), TOTAL + 400);
-    const tHide = setTimeout(() => setVisible(false), TOTAL + 900);
-
-    return () => {
-      clearTimeout(t2);
-      clearTimeout(tFade);
-      clearTimeout(tHide);
-    };
-  }, [paths]);
+    // Fade out after everything is drawn
+    const tFade = setTimeout(() => setFading(true), elapsed + 350);
+    const tHide = setTimeout(() => setVisible(false), elapsed + 850);
+    timers.current.push(tFade, tHide);
+  }, [data]);
 
   if (!visible) return null;
 
@@ -108,53 +135,27 @@ export default function LoadingScreen() {
         pointerEvents: fading ? "none" : "auto",
       }}
     >
-      {paths && (
+      {data && (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-          {/* "Matias" */}
           <svg
-            viewBox={paths.matias.viewBox}
-            style={{ width: "clamp(160px, 42vw, 320px)", height: "auto", display: "block" }}
+            ref={svg1}
+            viewBox={data.matias.viewBox}
+            style={{ width: "clamp(160px, 38vw, 300px)", height: "auto", display: "block" }}
           >
-            <path
-              ref={ref1}
-              d={paths.matias.d}
-              fill="none"
-              stroke="#1B1A17"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+            {data.matias.letters.map((d, i) => (
+              <path key={i} d={d} fill="none" stroke="#1B1A17" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            ))}
           </svg>
 
-          {/* "Speroni" — slight negative margin to keep cursive line spacing */}
           <svg
-            viewBox={paths.speroni.viewBox}
-            style={{ width: "clamp(180px, 48vw, 360px)", height: "auto", display: "block", marginTop: "-10px" }}
+            ref={svg2}
+            viewBox={data.speroni.viewBox}
+            style={{ width: "clamp(180px, 44vw, 340px)", height: "auto", display: "block", marginTop: "-8px" }}
           >
-            <path
-              ref={ref2}
-              d={paths.speroni.d}
-              fill="none"
-              stroke="#1B1A17"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+            {data.speroni.letters.map((d, i) => (
+              <path key={i} d={d} fill="none" stroke="#1B1A17" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            ))}
           </svg>
-
-          {/* Accent underline — draws after both words finish */}
-          <div
-            style={{
-              height: "1px",
-              width: "0",
-              background: "#A8642E",
-              marginTop: "4px",
-              animation: `ms-line 0.4s ease forwards ${(1500 + 180 + 1700 + 100) / 1000}s`,
-            }}
-          />
-          <style>{`
-            @keyframes ms-line { to { width: 100%; } }
-          `}</style>
         </div>
       )}
     </div>
