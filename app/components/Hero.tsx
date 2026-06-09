@@ -1,97 +1,99 @@
 "use client";
 
-// Componente Hero de la página de inicio
-
-import Image from "next/image";
 import Link from "next/link";
-import ProjectCarousel from "./ProjectCarousel";
-import StarField from "./StarField";
-import { projects } from "../data/projects";
+import { useEffect, useRef } from "react";
+
+const WHAT_I_DO = [
+  { label: "Backend", desc: ".NET · C# · REST APIs · SQL" },
+  { label: "Fullstack", desc: "React · Next.js · TypeScript" },
+  { label: "Data & AI", desc: "Python · Pandas · Ollama · n8n" },
+];
 
 export default function Hero() {
-  const featuredProjects = projects.slice(0, 3);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const els = sectionRef.current?.querySelectorAll<HTMLElement>(".motion-safe");
+    els?.forEach((el) => el.classList.add("animate-fade-up-hero"));
+  }, []);
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gradient-to-b from-black via-purple-950 to-black">
-      <StarField />
-      
-      <div className="absolute inset-0 bg-gradient-radial from-purple-900/20 via-transparent to-transparent pointer-events-none z-0" />
-      <div className="absolute top-0 right-0 w-96 h-96 bg-pink-500/20 rounded-full blur-[120px] pointer-events-none z-0" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/20 rounded-full blur-[120px] pointer-events-none z-0" />
+    <section
+      ref={sectionRef}
+      className="max-w-5xl mx-auto px-6 pt-36 pb-24"
+    >
+      {/* Eyebrow */}
+      <div className="motion-safe stagger-1 flex items-center gap-2 mb-6">
+        <span
+          className="inline-block w-2 h-2 rounded-full animate-pulse-dot"
+          style={{ backgroundColor: "var(--color-available)" }}
+          aria-hidden="true"
+        />
+        <span className="text-sm font-medium" style={{ color: "var(--color-available)" }}>
+          Available for work · Barcelona, Spain
+        </span>
+      </div>
 
-      <section className="relative z-10 px-4 sm:px-6 pt-32 pb-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center mb-12 md:mb-16">
-            <div className="text-left">
-              <div className="inline-block mb-4 md:mb-6">
-                <span className="px-3 py-1.5 md:px-4 md:py-2 bg-purple-950/50 border border-purple-500/50 rounded-full text-purple-300 text-xs md:text-sm font-medium backdrop-blur-sm mr-3 md:mr-4">
-                  Full Stack Developer
-                </span>
-                 <span className="px-3 py-1.5 md:px-4 md:py-2 bg-purple-950/50 border border-purple-500/50 rounded-full text-purple-300 text-xs md:text-sm font-medium backdrop-blur-sm">
-                  Learning Data Engineer
-                </span>        
-              </div>
+      {/* Name */}
+      <h1
+        className="motion-safe stagger-2 font-serif font-normal leading-none tracking-tight mb-4"
+        style={{
+          fontFamily: "var(--font-serif)",
+          fontSize: "clamp(48px, 8vw, 92px)",
+          letterSpacing: "-0.02em",
+          color: "var(--color-ink)",
+        }}
+      >
+        Matias Speroni
+      </h1>
 
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-4 md:mb-6 leading-tight">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 animate-gradient">
-                  Hello, I&apos;m
-                </span>
-                <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 drop-shadow-[0_0_30px_rgba(168,85,247,0.5)]">
-                  Matias Speroni
-                </span>
-              </h1>
+      {/* Role */}
+      <p
+        className="motion-safe stagger-3 text-xl font-medium mb-6"
+        style={{ color: "var(--color-muted)" }}
+      >
+        Backend &amp; Fullstack Developer
+      </p>
 
-              <p className="text-lg sm:text-xl md:text-2xl text-purple-200/80 mb-4 md:mb-6 font-light">
-                Full Stack Developer
-              </p>
+      {/* Intro */}
+      <p
+        className="motion-safe stagger-4 text-base leading-relaxed max-w-xl mb-10"
+        style={{ color: "var(--color-muted)" }}
+      >
+        I build production software end to end — from .NET and React applications
+        to data pipelines and AI tools. Currently specializing in data &amp; AI.
+      </p>
 
-              <p className="text-sm sm:text-base md:text-lg text-gray-400 leading-relaxed">
-                Full Stack programmer, specialized in .NET and React
-              </p>
-            </div>
+      {/* CTA buttons */}
+      <div className="motion-safe stagger-5 flex flex-wrap gap-3 mb-20">
+        <Link href="/proyectos" className="btn-primary">
+          View projects
+        </Link>
+        <Link href="/contacto" className="btn-ghost">
+          Get in touch
+        </Link>
+      </div>
 
-            <div className="flex items-center justify-center md:pl-8 lg:pl-16">
-              <div className="w-full max-w-[280px] sm:max-w-sm md:max-w-md aspect-square relative animate-float">
-                <Image
-                  src="/avatar.svg"
-                  alt="Matias Speroni Illustration"
-                  width={400}
-                  height={400}
-                  className="w-full h-full drop-shadow-[0_0_50px_rgba(168,85,247,0.6)]"
-                  priority
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="flex gap-3 md:gap-4 justify-center flex-wrap px-4">
-            <Link
-              href="/contacto"
-              className="group relative px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-medium inline-block overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] text-sm sm:text-base"
+      {/* What I do strip */}
+      <div className="border-t border-hairline pt-10 grid grid-cols-1 sm:grid-cols-3 gap-6">
+        {WHAT_I_DO.map(({ label, desc }) => (
+          <div key={label}>
+            <p
+              className="font-serif font-normal text-lg mb-1"
+              style={{
+                fontFamily: "var(--font-serif)",
+                color: "var(--color-ink)",
+                letterSpacing: "-0.01em",
+              }}
             >
-              <span className="relative z-10 text-white">Contact</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-pink-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            </Link>
-            <Link
-              href="/sobre-mi"
-              className="px-6 sm:px-8 py-3 sm:py-4 bg-transparent border-2 border-purple-500/50 text-purple-300 rounded-lg font-medium inline-block backdrop-blur-sm hover:bg-purple-500/10 hover:border-purple-400 transition-all duration-300 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] text-sm sm:text-base"
-            >
-              Learn more
-            </Link>
+              {label}
+            </p>
+            <p className="text-sm" style={{ color: "var(--color-faint)" }}>
+              {desc}
+            </p>
           </div>
-
-          <div className="mt-10 mb-6 flex items-center justify-center">
-            <div className="h-px w-32 bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
-            <div className="mx-4 text-purple-500">⭐</div>
-            <div className="h-px w-32 bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
-          </div>
-        </div>
-      </section>
-
-      <section className="relative z-10 px-4 sm:px-6 pb-20">
-        <ProjectCarousel projects={featuredProjects} />
-      </section>
-    </div>
+        ))}
+      </div>
+    </section>
   );
 }
