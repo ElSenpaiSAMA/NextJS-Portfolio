@@ -51,20 +51,10 @@ const AT_A_GLANCE = [
   { label: "Languages", value: "ES (native) · EN" },
 ];
 
-function SectionHeader({ number, title }: { number: string; title: string }) {
+function SectionHeader({ title }: { title: string }) {
   return (
     <div className="mb-8">
       <div className="flex items-baseline gap-4 mb-3">
-        <span
-          className="font-serif text-sm"
-          style={{
-            fontFamily: "var(--font-serif)",
-            color: "var(--color-accent)",
-            letterSpacing: "-0.01em",
-          }}
-        >
-          {number}
-        </span>
         <h2
           className="font-serif text-3xl sm:text-4xl font-normal"
           style={{
@@ -113,7 +103,7 @@ export default function SobreMiPage() {
     <div className="max-w-5xl mx-auto px-6 pt-32 pb-24 space-y-20">
       {/* Bio section */}
       <section ref={bioRef} className="motion-safe">
-        <SectionHeader number="01" title="About" />
+        <SectionHeader title="About" />
 
         <div className="grid md:grid-cols-[220px_1fr] gap-10 items-start">
           {/* Photo */}
@@ -171,7 +161,7 @@ export default function SobreMiPage() {
 
       {/* Stack section */}
       <section ref={stackRef} className="motion-safe">
-        <SectionHeader number="02" title="Stack" />
+        <SectionHeader title="Stack" />
 
         {/* Tabs */}
         <div className="flex gap-2 mb-8">
@@ -222,7 +212,7 @@ export default function SobreMiPage() {
 
       {/* GitHub section */}
       <section ref={githubRef} className="motion-safe">
-        <SectionHeader number="03" title="GitHub" />
+        <SectionHeader title="GitHub" />
 
         <div className="space-y-6">
           <div className="overflow-x-auto">

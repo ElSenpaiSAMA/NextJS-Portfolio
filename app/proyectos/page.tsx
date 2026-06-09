@@ -4,20 +4,10 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { projects } from "../data/projects";
 
-function SectionHeader({ number, title }: { number: string; title: string }) {
+function SectionHeader({ title }: { title: string }) {
   return (
     <div className="mb-12">
       <div className="flex items-baseline gap-4 mb-3">
-        <span
-          className="font-serif text-sm"
-          style={{
-            fontFamily: "var(--font-serif)",
-            color: "var(--color-accent)",
-            letterSpacing: "-0.01em",
-          }}
-        >
-          {number}
-        </span>
         <h1
           className="font-serif text-3xl sm:text-4xl font-normal"
           style={{
@@ -59,7 +49,7 @@ export default function ProyectosPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-6 pt-32 pb-24">
-      <SectionHeader number="01" title="Projects" />
+      <SectionHeader title="Projects" />
 
       <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {projects.map((project) => (
