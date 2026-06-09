@@ -15,7 +15,7 @@ export const projects: Project[] = [
     description:
       "Multi-tenant AI search analytics platform (GEO/AEO) that tracks how brands appear across AI engines like ChatGPT, Claude and Perplexity — measuring visibility, position and sentiment.",
     tech: ["Next.js", "PostgreSQL", "Supabase", "Prisma", "OpenRouter"],
-    link: null,
+    link: "https://mira-ia-demo.vercel.app",
     image: null,
     inDevelopment: true,
   },
