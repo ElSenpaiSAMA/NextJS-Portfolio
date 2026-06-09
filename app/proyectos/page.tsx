@@ -121,16 +121,30 @@ export default function ProyectosPage() {
                 ))}
               </div>
 
-              {/* Link */}
-              {project.link ? (
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-ghost text-sm mt-1 self-start"
-                >
-                  View on GitHub →
-                </a>
+              {/* Links */}
+              {(project.github || project.siteLink) ? (
+                <div className="flex flex-wrap gap-2 mt-1">
+                  {project.github && (
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-ghost text-sm self-start"
+                    >
+                      View on GitHub →
+                    </a>
+                  )}
+                  {project.siteLink && (
+                    <a
+                      href={project.siteLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-primary text-sm self-start"
+                    >
+                      View project →
+                    </a>
+                  )}
+                </div>
               ) : (
                 <span className="text-xs mt-1" style={{ color: "var(--color-faint)" }}>
                   No public link yet

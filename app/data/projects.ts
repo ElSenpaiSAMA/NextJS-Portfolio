@@ -3,7 +3,8 @@ export interface Project {
   title: string;
   description: string;
   tech: string[];
-  link: string | null;
+  github?: string | null;
+  siteLink?: string | null;
   image: string | null;
   inDevelopment?: boolean;
 }
@@ -15,7 +16,7 @@ export const projects: Project[] = [
     description:
       "Multi-tenant AI search analytics platform (GEO/AEO) that tracks how brands appear across AI engines like ChatGPT, Claude and Perplexity — measuring visibility, position and sentiment.",
     tech: ["Next.js", "PostgreSQL", "Supabase", "Prisma", "OpenRouter"],
-    link: "https://mira-ia-demo.vercel.app",
+    siteLink: "https://mira-ia-demo.vercel.app",
     image: "/Mira.png",
     inDevelopment: true,
   },
@@ -25,7 +26,7 @@ export const projects: Project[] = [
     description:
       "Automated ETL pipeline that extracts tracks from the Spotify API, transforms them with Pandas and loads into SQLite — fully scheduled and self-updating with GitHub Actions.",
     tech: ["Python", "Pandas", "SQLite", "Plotly", "GitHub Actions"],
-    link: "https://github.com/ElSenpaiSAMA/Spotify-Track",
+    github: "https://github.com/ElSenpaiSAMA/Spotify-Track",
     image: "/top10.png",
   },
   {
@@ -34,7 +35,7 @@ export const projects: Project[] = [
     description:
       "AI-powered academic assistant with mock-exam generation from personal notes, schedule planning and Google Calendar integration.",
     tech: ["React", "FastAPI", "Ollama", "SQL Server"],
-    link: "https://github.com/ElSenpaiSAMA/Proyecto_Study_Bot",
+    github: "https://github.com/ElSenpaiSAMA/Proyecto_Study_Bot",
     image: "/study.jpg",
   },
   {
@@ -43,7 +44,7 @@ export const projects: Project[] = [
     description:
       "Room booking platform with role-based authentication, admin panel and email notifications. Full backend in .NET with EF Core.",
     tech: [".NET", "Entity Framework", "SQL Server", "Resend API"],
-    link: "https://github.com/ElSenpaiSAMA/SalaReservas",
+    github: "https://github.com/ElSenpaiSAMA/SalaReservas",
     image: "/salareserva.jpg",
   },
   {
@@ -52,7 +53,7 @@ export const projects: Project[] = [
     description:
       "Online bookstore with book search powered by the OpenLibrary API, real-time inventory and authentication via Firebase.",
     tech: ["Next.js", "TypeScript", "Tailwind", "Firebase", "OpenLibrary API"],
-    link: "https://mundolibro-bay.vercel.app",
+    siteLink: "https://mundolibro-bay.vercel.app",
     image: "/mundo del libro.png",
   },
   {
@@ -61,7 +62,7 @@ export const projects: Project[] = [
     description:
       "This site. Personal portfolio built with Next.js, Tailwind CSS and TypeScript — designed with an editorial aesthetic and a step-by-step Git workflow.",
     tech: ["Next.js", "TypeScript", "Tailwind"],
-    link: "https://github.com/ElSenpaiSAMA/NextJS-Portfolio",
+    github: "https://github.com/ElSenpaiSAMA/NextJS-Portfolio",
     image: "/pagina.png",
   },
 ];
