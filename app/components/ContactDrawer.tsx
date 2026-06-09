@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useForm, ValidationError } from "@formspree/react";
 
 const CONTACT_LINKS = [
   {
@@ -23,17 +24,9 @@ const CONTACT_LINKS = [
   },
 ];
 
-interface FormState {
-  name: string;
-  email: string;
-  message: string;
-}
-const EMPTY: FormState = { name: "", email: "", message: "" };
-
 export default function ContactDrawer() {
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState<FormState>(EMPTY);
-  const [errors, setErrors] = useState<Partial<FormState>>({});
+  const [formspreeState, handleFormspreeSubmit] = useForm("mrbzwjdp");
   const pillRef = useRef<HTMLDivElement>(null);
   const [pillH, setPillH] = useState(44);
   const firstFieldRef = useRef<HTMLInputElement>(null);
@@ -63,34 +56,7 @@ export default function ContactDrawer() {
     return () => window.removeEventListener("open-contact-drawer", handler);
   }, []);
 
-  function validate(): boolean {
-    const next: Partial<FormState> = {};
-    if (!form.name.trim()) next.name = "Required";
-    if (!form.email.trim()) next.email = "Required";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) next.email = "Invalid email";
-    if (!form.message.trim()) next.message = "Required";
-    setErrors(next);
-    return Object.keys(next).length === 0;
-  }
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    const { name, value } = e.target;
-    setForm((p) => ({ ...p, [name]: value }));
-    if (errors[name as keyof FormState]) setErrors((p) => ({ ...p, [name]: undefined }));
-  }
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!validate()) return;
-    const sub = encodeURIComponent("Portfolio contact");
-    const body = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`);
-    window.location.href = `mailto:mnicolas03sp@gmail.com?subject=${sub}&body=${body}`;
-  }
-
-  const inputBase =
-    "w-full px-3 py-2.5 text-sm bg-white border outline-none transition-colors duration-150";
-  const field = (f: keyof FormState) =>
-    `${inputBase} ${errors[f] ? "border-accent" : "border-hairline"} focus:border-ink`;
+  const inputCls = "w-full px-3 py-2.5 text-sm bg-white border border-hairline outline-none transition-colors duration-150 focus:border-ink";
 
   return (
     <>
@@ -275,114 +241,79 @@ export default function ContactDrawer() {
                     Open to backend and fullstack opportunities.
                   </p>
 
-                  <form
-                    onSubmit={handleSubmit}
-                    noValidate
-                    style={{ display: "flex", flexDirection: "column", gap: "12px" }}
-                  >
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-                      <div>
-                        <label
-                          htmlFor="drawer-name"
-                          style={{
-                            display: "block",
-                            fontSize: "10px",
-                            textTransform: "uppercase",
-                            letterSpacing: "0.08em",
-                            color: "#9C988E",
-                            marginBottom: "5px",
-                          }}
-                        >
-                          Name
-                        </label>
-                        <input
-                          ref={firstFieldRef}
-                          type="text"
-                          id="drawer-name"
-                          name="name"
-                          value={form.name}
-                          onChange={handleChange}
-                          placeholder="Your name"
-                          className={field("name")}
-                          style={{ borderRadius: "2px", color: "#1B1A17" }}
-                        />
-                        {errors.name && (
-                          <p style={{ fontSize: "11px", color: "#A8642E", marginTop: "3px" }}>
-                            {errors.name}
-                          </p>
-                        )}
-                      </div>
-                      <div>
-                        <label
-                          htmlFor="drawer-email"
-                          style={{
-                            display: "block",
-                            fontSize: "10px",
-                            textTransform: "uppercase",
-                            letterSpacing: "0.08em",
-                            color: "#9C988E",
-                            marginBottom: "5px",
-                          }}
-                        >
-                          Email
-                        </label>
-                        <input
-                          type="email"
-                          id="drawer-email"
-                          name="email"
-                          value={form.email}
-                          onChange={handleChange}
-                          placeholder="you@example.com"
-                          className={field("email")}
-                          style={{ borderRadius: "2px", color: "#1B1A17" }}
-                        />
-                        {errors.email && (
-                          <p style={{ fontSize: "11px", color: "#A8642E", marginTop: "3px" }}>
-                            {errors.email}
-                          </p>
-                        )}
-                      </div>
+                  {formspreeState.succeeded ? (
+                    <div style={{ padding: "20px", background: "#F3F9F3", border: "1px solid #C6DEC5", borderRadius: "3px" }}>
+                      <p style={{ fontSize: "14px", color: "#3A6B38", fontWeight: 500 }}>Message sent!</p>
+                      <p style={{ fontSize: "13px", color: "#5B7F58", marginTop: "4px" }}>Thanks for reaching out — I&apos;ll get back to you soon.</p>
                     </div>
-
-                    <div>
-                      <label
-                        htmlFor="drawer-message"
-                        style={{
-                          display: "block",
-                          fontSize: "10px",
-                          textTransform: "uppercase",
-                          letterSpacing: "0.08em",
-                          color: "#9C988E",
-                          marginBottom: "5px",
-                        }}
-                      >
-                        Message
-                      </label>
-                      <textarea
-                        id="drawer-message"
-                        name="message"
-                        value={form.message}
-                        onChange={handleChange}
-                        rows={3}
-                        placeholder="What would you like to talk about?"
-                        className={field("message")}
-                        style={{ borderRadius: "2px", color: "#1B1A17", resize: "none" }}
-                      />
-                      {errors.message && (
-                        <p style={{ fontSize: "11px", color: "#A8642E", marginTop: "3px" }}>
-                          {errors.message}
-                        </p>
-                      )}
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="btn-primary"
-                      style={{ alignSelf: "flex-start" }}
+                  ) : (
+                    <form
+                      onSubmit={handleFormspreeSubmit}
+                      style={{ display: "flex", flexDirection: "column", gap: "12px" }}
                     >
-                      Send message
-                    </button>
-                  </form>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                        <div>
+                          <label htmlFor="drawer-name" style={{ display: "block", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.08em", color: "#9C988E", marginBottom: "5px" }}>
+                            Name
+                          </label>
+                          <input
+                            ref={firstFieldRef}
+                            type="text"
+                            id="drawer-name"
+                            name="name"
+                            required
+                            disabled={formspreeState.submitting}
+                            placeholder="Your name"
+                            className={inputCls}
+                            style={{ borderRadius: "2px", color: "#1B1A17" }}
+                          />
+                          <ValidationError prefix="Name" field="name" errors={formspreeState.errors} className="text-xs mt-1" style={{ color: "#A8642E", fontSize: "11px" }} />
+                        </div>
+                        <div>
+                          <label htmlFor="drawer-email" style={{ display: "block", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.08em", color: "#9C988E", marginBottom: "5px" }}>
+                            Email
+                          </label>
+                          <input
+                            type="email"
+                            id="drawer-email"
+                            name="email"
+                            required
+                            disabled={formspreeState.submitting}
+                            placeholder="you@example.com"
+                            className={inputCls}
+                            style={{ borderRadius: "2px", color: "#1B1A17" }}
+                          />
+                          <ValidationError prefix="Email" field="email" errors={formspreeState.errors} style={{ color: "#A8642E", fontSize: "11px" }} />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label htmlFor="drawer-message" style={{ display: "block", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.08em", color: "#9C988E", marginBottom: "5px" }}>
+                          Message
+                        </label>
+                        <textarea
+                          id="drawer-message"
+                          name="message"
+                          required
+                          rows={3}
+                          disabled={formspreeState.submitting}
+                          placeholder="What would you like to talk about?"
+                          className={inputCls}
+                          style={{ borderRadius: "2px", color: "#1B1A17", resize: "none" }}
+                        />
+                        <ValidationError prefix="Message" field="message" errors={formspreeState.errors} style={{ color: "#A8642E", fontSize: "11px" }} />
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={formspreeState.submitting}
+                        className="btn-primary"
+                        style={{ alignSelf: "flex-start", opacity: formspreeState.submitting ? 0.6 : 1 }}
+                      >
+                        {formspreeState.submitting ? "Sending…" : "Send message"}
+                      </button>
+                    </form>
+                  )}
                 </div>
               </div>
             </div>
