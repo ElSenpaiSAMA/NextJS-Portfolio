@@ -2,14 +2,19 @@
 
 import { useEffect, useState } from "react";
 
+const LINE1_S = 1.5;       // duration "Matias"
+const LINE2_DELAY_S = LINE1_S + 0.2;
+const LINE2_S = 1.7;       // duration "Speroni"
+const TOTAL_S = LINE2_DELAY_S + LINE2_S;
+const EASE = "cubic-bezier(0.4, 0, 0.2, 1)";
+
 export default function LoadingScreen() {
   const [visible, setVisible] = useState(true);
   const [fading, setFading] = useState(false);
 
   useEffect(() => {
-    // "Matias" draws ~0.1s–1.1s, "Speroni" draws ~1.2s–2.4s, accent line ~2.5s
-    const fadeTimer = setTimeout(() => setFading(true), 2800);
-    const hideTimer = setTimeout(() => setVisible(false), 3300);
+    const fadeTimer = setTimeout(() => setFading(true), (TOTAL_S + 0.4) * 1000);
+    const hideTimer = setTimeout(() => setVisible(false), (TOTAL_S + 0.9) * 1000);
     return () => {
       clearTimeout(fadeTimer);
       clearTimeout(hideTimer);
@@ -34,67 +39,94 @@ export default function LoadingScreen() {
         pointerEvents: fading ? "none" : "auto",
       }}
     >
-      <svg
-        viewBox="0 0 360 170"
-        width="360"
-        height="170"
-        style={{ overflow: "visible" }}
-        aria-label="Matias Speroni"
-      >
-        <style>{`
-          .ms-line-1 {
-            font-family: var(--font-dancing), cursive;
-            font-size: 72px;
-            font-weight: 600;
-            fill: none;
-            stroke: #1B1A17;
-            stroke-width: 1px;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            stroke-dasharray: 2000;
-            stroke-dashoffset: 2000;
-            animation: ms-draw 1.1s ease-in-out forwards 0.1s;
-          }
-          .ms-line-2 {
-            font-family: var(--font-dancing), cursive;
-            font-size: 72px;
-            font-weight: 600;
-            fill: none;
-            stroke: #1B1A17;
-            stroke-width: 1px;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            stroke-dasharray: 2500;
-            stroke-dashoffset: 2500;
-            animation: ms-draw 1.2s ease-in-out forwards 1.3s;
-          }
-          .ms-accent {
-            stroke: #A8642E;
-            stroke-width: 1.5px;
-            stroke-linecap: round;
-            fill: none;
-            stroke-dasharray: 80;
-            stroke-dashoffset: 80;
-            animation: ms-draw 0.4s ease forwards 2.6s;
-          }
-          @keyframes ms-draw {
-            to { stroke-dashoffset: 0; }
-          }
-        `}</style>
+      <style>{`
+        .ms-wrap {
+          position: relative;
+          display: inline-flex;
+          flex-direction: column;
+          align-items: flex-start;
+        }
 
-        {/* First name */}
-        <text x="180" y="80" textAnchor="middle" className="ms-line-1">
-          Matias
-        </text>
+        /* Each line row holds the text + the moving pen tip */
+        .ms-row {
+          position: relative;
+          display: block;
+        }
 
-        {/* Last name */}
-        <text x="180" y="152" textAnchor="middle" className="ms-line-2">
-          Speroni
-        </text>
+        /* Cursive text */
+        .ms-word {
+          font-family: var(--font-dancing), cursive;
+          font-size: clamp(50px, 12vw, 82px);
+          font-weight: 600;
+          color: #1B1A17;
+          display: block;
+          line-height: 1.3;
+          white-space: nowrap;
+          user-select: none;
+        }
 
-        {/* Accent underline */}
-        <line x1="140" y1="163" x2="220" y2="163" className="ms-accent" />
-      </svg>
+        /* Clip sweeps left → right, revealing the ink as it passes */
+        .ms-word-1 {
+          clip-path: inset(-20% 100% -20% 0);
+          animation: ms-write ${LINE1_S}s ${EASE} forwards 0.2s;
+        }
+        .ms-word-2 {
+          clip-path: inset(-20% 100% -20% 0);
+          animation: ms-write ${LINE2_S}s ${EASE} forwards ${LINE2_DELAY_S}s;
+        }
+        @keyframes ms-write {
+          from { clip-path: inset(-20% 100% -20% 0); }
+          to   { clip-path: inset(-20%   0% -20% 0); }
+        }
+
+        /* Pen tip — a small dot that leads the sweep */
+        .ms-pen {
+          position: absolute;
+          top: 55%;
+          transform: translate(-50%, -50%);
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background: #A8642E;
+          pointer-events: none;
+          opacity: 0;
+        }
+        .ms-pen-1 {
+          animation: ms-pen-move ${LINE1_S}s ${EASE} forwards 0.2s;
+        }
+        .ms-pen-2 {
+          animation: ms-pen-move ${LINE2_S}s ${EASE} forwards ${LINE2_DELAY_S}s;
+        }
+        @keyframes ms-pen-move {
+          0%  { left: 1%;  opacity: 1; }
+          97% { opacity: 1; }
+          100%{ left: 99%; opacity: 0; }
+        }
+
+        /* Accent underline draws after the name is complete */
+        .ms-underline {
+          height: 1px;
+          width: 0;
+          background: #A8642E;
+          margin-top: 2px;
+          animation: ms-underline 0.45s ease forwards ${TOTAL_S + 0.05}s;
+        }
+        @keyframes ms-underline {
+          to { width: 100%; }
+        }
+      `}</style>
+
+      <div className="ms-wrap">
+        <div className="ms-row">
+          <span className="ms-word ms-word-1">Matias</span>
+          <span className="ms-pen ms-pen-1" />
+        </div>
+        <div className="ms-row">
+          <span className="ms-word ms-word-2">Speroni</span>
+          <span className="ms-pen ms-pen-2" />
+        </div>
+        <div className="ms-underline" />
+      </div>
     </div>
   );
 }
