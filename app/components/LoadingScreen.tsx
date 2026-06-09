@@ -84,7 +84,14 @@ export default function LoadingScreen() {
           {WORD1.split("").map((char, i) => (
             <span
               key={i}
-              style={{ display: "inline-block", overflow: "hidden", lineHeight: 1.15 }}
+              style={{
+                display: "inline-block",
+                overflow: "hidden",
+                lineHeight: 1.15,
+                // Extra room above so dots/diacritics aren't clipped by overflow:hidden
+                paddingTop: "0.3em",
+                marginTop: "-0.3em",
+              }}
             >
               <span style={letterStyle(i)}>{char}</span>
             </span>
@@ -96,7 +103,13 @@ export default function LoadingScreen() {
           {WORD2.split("").map((char, i) => (
             <span
               key={i}
-              style={{ display: "inline-block", overflow: "hidden", lineHeight: 1.15 }}
+              style={{
+                display: "inline-block",
+                overflow: "hidden",
+                lineHeight: 1.15,
+                paddingTop: "0.3em",
+                marginTop: "-0.3em",
+              }}
             >
               <span style={letterStyle(WORD1.length + i)}>{char}</span>
             </span>
