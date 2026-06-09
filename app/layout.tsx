@@ -40,10 +40,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${fraunces.variable} ${hankenGrotesk.variable} ${dancingScript.variable} antialiased`}>
+      <body className={`${fraunces.variable} ${hankenGrotesk.variable} ${dancingScript.variable} antialiased flex flex-col min-h-screen`}>
         <LoadingScreen />
         <Header />
-        <main className="min-h-screen">{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
         <ContactDrawer />
       </body>

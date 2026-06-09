@@ -70,7 +70,7 @@ export default function Hero() {
       </p>
 
       {/* CTA buttons */}
-      <div className="motion-safe stagger-5 flex flex-wrap gap-3 mb-20">
+      <div className="motion-safe stagger-5 flex flex-wrap gap-3 mb-10">
         <Link href="/proyectos" className="btn-primary">View projects</Link>
         <button onClick={openContact} className="btn-ghost">Get in touch</button>
       </div>
