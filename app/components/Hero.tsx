@@ -22,7 +22,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="max-w-5xl mx-auto px-6 pt-36 pb-24">
+    <section ref={sectionRef} className="max-w-5xl mx-auto px-6" style={{ paddingTop: "clamp(48px, 9vh, 120px)", paddingBottom: "clamp(24px, 4vh, 64px)" }}>
       {/* Eyebrow */}
       <div className="motion-safe stagger-1 flex items-center gap-2 mb-6">
         <span
@@ -63,7 +63,7 @@ export default function Hero() {
       </p>
 
       {/* Currently strip */}
-      <p className="motion-safe stagger-4 text-sm mb-10" style={{ color: "var(--color-faint)" }}>
+      <p className="motion-safe stagger-4 text-sm mb-7" style={{ color: "var(--color-faint)" }}>
         Currently at <span style={{ color: "var(--color-ink)" }}>Imagine</span> · Building{" "}
         <span style={{ color: "var(--color-ink)" }}>Mira</span> · Studying{" "}
         <span style={{ color: "var(--color-ink)" }}>Applied Data Science</span>
@@ -76,7 +76,7 @@ export default function Hero() {
       </div>
 
       {/* What I do strip */}
-      <div className="border-t border-hairline pt-10 grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <div className="border-t border-hairline pt-7 grid grid-cols-1 sm:grid-cols-3 gap-6">
         {WHAT_I_DO.map(({ label, desc }) => (
           <div key={label}>
             <p
