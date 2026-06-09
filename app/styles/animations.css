@@ -1,63 +1,57 @@
-/* Animaciones personalizadas para el portfolio */
-
-@keyframes gradient {
-  /* Animación gradiente en títulos de páginas */
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-@keyframes float {
-  /* Animación de flote de robot en Hero */
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes fadeOut {
-  /* Animación de transiciones en ProjectCarousel */
+/* Scroll-reveal: elements fade and translate up when they enter the viewport */
+@keyframes fade-up {
   from {
-    opacity: 1;
+    opacity: 0;
+    transform: translateY(24px);
   }
   to {
-    opacity: 0;
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@keyframes wave {
-  /* Animación de onda similar al gradiente - usada en ProjectCarousel */
+/* Hero stagger: faster, used for hero elements only */
+@keyframes fade-up-hero {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Available dot pulse */
+@keyframes pulse-dot {
   0%, 100% {
-    background-position: 0% 50%;
+    opacity: 1;
   }
   50% {
-    background-position: 100% 50%;
+    opacity: 0.4;
   }
 }
 
-.animate-gradient {
-  /* Clase para aplicar animación de gradiente */
-  animation: gradient 3s ease infinite;
-  background-size: 200% 200%;
+.animate-fade-up {
+  animation: fade-up 0.6s ease forwards;
 }
 
-.animate-float {
-  /* Clase para aplicar animación de flote */
-  animation: float 3s ease-in-out infinite;
+.animate-fade-up-hero {
+  animation: fade-up-hero 0.5s ease forwards;
 }
 
-.animate-fadeOut {
-  /* Clase para aplicar animación de desvanecimiento */
-  animation: fadeOut 700ms ease-in-out forwards;
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
 }
 
-.animate-wave {
-  /* Clase para aplicar animación de onda */
-  animation: wave 3s ease-in-out infinite;
-  background-size: 200% 100%;
+/* Stagger delays for hero children */
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.15s; }
+.stagger-3 { animation-delay: 0.25s; }
+.stagger-4 { animation-delay: 0.35s; }
+.stagger-5 { animation-delay: 0.45s; }
+
+/* Elements start hidden before animation plays */
+.motion-safe {
+  opacity: 0;
 }

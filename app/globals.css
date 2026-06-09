@@ -2,34 +2,36 @@
 @import "./styles/animations.css";
 @import "./styles/effects.css";
 
-/* Estilos globales personalizados */
-/* Configuración manual del tema y tipografía */
+@theme {
+  /* Color tokens */
+  --color-paper: #FBFAF7;
+  --color-surface: #FFFFFF;
+  --color-ink: #1B1A17;
+  --color-muted: #6E6A62;
+  --color-faint: #9C988E;
+  --color-hairline: #E7E4DC;
+  --color-hairline-hover: #DAD6CC;
+  --color-accent: #A8642E;
+  --color-available: #5B7F58;
+
+  /* Font stacks — variables injected by next/font in layout.tsx */
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+
+  /* Border radius */
+  --radius-sm: 2px;
+  --radius-md: 3px;
+}
 
 * {
   scroll-behavior: smooth;
-}
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #FBFAF7;
+  color: #1B1A17;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
