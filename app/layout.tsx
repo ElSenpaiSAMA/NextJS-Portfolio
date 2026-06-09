@@ -3,6 +3,7 @@ import { Fraunces, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import LoadingScreen from "./components/LoadingScreen";
 
 const fraunces = Fraunces({
   variable: "--font-fraunces",
@@ -32,6 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${fraunces.variable} ${hankenGrotesk.variable} antialiased`}>
+        <LoadingScreen />
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />
