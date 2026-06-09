@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Hanken_Grotesk, Dancing_Script } from "next/font/google";
+import { ViewTransitions } from "next-view-transitions";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -39,14 +40,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${fraunces.variable} ${hankenGrotesk.variable} ${dancingScript.variable} antialiased flex flex-col min-h-screen`}>
-        <LoadingScreen />
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <ContactDrawer />
-      </body>
-    </html>
+    <ViewTransitions>
+      <html lang="en">
+        <body className={`${fraunces.variable} ${hankenGrotesk.variable} ${dancingScript.variable} antialiased flex flex-col min-h-screen`}>
+          <LoadingScreen />
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <ContactDrawer />
+        </body>
+      </html>
+    </ViewTransitions>
   );
 }
