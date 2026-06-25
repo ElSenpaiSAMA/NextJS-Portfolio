@@ -2,6 +2,8 @@
 
 import { Section, useSceneStore } from "../store/sceneStore";
 
+const SANS = "var(--font-hanken), system-ui, sans-serif";
+
 const NAV: { id: Section; label: string }[] = [
   { id: "hero",     label: "Home" },
   { id: "projects", label: "Projects" },
@@ -14,20 +16,18 @@ export function Navigation3D() {
   const setActive = useSceneStore((s) => s.setActive);
 
   return (
-    <nav
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 10,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "20px 32px",
-        pointerEvents: "none",
-      }}
-    >
+    <nav style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      zIndex: 10,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      padding: "20px 32px",
+      pointerEvents: "none",
+    }}>
       {/* Brand */}
       <button
         onClick={() => setActive("hero")}
@@ -36,8 +36,9 @@ export function Navigation3D() {
           border: "none",
           cursor: "pointer",
           color: "#f0ede8",
-          fontSize: "15px",
-          fontWeight: 500,
+          fontFamily: "var(--font-fraunces), Georgia, serif",
+          fontSize: "17px",
+          fontWeight: 400,
           letterSpacing: "-0.02em",
           pointerEvents: "auto",
           padding: 0,
@@ -55,14 +56,15 @@ export function Navigation3D() {
             style={{
               background: "none",
               border: "none",
+              borderBottom: active === id ? "1px solid rgba(168,100,46,0.6)" : "1px solid transparent",
               cursor: "pointer",
+              fontFamily: SANS,
               fontSize: "13px",
               fontWeight: 500,
-              letterSpacing: "0.02em",
-              color: active === id ? "#f0ede8" : "#4a4a6a",
+              letterSpacing: "0.01em",
+              color: active === id ? "#f0ede8" : "#4a4540",
               padding: "4px 0",
-              borderBottom: active === id ? "1px solid rgba(200,200,255,0.5)" : "1px solid transparent",
-              transition: "color 0.2s, border-color 0.2s",
+              transition: "color 0.25s, border-color 0.25s",
             }}
           >
             {label}

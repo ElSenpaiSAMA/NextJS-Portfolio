@@ -24,8 +24,8 @@ export function Scene() {
       dpr={[1, 1.5]}
       shadows
     >
-      <color attach="background" args={["#05050f"]} />
-      <fog attach="fog" args={["#05050f", 30, 95]} />
+      <color attach="background" args={["#0a0908"]} />
+      <fog attach="fog" args={["#0a0908", 28, 92]} />
 
       <Suspense fallback={null}>
         <SceneEnvironment />
@@ -36,12 +36,12 @@ export function Scene() {
         <ContactStation />
         <EffectComposer>
           <Bloom
-            intensity={0.6}
-            luminanceThreshold={0.3}
-            luminanceSmoothing={0.9}
+            intensity={0.45}
+            luminanceThreshold={0.35}
+            luminanceSmoothing={0.85}
             mipmapBlur
           />
-          <Vignette eskil={false} offset={0.25} darkness={0.7} />
+          <Vignette eskil={false} offset={0.2} darkness={0.65} />
         </EffectComposer>
       </Suspense>
     </Canvas>
