@@ -2,7 +2,7 @@
 
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useEffect } from "react";
-import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
+import { EffectComposer, Vignette } from "@react-three/postprocessing";
 import { CameraRig } from "./CameraRig";
 import { SceneEnvironment } from "./SceneEnvironment";
 
@@ -20,16 +20,15 @@ export function Scene() {
       dpr={[1, 1.5]}
       shadows
     >
-      <color attach="background" args={["#080604"]} />
-      <fog attach="fog" args={["#080604", 35, 100]} />
+      <color attach="background" args={["#f5f3ee"]} />
+      <fog attach="fog" args={["#f5f3ee", 22, 72]} />
 
       <Suspense fallback={null}>
         <SceneEnvironment />
         <CameraRig />
 
         <EffectComposer>
-          <Bloom intensity={0.5} luminanceThreshold={0.3} luminanceSmoothing={0.9} mipmapBlur />
-          <Vignette eskil={false} offset={0.15} darkness={0.75} />
+          <Vignette eskil={false} offset={0.2} darkness={0.28} />
         </EffectComposer>
       </Suspense>
     </Canvas>

@@ -40,10 +40,10 @@ export function Terrain() {
   return (
     <mesh geometry={geometry} position={[52, -1, -2]} receiveShadow castShadow>
       <meshStandardMaterial
-        color="#0d0b08"
+        color="#b0aca4"
         flatShading
-        roughness={0.88}
-        metalness={0.08}
+        roughness={0.92}
+        metalness={0.0}
       />
     </mesh>
   );

@@ -15,10 +15,10 @@ const CONTACT_LINKS = [
 const INPUT: React.CSSProperties = {
   width: "100%",
   padding: "9px 12px",
-  background: "rgba(255,255,255,0.04)",
-  border: "1px solid rgba(168,100,46,0.22)",
+  background: "#F5F3EE",
+  border: "1px solid #E7E4DC",
   borderRadius: "2px",
-  color: "#c8c4bc",
+  color: "#1B1A17",
   fontFamily: S,
   fontSize: "13px",
   outline: "none",
@@ -61,8 +61,8 @@ export function ContactDrawer3D() {
         onClick={() => setOpen(false)}
         style={{
           position: "fixed", inset: 0, zIndex: 40,
-          background: "rgba(5, 3, 2, 0.55)",
-          backdropFilter: "blur(3px)",
+          background: "rgba(27, 26, 23, 0.12)",
+          backdropFilter: "blur(2px)",
           opacity: open ? 1 : 0,
           pointerEvents: open ? "auto" : "none",
           transition: "opacity 0.35s ease",
@@ -89,20 +89,18 @@ export function ContactDrawer3D() {
             style={{
               display: "flex", alignItems: "center", gap: "8px",
               padding: "10px 24px",
-              background: "rgba(8, 6, 4, 0.92)",
-              border: "1px solid rgba(168,100,46,0.28)",
-              borderBottom: "none",
+              background: "#1B1A17",
+              border: "none",
               borderRadius: "14px 14px 0 0",
               cursor: "pointer",
               fontFamily: S,
               fontSize: "13px",
               fontWeight: 500,
               letterSpacing: "0.01em",
-              color: "#f0ede8",
-              backdropFilter: "blur(12px)",
+              color: "#FBFAF7",
               userSelect: "none",
               lineHeight: "1.2",
-              boxShadow: "0 -4px 24px rgba(168,100,46,0.08)",
+              boxShadow: "0 -4px 16px rgba(27,26,23,0.14)",
             }}
           >
             <span style={{
@@ -110,7 +108,7 @@ export function ContactDrawer3D() {
               transition: "transform 0.35s ease",
               transform: open ? "rotate(180deg)" : "rotate(0deg)",
               fontSize: "11px",
-              color: "#A8642E",
+              color: "#FBFAF7",
             }}>↑</span>
             {open ? "Close" : "Get in touch"}
           </button>
@@ -122,10 +120,9 @@ export function ContactDrawer3D() {
           transition: open ? "visibility 0s" : "visibility 0s linear 0.42s",
         }}>
           <div style={{
-            background: "rgba(8, 6, 4, 0.96)",
-            borderTop: "1px solid rgba(168,100,46,0.2)",
-            backdropFilter: "blur(20px)",
-            boxShadow: "0 -12px 60px rgba(0,0,0,0.6)",
+            background: "#FFFFFF",
+            borderTop: "1px solid #E7E4DC",
+            boxShadow: "0 -8px 40px rgba(27,26,23,0.08)",
             paddingBottom: "env(safe-area-inset-bottom)",
           }}>
             <div style={{
@@ -173,7 +170,7 @@ export function ContactDrawer3D() {
 
                 {/* RIGHT — form */}
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <h2 style={{ fontFamily: F, fontSize: "22px", fontWeight: 400, letterSpacing: "-0.02em", color: "#f0ede8", marginBottom: "4px" }}>
+                  <h2 style={{ fontFamily: F, fontSize: "22px", fontWeight: 400, letterSpacing: "-0.02em", color: "#1B1A17", marginBottom: "4px" }}>
                     Send a message
                   </h2>
                   <p style={{ fontFamily: S, fontSize: "13px", color: "#6E6A62", marginBottom: "22px" }}>
@@ -193,12 +190,12 @@ export function ContactDrawer3D() {
                       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
                         <div>
                           <label style={{ fontFamily: S, display: "block", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.08em", color: "#6E6A62", marginBottom: "5px" }}>Name</label>
-                          <input ref={firstRef} type="text" name="name" required disabled={state.submitting} placeholder="Your name" style={{ ...INPUT, color: "#c8c4bc" }} />
+                          <input ref={firstRef} type="text" name="name" required disabled={state.submitting} placeholder="Your name" style={INPUT} />
                           <ValidationError prefix="Name" field="name" errors={state.errors} style={{ color: "#A8642E", fontSize: "11px", display: "block", marginTop: "3px" }} />
                         </div>
                         <div>
                           <label style={{ fontFamily: S, display: "block", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.08em", color: "#6E6A62", marginBottom: "5px" }}>Email</label>
-                          <input type="email" name="email" required disabled={state.submitting} placeholder="you@example.com" style={{ ...INPUT, color: "#c8c4bc" }} />
+                          <input type="email" name="email" required disabled={state.submitting} placeholder="you@example.com" style={INPUT} />
                           <ValidationError prefix="Email" field="email" errors={state.errors} style={{ color: "#A8642E", fontSize: "11px", display: "block", marginTop: "3px" }} />
                         </div>
                       </div>
@@ -215,8 +212,8 @@ export function ContactDrawer3D() {
                         style={{
                           alignSelf: "flex-start",
                           padding: "10px 24px",
-                          background: "#f0ede8",
-                          color: "#1B1A17",
+                          background: "#1B1A17",
+                          color: "#FBFAF7",
                           border: "none",
                           borderRadius: "2px",
                           fontFamily: S,
@@ -234,7 +231,7 @@ export function ContactDrawer3D() {
                     {state.succeeded && (
                       <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "center" }}>
                         <div style={{ width: "32px", height: "1px", background: "#A8642E", marginBottom: "18px", opacity: 0.5 }} />
-                        <p style={{ fontFamily: F, fontStyle: "italic", fontSize: "22px", fontWeight: 400, letterSpacing: "-0.02em", color: "#f0ede8", marginBottom: "8px" }}>
+                        <p style={{ fontFamily: F, fontStyle: "italic", fontSize: "22px", fontWeight: 400, letterSpacing: "-0.02em", color: "#1B1A17", marginBottom: "8px" }}>
                           Message sent.
                         </p>
                         <p style={{ fontFamily: S, fontSize: "13px", color: "#6E6A62", lineHeight: 1.5 }}>
