@@ -25,14 +25,17 @@ export function ContentOverlay() {
       overflow: "hidden",
       pointerEvents: "none",
     }}>
-      <div style={{
-        display: "flex",
-        width: `${SECTIONS.length * 100}vw`,
-        height: "100vh",
-        transform: `translateX(-${index * 100}vw)`,
-        transition: "transform 0.82s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-        willChange: "transform",
-      }}>
+      {/* id="content-slider" — transform driven directly from CameraRig useFrame */}
+      <div
+        id="content-slider"
+        style={{
+          display: "flex",
+          width: `${SECTIONS.length * 100}vw`,
+          height: "100vh",
+          willChange: "transform",
+          transform: `translateX(-${index * 100}vw)`,
+        }}
+      >
         {SECTIONS.map(({ id, Component }) => (
           <div
             key={id}
