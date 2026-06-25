@@ -50,7 +50,6 @@ export function ProjectsContent() {
               position: "relative",
               overflow: "hidden",
               borderRadius: "3px",
-              cursor: "default",
               minHeight: 0,
             }}
             onMouseEnter={(e) => {
@@ -140,41 +139,59 @@ export function ProjectsContent() {
                 {p.description}
               </p>
 
-              {/* Bottom row: tech + links */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
-                  {p.tech.slice(0, 2).map((t) => (
-                    <span key={t} style={{
-                      fontFamily: S, fontSize: "8px", color: "#5A5650",
-                      border: "1px solid rgba(168,100,46,0.15)",
-                      borderRadius: "2px", padding: "1px 5px",
-                      textTransform: "uppercase", letterSpacing: "0.04em",
-                    }}>{t}</span>
-                  ))}
-                </div>
-                <div style={{ display: "flex", gap: "6px" }}>
-                  {p.github && (
-                    <a
-                      href={p.github} target="_blank" rel="noopener noreferrer"
-                      style={{
-                        fontFamily: S, fontSize: "10px", color: "#5A5650",
-                        textDecoration: "none", lineHeight: 1,
-                      }}
-                      title="View on GitHub"
-                    >GH →</a>
-                  )}
-                  {p.siteLink && (
-                    <a
-                      href={p.siteLink} target="_blank" rel="noopener noreferrer"
-                      style={{
-                        fontFamily: S, fontSize: "10px", color: "#A8642E",
-                        textDecoration: "none", lineHeight: 1,
-                        textShadow: "0 0 8px rgba(168,100,46,0.5)",
-                      }}
-                      title="Visit site"
-                    >↗</a>
-                  )}
-                </div>
+              {/* Tech tags */}
+              <div style={{ display: "flex", gap: "4px", flexWrap: "wrap", marginBottom: "8px" }}>
+                {p.tech.slice(0, 2).map((t) => (
+                  <span key={t} style={{
+                    fontFamily: S, fontSize: "8px", color: "#5A5650",
+                    border: "1px solid rgba(168,100,46,0.15)",
+                    borderRadius: "2px", padding: "1px 5px",
+                    textTransform: "uppercase", letterSpacing: "0.04em",
+                  }}>{t}</span>
+                ))}
+              </div>
+
+              {/* Link buttons */}
+              <div style={{ display: "flex", gap: "6px" }}>
+                {p.github && (
+                  <a
+                    href={p.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      fontFamily: S, fontSize: "10px", fontWeight: 500,
+                      color: "#C8C4BC",
+                      textDecoration: "none",
+                      padding: "4px 10px",
+                      border: "1px solid rgba(168,100,46,0.3)",
+                      borderRadius: "2px",
+                      cursor: "pointer",
+                      letterSpacing: "0.02em",
+                    }}
+                  >
+                    GitHub →
+                  </a>
+                )}
+                {p.siteLink && (
+                  <a
+                    href={p.siteLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      fontFamily: S, fontSize: "10px", fontWeight: 500,
+                      color: "#F0EDE8",
+                      textDecoration: "none",
+                      padding: "4px 10px",
+                      background: "#A8642E",
+                      borderRadius: "2px",
+                      cursor: "pointer",
+                      letterSpacing: "0.02em",
+                      boxShadow: "0 0 10px rgba(168,100,46,0.35)",
+                    }}
+                  >
+                    View site →
+                  </a>
+                )}
               </div>
             </div>
           </article>
