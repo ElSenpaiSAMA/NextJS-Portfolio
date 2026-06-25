@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 const F = "var(--font-fraunces), Georgia, serif";
 const S = "var(--font-hanken), system-ui, sans-serif";
 
@@ -10,12 +12,32 @@ const PANEL: React.CSSProperties = {
   backdropFilter: "blur(12px)",
 };
 
-const STACK = [
-  ".NET", "C#", "React", "Next.js", "TypeScript", "FastAPI",
-  "PostgreSQL", "Supabase", "Docker", "Python", "Pandas", "Ollama",
+const STACK_TABS = [
+  {
+    key: "fullstack",
+    label: "Backend & Fullstack",
+    items: [
+      ".NET", "C#", "React", "Next.js", "TypeScript",
+      "FastAPI", "SQL Server", "PostgreSQL", "Supabase",
+      "Firebase", "Docker", "Git",
+    ],
+  },
+  {
+    key: "data",
+    label: "Data & AI",
+    items: [
+      "Python", "Pandas", "NumPy", "Jupyter",
+      "Ollama", "n8n", "GitHub Actions",
+      "SQL Server", "PostgreSQL", "Supabase", "Firebase",
+    ],
+  },
 ];
 
 export function AboutContent() {
+  const [activeTab, setActiveTab] = useState<"fullstack" | "data">("fullstack");
+
+  const items = STACK_TABS.find((t) => t.key === activeTab)?.items ?? [];
+
   return (
     <div style={{
       position: "absolute",
@@ -25,6 +47,7 @@ export function AboutContent() {
       padding: "80px 8% 24px",
       overflowY: "auto",
     }}>
+      {/* Heading */}
       <div style={{ marginBottom: "24px", flexShrink: 0 }}>
         <h2 style={{ fontFamily: F, fontSize: "clamp(38px, 4.5vw, 60px)", fontWeight: 400, color: "#f0ede8", letterSpacing: "-0.03em", margin: "0 0 10px", lineHeight: 1 }}>About</h2>
         <div style={{ width: "36px", height: "1px", background: "#A8642E", opacity: 0.6 }} />
@@ -42,6 +65,7 @@ export function AboutContent() {
               <p style={{ fontFamily: S, fontSize: "10px", color: "#A8642E", textTransform: "uppercase", letterSpacing: "0.1em", margin: "3px 0 0" }}>Barcelona, Spain</p>
             </div>
           </div>
+
           <p style={{ fontFamily: S, fontSize: "13px", color: "#6E6A62", lineHeight: 1.7, marginBottom: "12px" }}>
             Backend &amp; fullstack developer specialized in .NET and React. Working at Imagine building data and AI products end to end.
           </p>
@@ -54,10 +78,10 @@ export function AboutContent() {
 
           <div style={{ marginTop: "18px", paddingTop: "14px", borderTop: "1px solid rgba(168,100,46,0.12)", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
             {[
-              { label: "Based in", value: "Barcelona, Spain" },
-              { label: "Role", value: "Backend & Fullstack" },
-              { label: "Focus", value: "Data & AI" },
-              { label: "Languages", value: "ES · EN" },
+              { label: "Based in",     value: "Barcelona, Spain" },
+              { label: "Role",         value: "Backend & Fullstack" },
+              { label: "Focus",        value: "Data & AI" },
+              { label: "Languages",    value: "ES · EN" },
             ].map(({ label, value }) => (
               <div key={label}>
                 <p style={{ fontFamily: S, fontSize: "10px", color: "#4a4540", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "2px" }}>{label}</p>
@@ -69,9 +93,34 @@ export function AboutContent() {
 
         {/* Stack */}
         <div>
-          <p style={{ fontFamily: S, fontSize: "10px", color: "#9C988E", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "12px" }}>Stack</p>
+          {/* Tabs */}
+          <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
+            {STACK_TABS.map(({ key, label }) => (
+              <button
+                key={key}
+                onClick={() => setActiveTab(key as "fullstack" | "data")}
+                style={{
+                  fontFamily: S,
+                  fontSize: "11px",
+                  fontWeight: 500,
+                  padding: "5px 12px",
+                  borderRadius: "2px",
+                  border: "1px solid",
+                  cursor: "pointer",
+                  transition: "all 0.15s",
+                  background:     activeTab === key ? "#f0ede8"                   : "transparent",
+                  color:          activeTab === key ? "#1B1A17"                   : "#9C988E",
+                  borderColor:    activeTab === key ? "#f0ede8"                   : "rgba(168,100,46,0.2)",
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {/* Grid */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "7px" }}>
-            {STACK.map((name) => (
+            {items.map((name) => (
               <div key={name} style={{ ...PANEL, padding: "11px 8px", textAlign: "center" }}>
                 <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: "#A8642E", margin: "0 auto 6px", boxShadow: "0 0 4px #A8642E88" }} />
                 <p style={{ fontFamily: S, fontSize: "11px", color: "#c8c4bc", fontWeight: 500, margin: 0 }}>{name}</p>
