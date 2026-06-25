@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import { useSceneStore } from "../../store/sceneStore";
 
 const F = "var(--font-fraunces), Georgia, serif";
@@ -7,6 +8,9 @@ const S = "var(--font-hanken), system-ui, sans-serif";
 
 export function HeroContent() {
   const setActive = useSceneStore((s) => s.setActive);
+  const openContact = useCallback(() => {
+    window.dispatchEvent(new CustomEvent("open-contact-drawer"));
+  }, []);
 
   return (
     <div style={{
@@ -92,7 +96,7 @@ export function HeroContent() {
           View projects →
         </button>
         <button
-          onClick={() => setActive("contact")}
+          onClick={openContact}
           style={{
             padding: "11px 28px",
             background: "transparent",

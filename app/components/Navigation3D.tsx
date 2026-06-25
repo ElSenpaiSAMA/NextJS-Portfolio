@@ -8,7 +8,6 @@ const NAV: { id: Section; label: string }[] = [
   { id: "hero",     label: "Home" },
   { id: "projects", label: "Projects" },
   { id: "about",    label: "About" },
-  { id: "contact",  label: "Contact" },
 ];
 
 export function Navigation3D() {
@@ -28,42 +27,32 @@ export function Navigation3D() {
       padding: "20px 32px",
       pointerEvents: "none",
     }}>
-      {/* Brand */}
       <button
         onClick={() => setActive("hero")}
         style={{
-          background: "none",
-          border: "none",
-          cursor: "pointer",
+          background: "none", border: "none", cursor: "pointer",
           color: "#f0ede8",
           fontFamily: "var(--font-fraunces), Georgia, serif",
-          fontSize: "17px",
-          fontWeight: 400,
-          letterSpacing: "-0.02em",
-          pointerEvents: "auto",
-          padding: 0,
+          fontSize: "17px", fontWeight: 400, letterSpacing: "-0.02em",
+          pointerEvents: "auto", padding: 0,
         }}
       >
         MS
       </button>
 
-      {/* Links */}
       <div style={{ display: "flex", gap: "32px", pointerEvents: "auto" }}>
         {NAV.map(({ id, label }) => (
           <button
             key={id}
             onClick={() => setActive(id)}
             style={{
-              background: "none",
-              border: "none",
-              borderBottom: active === id ? "1px solid rgba(168,100,46,0.6)" : "1px solid transparent",
-              cursor: "pointer",
-              fontFamily: SANS,
-              fontSize: "13px",
-              fontWeight: 500,
+              background: "none", cursor: "pointer",
+              fontFamily: SANS, fontSize: "13px", fontWeight: 500,
               letterSpacing: "0.01em",
               color: active === id ? "#f0ede8" : "#4a4540",
               padding: "4px 0",
+              border: "none",
+              borderBottom: active === id ? "1px solid rgba(168,100,46,0.6)" : "1px solid transparent",
               transition: "color 0.25s, border-color 0.25s",
             }}
           >

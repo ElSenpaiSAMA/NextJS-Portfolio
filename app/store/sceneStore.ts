@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type Section = "hero" | "projects" | "about" | "contact";
+export type Section = "hero" | "projects" | "about";
 
 interface CameraConfig {
   position: [number, number, number];
@@ -8,10 +8,9 @@ interface CameraConfig {
 }
 
 export const STATIONS: Record<Section, CameraConfig> = {
-  hero:     { position: [0,   7, 18], lookAt: [0,   0, -3] },
-  projects: { position: [35,  7, 18], lookAt: [35,  0, -3] },
-  about:    { position: [70,  7, 18], lookAt: [70,  0, -3] },
-  contact:  { position: [105, 7, 18], lookAt: [105, 0, -3] },
+  hero:     { position: [0,  7, 18], lookAt: [0,  0, -3] },
+  projects: { position: [35, 7, 18], lookAt: [35, 0, -3] },
+  about:    { position: [70, 7, 18], lookAt: [70, 0, -3] },
 };
 
 interface SceneStore {

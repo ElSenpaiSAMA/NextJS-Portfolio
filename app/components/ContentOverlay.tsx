@@ -4,13 +4,11 @@ import { useSceneStore } from "../store/sceneStore";
 import { HeroContent } from "./sections/HeroContent";
 import { ProjectsContent } from "./sections/ProjectsContent";
 import { AboutContent } from "./sections/AboutContent";
-import { ContactContent } from "./sections/ContactContent";
 
 const SECTIONS = [
   { id: "hero",     Component: HeroContent },
   { id: "projects", Component: ProjectsContent },
   { id: "about",    Component: AboutContent },
-  { id: "contact",  Component: ContactContent },
 ] as const;
 
 export function ContentOverlay() {
@@ -25,7 +23,6 @@ export function ContentOverlay() {
       overflow: "hidden",
       pointerEvents: "none",
     }}>
-      {/* id="content-slider" — transform driven directly from CameraRig useFrame */}
       <div
         id="content-slider"
         style={{
