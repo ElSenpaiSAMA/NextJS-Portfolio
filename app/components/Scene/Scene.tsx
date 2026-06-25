@@ -2,6 +2,7 @@
 
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useEffect } from "react";
+import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import { CameraRig } from "./CameraRig";
 import { SceneEnvironment } from "./SceneEnvironment";
 import { HeroStation } from "../stations/HeroStation";
@@ -33,6 +34,15 @@ export function Scene() {
         <ProjectsStation />
         <AboutStation />
         <ContactStation />
+        <EffectComposer>
+          <Bloom
+            intensity={0.6}
+            luminanceThreshold={0.3}
+            luminanceSmoothing={0.9}
+            mipmapBlur
+          />
+          <Vignette eskil={false} offset={0.25} darkness={0.7} />
+        </EffectComposer>
       </Suspense>
     </Canvas>
   );
