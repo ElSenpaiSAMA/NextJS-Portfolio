@@ -1,6 +1,7 @@
-import { SceneLoader } from "./components/Scene/SceneLoader";
-import { Navigation3D } from "./components/Navigation3D";
+import { SceneLoader }    from "./components/Scene/SceneLoader";
 import { ContentOverlay } from "./components/ContentOverlay";
+import { SiteChrome }     from "./components/SiteChrome";
+import { ScrollHint }     from "./components/ScrollHint";
 import { ContactDrawer3D } from "./components/ContactDrawer3D";
 
 export const metadata = {
@@ -13,7 +14,8 @@ export default function Home() {
     <>
       <SceneLoader />
       <ContentOverlay />
-      <Navigation3D />
+      <SiteChrome />
+      <ScrollHint />
       <ContactDrawer3D />
     </>
   );

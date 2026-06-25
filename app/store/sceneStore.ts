@@ -2,10 +2,11 @@ import { create } from "zustand";
 
 export type Section = "hero" | "projects" | "about";
 
+// Where the camera aims when navigating to each section
 export const SECTION_PROGRESS: Record<Section, number> = {
   hero:     0,
-  projects: 0.4,
-  about:    0.8,
+  projects: 0.35,
+  about:    0.76,
 };
 
 interface SceneStore {

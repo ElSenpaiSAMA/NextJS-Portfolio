@@ -5,61 +5,176 @@ import { projects } from "../../data/projects";
 const F = "var(--font-fraunces), Georgia, serif";
 const S = "var(--font-hanken), system-ui, sans-serif";
 
-const PANEL: React.CSSProperties = {
-  background: "rgba(10, 9, 16, 0.84)",
-  border: "1px solid rgba(168,100,46,0.22)",
-  borderRadius: "3px",
-  backdropFilter: "blur(14px)",
-  overflow: "hidden",
-};
-
 export function ProjectsContent() {
   return (
-    <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", padding: "80px 8% 24px", overflowY: "auto" }}>
-      <div style={{ marginBottom: "24px", flexShrink: 0 }}>
-        <h2 style={{ fontFamily: F, fontSize: "clamp(38px, 4.5vw, 60px)", fontWeight: 400, color: "#F0EDE8", letterSpacing: "-0.03em", margin: "0 0 10px", lineHeight: 1 }}>Projects</h2>
-        <div style={{ width: "44px", height: "1px", background: "#A8642E", boxShadow: "0 0 8px rgba(168,100,46,0.6)" }} />
+    <div style={{
+      position: "absolute", inset: 0,
+      padding: "72px 7% 28px",
+      display: "flex", flexDirection: "column",
+    }}>
+      {/* Header */}
+      <div style={{ marginBottom: "20px", flexShrink: 0 }}>
+        <div style={{ display: "flex", alignItems: "baseline", gap: "16px" }}>
+          <h2 style={{
+            fontFamily: F, fontSize: "clamp(32px, 3.5vw, 52px)", fontWeight: 400,
+            color: "#F0EDE8", letterSpacing: "-0.03em", margin: 0, lineHeight: 1,
+          }}>
+            Projects
+          </h2>
+          <div style={{
+            flex: 1, height: "1px",
+            background: "linear-gradient(to right, rgba(168,100,46,0.6), transparent)",
+          }} />
+        </div>
+        <p style={{
+          fontFamily: S, fontSize: "11px", color: "#4A4640",
+          letterSpacing: "0.08em", textTransform: "uppercase", marginTop: "6px",
+        }}>
+          Selected work
+        </p>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px", flexShrink: 0 }}>
+      {/* 3×2 grid — image-first cards */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)",
+        gridTemplateRows: "repeat(2, 1fr)",
+        gap: "8px",
+        flex: 1,
+        minHeight: 0,
+      }}>
         {projects.map((p) => (
-          <article key={p.id} style={PANEL}>
-            {p.image && (
-              <div style={{ width: "100%", aspectRatio: "16/9", overflow: "hidden", borderBottom: "1px solid rgba(168,100,46,0.15)" }}>
-                <img src={p.image} alt={p.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          <article
+            key={p.id}
+            style={{
+              position: "relative",
+              overflow: "hidden",
+              borderRadius: "3px",
+              cursor: "default",
+              minHeight: 0,
+            }}
+            onMouseEnter={(e) => {
+              const img = e.currentTarget.querySelector("img") as HTMLImageElement | null;
+              if (img) img.style.transform = "scale(1.06)";
+            }}
+            onMouseLeave={(e) => {
+              const img = e.currentTarget.querySelector("img") as HTMLImageElement | null;
+              if (img) img.style.transform = "scale(1)";
+            }}
+          >
+            {/* Background image */}
+            {p.image ? (
+              <img
+                src={p.image}
+                alt={p.title}
+                style={{
+                  position: "absolute", inset: 0,
+                  width: "100%", height: "100%",
+                  objectFit: "cover",
+                  transition: "transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                }}
+              />
+            ) : (
+              <div style={{
+                position: "absolute", inset: 0,
+                background: "linear-gradient(135deg, #0e0d14 0%, #1a1228 100%)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>
+                <span style={{
+                  fontFamily: F, fontSize: "52px", color: "rgba(168,100,46,0.15)",
+                  letterSpacing: "-0.02em",
+                }}>{p.title[0]}</span>
               </div>
             )}
-            <div style={{ padding: "14px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "5px" }}>
-                <p style={{ fontFamily: F, fontSize: "16px", color: "#F0EDE8", letterSpacing: "-0.01em", margin: 0 }}>{p.title}</p>
-                {p.inDevelopment && (
-                  <span style={{ fontFamily: S, fontSize: "9px", color: "#A8642E", textTransform: "uppercase", letterSpacing: "0.08em" }}>WIP</span>
-                )}
+
+            {/* Gradient overlay */}
+            <div style={{
+              position: "absolute", inset: 0,
+              background: "linear-gradient(to top, rgba(5,5,10,0.97) 0%, rgba(5,5,10,0.55) 40%, rgba(5,5,10,0.12) 100%)",
+            }} />
+
+            {/* Amber border glow on hover */}
+            <div style={{
+              position: "absolute", inset: 0,
+              boxShadow: "inset 0 0 0 1px rgba(168,100,46,0.18)",
+              borderRadius: "3px",
+              pointerEvents: "none",
+            }} />
+
+            {/* WIP badge */}
+            {p.inDevelopment && (
+              <div style={{
+                position: "absolute", top: "10px", right: "10px",
+                background: "rgba(5,5,10,0.75)",
+                border: "1px solid rgba(168,100,46,0.4)",
+                borderRadius: "2px",
+                padding: "2px 7px",
+              }}>
+                <span style={{
+                  fontFamily: S, fontSize: "8px", color: "#A8642E",
+                  textTransform: "uppercase", letterSpacing: "0.1em",
+                }}>WIP</span>
               </div>
-              <p style={{ fontFamily: S, fontSize: "11px", color: "#6A6460", lineHeight: 1.55, marginBottom: "10px" }}>{p.description}</p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", marginBottom: "10px" }}>
-                {p.tech.slice(0, 3).map((t) => (
-                  <span key={t} style={{
-                    fontFamily: S, fontSize: "9px", color: "#6A6460",
-                    border: "1px solid rgba(168,100,46,0.18)", borderRadius: "2px",
-                    padding: "2px 5px", textTransform: "uppercase", letterSpacing: "0.04em",
-                  }}>{t}</span>
-                ))}
-              </div>
-              <div style={{ display: "flex", gap: "7px" }}>
-                {p.github && (
-                  <a href={p.github} target="_blank" rel="noopener noreferrer" style={{
-                    fontFamily: S, fontSize: "10px", color: "#7A7670", textDecoration: "none",
-                    border: "1px solid rgba(168,100,46,0.2)", padding: "3px 8px", borderRadius: "2px",
-                  }}>GitHub →</a>
-                )}
-                {p.siteLink && (
-                  <a href={p.siteLink} target="_blank" rel="noopener noreferrer" style={{
-                    fontFamily: S, fontSize: "10px", color: "#F0EDE8", textDecoration: "none",
-                    background: "#A8642E", padding: "3px 8px", borderRadius: "2px",
-                    boxShadow: "0 0 8px rgba(168,100,46,0.4)",
-                  }}>View →</a>
-                )}
+            )}
+
+            {/* Content overlay — bottom */}
+            <div style={{
+              position: "absolute", bottom: 0, left: 0, right: 0,
+              padding: "10px 12px 12px",
+            }}>
+              <h3 style={{
+                fontFamily: F, fontSize: "16px", color: "#F0EDE8",
+                fontWeight: 400, letterSpacing: "-0.01em", margin: "0 0 3px",
+                lineHeight: 1.2,
+              }}>
+                {p.title}
+              </h3>
+              <p style={{
+                fontFamily: S, fontSize: "10px", color: "#6A6460",
+                lineHeight: 1.5, margin: "0 0 8px",
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+              }}>
+                {p.description}
+              </p>
+
+              {/* Bottom row: tech + links */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
+                  {p.tech.slice(0, 2).map((t) => (
+                    <span key={t} style={{
+                      fontFamily: S, fontSize: "8px", color: "#5A5650",
+                      border: "1px solid rgba(168,100,46,0.15)",
+                      borderRadius: "2px", padding: "1px 5px",
+                      textTransform: "uppercase", letterSpacing: "0.04em",
+                    }}>{t}</span>
+                  ))}
+                </div>
+                <div style={{ display: "flex", gap: "6px" }}>
+                  {p.github && (
+                    <a
+                      href={p.github} target="_blank" rel="noopener noreferrer"
+                      style={{
+                        fontFamily: S, fontSize: "10px", color: "#5A5650",
+                        textDecoration: "none", lineHeight: 1,
+                      }}
+                      title="View on GitHub"
+                    >GH →</a>
+                  )}
+                  {p.siteLink && (
+                    <a
+                      href={p.siteLink} target="_blank" rel="noopener noreferrer"
+                      style={{
+                        fontFamily: S, fontSize: "10px", color: "#A8642E",
+                        textDecoration: "none", lineHeight: 1,
+                        textShadow: "0 0 8px rgba(168,100,46,0.5)",
+                      }}
+                      title="Visit site"
+                    >↗</a>
+                  )}
+                </div>
               </div>
             </div>
           </article>

@@ -4,46 +4,33 @@ import { HeroContent }     from "./sections/HeroContent";
 import { ProjectsContent } from "./sections/ProjectsContent";
 import { AboutContent }    from "./sections/AboutContent";
 
+// Sections stack on top of each other.
+// CameraRig drives each section's opacity+transform from useFrame.
 const SECTIONS = [
-  { id: "hero",     Component: HeroContent     },
-  { id: "projects", Component: ProjectsContent },
-  { id: "about",    Component: AboutContent    },
+  { id: "section-hero",     Component: HeroContent,     initialOp: 1 },
+  { id: "section-projects", Component: ProjectsContent, initialOp: 0 },
+  { id: "section-about",    Component: AboutContent,    initialOp: 0 },
 ] as const;
 
 export function ContentOverlay() {
   return (
-    <div style={{
-      position: "fixed",
-      inset: 0,
-      zIndex: 5,
-      overflow: "hidden",
-      pointerEvents: "none",
-    }}>
-      <div
-        id="content-slider"
-        style={{
-          display: "flex",
-          width: `${SECTIONS.length * 100}vw`,
-          height: "100vh",
-          willChange: "transform",
-          transform: "translateX(0)",
-        }}
-      >
-        {SECTIONS.map(({ id, Component }) => (
-          <div
-            key={id}
-            style={{
-              width: "100vw",
-              height: "100vh",
-              flexShrink: 0,
-              position: "relative",
-              pointerEvents: "auto",
-            }}
-          >
-            <Component />
-          </div>
-        ))}
-      </div>
-    </div>
+    <>
+      {SECTIONS.map(({ id, Component, initialOp }) => (
+        <div
+          key={id}
+          id={id}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 5,
+            opacity: initialOp,
+            pointerEvents: initialOp > 0 ? "auto" : "none",
+            willChange: "opacity, transform",
+          }}
+        >
+          <Component />
+        </div>
+      ))}
+    </>
   );
 }
