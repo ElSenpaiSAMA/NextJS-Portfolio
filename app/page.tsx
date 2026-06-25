@@ -1,12 +1,16 @@
-import Hero from "./components/Hero";
-
-// Componente de página de inicio
+import { SceneLoader } from "./components/Scene/SceneLoader";
+import { Navigation3D } from "./components/Navigation3D";
 
 export const metadata = {
-  title: "Home - Matias Speroni",
-  description: "Welcome to my personal portfolio",
+  title: "Matias Speroni",
+  description: "Backend & Fullstack Developer — .NET, React, Data & AI",
 };
 
 export default function Home() {
-  return <Hero />;
+  return (
+    <>
+      <SceneLoader />
+      <Navigation3D />
+    </>
+  );
 }
