@@ -5,10 +5,6 @@ import { Suspense, useEffect } from "react";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import { CameraRig } from "./CameraRig";
 import { SceneEnvironment } from "./SceneEnvironment";
-import { HeroStation } from "../stations/HeroStation";
-import { ProjectsStation } from "../stations/ProjectsStation";
-import { AboutStation } from "../stations/AboutStation";
-import { ContactStation } from "../stations/ContactStation";
 
 export function Scene() {
   useEffect(() => {
@@ -18,30 +14,22 @@ export function Scene() {
 
   return (
     <Canvas
-      camera={{ position: [0, 4, 14], fov: 60 }}
+      camera={{ position: [0, 7, 18], fov: 58 }}
       style={{ position: "fixed", inset: 0, zIndex: 0 }}
       gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
       dpr={[1, 1.5]}
       shadows
     >
-      <color attach="background" args={["#0a0908"]} />
-      <fog attach="fog" args={["#0a0908", 28, 92]} />
+      <color attach="background" args={["#080604"]} />
+      <fog attach="fog" args={["#080604", 35, 100]} />
 
       <Suspense fallback={null}>
         <SceneEnvironment />
         <CameraRig />
-        <HeroStation />
-        <ProjectsStation />
-        <AboutStation />
-        <ContactStation />
+
         <EffectComposer>
-          <Bloom
-            intensity={0.45}
-            luminanceThreshold={0.35}
-            luminanceSmoothing={0.85}
-            mipmapBlur
-          />
-          <Vignette eskil={false} offset={0.2} darkness={0.65} />
+          <Bloom intensity={0.5} luminanceThreshold={0.3} luminanceSmoothing={0.9} mipmapBlur />
+          <Vignette eskil={false} offset={0.15} darkness={0.75} />
         </EffectComposer>
       </Suspense>
     </Canvas>

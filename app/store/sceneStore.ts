@@ -8,10 +8,10 @@ interface CameraConfig {
 }
 
 export const STATIONS: Record<Section, CameraConfig> = {
-  hero:     { position: [0,   4, 14], lookAt: [0,   1.5, 0] },
-  projects: { position: [32,  4, 14], lookAt: [32,  1.5, 0] },
-  about:    { position: [64,  4, 14], lookAt: [64,  1.5, 0] },
-  contact:  { position: [96,  4, 14], lookAt: [96,  1.5, 0] },
+  hero:     { position: [0,   7, 18], lookAt: [0,   0, -3] },
+  projects: { position: [35,  7, 18], lookAt: [35,  0, -3] },
+  about:    { position: [70,  7, 18], lookAt: [70,  0, -3] },
+  contact:  { position: [105, 7, 18], lookAt: [105, 0, -3] },
 };
 
 interface SceneStore {
