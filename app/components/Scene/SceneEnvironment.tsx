@@ -5,14 +5,17 @@ import { Terrain } from "./Terrain";
 export function SceneEnvironment() {
   return (
     <>
-      {/* Strong ambient for light scene */}
-      <ambientLight intensity={0.55} color="#fff8f0" />
+      {/* Very dim ambient to keep deep shadows truly dark */}
+      <ambientLight intensity={0.1} color="#1a1228" />
 
-      {/* Main directional — warm, high angle, creates face shadows on terrain */}
-      <directionalLight position={[20, 35, 15]} intensity={0.7} color="#ffe8cc" castShadow shadow-mapSize={[1024, 1024]} />
+      {/* Warm amber light near hero */}
+      <pointLight position={[6, 10, 8]}   intensity={2.2} color="#ffaa44" distance={55} decay={2} />
 
-      {/* Cool fill from opposite side — keeps shadows from going pure black */}
-      <directionalLight position={[-15, 12, -10]} intensity={0.18} color="#dde8ff" />
+      {/* Cool blue accent mid-scene */}
+      <pointLight position={[-8, 8, -38]} intensity={1.8} color="#4488ff" distance={60} decay={2} />
+
+      {/* Amber again near about */}
+      <pointLight position={[7, 12, -76]} intensity={2.0} color="#ffaa44" distance={55} decay={2} />
 
       <Terrain />
     </>

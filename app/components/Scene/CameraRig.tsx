@@ -3,43 +3,95 @@
 import { useEffect, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import { useSceneStore, STATIONS } from "../../store/sceneStore";
+import { useSceneStore, SECTION_PROGRESS, type Section } from "../../store/sceneStore";
 
-// Sections are spaced 35 units apart in world X.
-// Slider maps world X → -vw: sliderX = -(cameraX / 35) * 100vw
-const SECTION_STEP = 35;
+const Z_START = 22;
+const Z_RANGE  = 95;
+
+function clamp(v: number, lo: number, hi: number) {
+  return v < lo ? lo : v > hi ? hi : v;
+}
 
 export function CameraRig() {
-  const { camera } = useThree();
-  const active = useSceneStore((s) => s.active);
+  const scrollTarget     = useSceneStore((s) => s.scrollTarget);
+  const clearScrollTarget = useSceneStore((s) => s.clearScrollTarget);
+  const setActive        = useSceneStore((s) => s.setActive);
+  const { camera }       = useThree();
 
-  const pos       = useRef(new THREE.Vector3(0, 7, 18));
-  const look      = useRef(new THREE.Vector3(0, 0, -3));
-  const targetPos  = useRef(new THREE.Vector3(0, 7, 18));
-  const targetLook = useRef(new THREE.Vector3(0, 0, -3));
-  const sliderRef  = useRef<HTMLElement | null>(null);
+  const targetRef   = useRef(0);
+  const progressRef = useRef(0);
+  const sectionRef  = useRef<Section>("hero");
+  const lookTarget  = useRef(new THREE.Vector3(0, 2.5, 4));
 
+  // Nav click → consume and apply scroll target
   useEffect(() => {
-    sliderRef.current = document.getElementById("content-slider");
+    if (scrollTarget !== null) {
+      targetRef.current = scrollTarget;
+      clearScrollTarget();
+    }
+  }, [scrollTarget, clearScrollTarget]);
+
+  // Wheel + touch + keyboard
+  useEffect(() => {
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      targetRef.current = clamp(targetRef.current + e.deltaY / 3200, 0, 1);
+    };
+    let ty = 0;
+    const onTouchStart = (e: TouchEvent) => { ty = e.touches[0].clientY; };
+    const onTouchMove  = (e: TouchEvent) => {
+      const d = ty - e.touches[0].clientY;
+      ty = e.touches[0].clientY;
+      targetRef.current = clamp(targetRef.current + d / 1600, 0, 1);
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowDown" || e.key === "ArrowRight") {
+        targetRef.current = clamp(targetRef.current + 0.38, 0, 1);
+      } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+        targetRef.current = clamp(targetRef.current - 0.38, 0, 1);
+      }
+    };
+    window.addEventListener("wheel",      onWheel,      { passive: false });
+    window.addEventListener("touchstart", onTouchStart, { passive: true  });
+    window.addEventListener("touchmove",  onTouchMove,  { passive: true  });
+    window.addEventListener("keydown",    onKeyDown);
+    return () => {
+      window.removeEventListener("wheel",      onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove",  onTouchMove);
+      window.removeEventListener("keydown",    onKeyDown);
+    };
   }, []);
 
-  useEffect(() => {
-    const { position, lookAt } = STATIONS[active];
-    targetPos.current.set(...position);
-    targetLook.current.set(...lookAt);
-  }, [active]);
-
   useFrame(() => {
-    pos.current.lerp(targetPos.current, 0.045);
-    look.current.lerp(targetLook.current, 0.045);
-    camera.position.copy(pos.current);
-    camera.lookAt(look.current);
+    progressRef.current = THREE.MathUtils.lerp(progressRef.current, targetRef.current, 0.038);
+    const p = progressRef.current;
 
-    // Drive content slider directly from camera X — perfectly in sync
-    if (sliderRef.current) {
-      const vw = window.innerWidth;
-      const tx = -(pos.current.x / SECTION_STEP) * vw;
-      sliderRef.current.style.transform = `translateX(${tx}px)`;
+    // Update active section at thresholds
+    const newSection: Section = p < 0.22 ? "hero" : p < 0.62 ? "projects" : "about";
+    if (newSection !== sectionRef.current) {
+      sectionRef.current = newSection;
+      setActive(newSection);
+    }
+
+    // Camera along Z with gentle drift
+    const camZ = Z_START - p * Z_RANGE;
+    camera.position.set(
+      Math.sin(p * Math.PI * 1.5) * 0.7,
+      6 + Math.sin(p * Math.PI * 2.5) * 0.4,
+      camZ,
+    );
+
+    // Smooth lookAt slightly ahead and below
+    const dest = new THREE.Vector3(0, 2.5, camZ - 18);
+    lookTarget.current.lerp(dest, 0.06);
+    camera.lookAt(lookTarget.current);
+
+    // Drive content slider
+    const slider = document.getElementById("content-slider");
+    if (slider) {
+      const sf = clamp(p * 2.5, 0, 2);
+      slider.style.transform = `translateX(${-sf * window.innerWidth}px)`;
     }
   });
 

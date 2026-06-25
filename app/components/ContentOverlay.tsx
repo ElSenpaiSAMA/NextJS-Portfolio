@@ -1,20 +1,16 @@
 "use client";
 
-import { useSceneStore } from "../store/sceneStore";
-import { HeroContent } from "./sections/HeroContent";
+import { HeroContent }     from "./sections/HeroContent";
 import { ProjectsContent } from "./sections/ProjectsContent";
-import { AboutContent } from "./sections/AboutContent";
+import { AboutContent }    from "./sections/AboutContent";
 
 const SECTIONS = [
-  { id: "hero",     Component: HeroContent },
+  { id: "hero",     Component: HeroContent     },
   { id: "projects", Component: ProjectsContent },
-  { id: "about",    Component: AboutContent },
+  { id: "about",    Component: AboutContent    },
 ] as const;
 
 export function ContentOverlay() {
-  const active = useSceneStore((s) => s.active);
-  const index = SECTIONS.findIndex((s) => s.id === active);
-
   return (
     <div style={{
       position: "fixed",
@@ -30,7 +26,7 @@ export function ContentOverlay() {
           width: `${SECTIONS.length * 100}vw`,
           height: "100vh",
           willChange: "transform",
-          transform: `translateX(-${index * 100}vw)`,
+          transform: "translateX(0)",
         }}
       >
         {SECTIONS.map(({ id, Component }) => (
@@ -41,7 +37,7 @@ export function ContentOverlay() {
               height: "100vh",
               flexShrink: 0,
               position: "relative",
-              pointerEvents: active === id ? "auto" : "none",
+              pointerEvents: "auto",
             }}
           >
             <Component />

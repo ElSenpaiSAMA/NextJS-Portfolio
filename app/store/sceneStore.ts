@@ -2,23 +2,24 @@ import { create } from "zustand";
 
 export type Section = "hero" | "projects" | "about";
 
-interface CameraConfig {
-  position: [number, number, number];
-  lookAt: [number, number, number];
-}
-
-export const STATIONS: Record<Section, CameraConfig> = {
-  hero:     { position: [0,  7, 18], lookAt: [0,  0, -3] },
-  projects: { position: [35, 7, 18], lookAt: [35, 0, -3] },
-  about:    { position: [70, 7, 18], lookAt: [70, 0, -3] },
+export const SECTION_PROGRESS: Record<Section, number> = {
+  hero:     0,
+  projects: 0.4,
+  about:    0.8,
 };
 
 interface SceneStore {
-  active: Section;
-  setActive: (s: Section) => void;
+  active:            Section;
+  scrollTarget:      number | null;
+  setActive:         (s: Section) => void;
+  navigateTo:        (s: Section) => void;
+  clearScrollTarget: () => void;
 }
 
 export const useSceneStore = create<SceneStore>((set) => ({
-  active: "hero",
-  setActive: (active) => set({ active }),
+  active:            "hero",
+  scrollTarget:      null,
+  setActive:         (active) => set({ active }),
+  navigateTo:        (section) => set({ active: section, scrollTarget: SECTION_PROGRESS[section] }),
+  clearScrollTarget: () => set({ scrollTarget: null }),
 }));
