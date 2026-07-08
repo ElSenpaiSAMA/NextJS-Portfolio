@@ -237,7 +237,7 @@ export function ContactDrawer3D() {
                           Message sent.
                         </p>
                         <p style={{ fontFamily: S, fontSize: "13px", color: "#5A5650", lineHeight: 1.5 }}>
-                          Thanks for reaching out —<br />I'll get back to you soon.
+                          Thanks for reaching out —<br />I&apos;ll get back to you soon.
                         </p>
                       </div>
                     )}

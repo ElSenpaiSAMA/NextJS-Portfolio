@@ -1,6 +1,4 @@
 @import "tailwindcss";
-@import "./styles/animations.css";
-@import "./styles/effects.css";
 
 @theme {
   /* Color tokens */

@@ -12,14 +12,11 @@
 
 ```
 app/
-  components/     # Componentes reutilizables
+  components/     # Componentes reutilizables (SiteChrome, ContentOverlay, Scene/, sections/)
   data/           # Datos estáticos (proyectos, skills, etc.)
-  styles/         # Estilos globales adicionales
-  contacto/       # Página de contacto
-  proyectos/      # Página de proyectos
-  sobre-mi/       # Página sobre mí
+  store/          # Estado global
   layout.tsx      # Layout raíz
-  page.tsx        # Página principal
+  page.tsx        # Página principal (single-page con escena 3D)
 public/           # Assets estáticos (imágenes, íconos)
 ```
 
