@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { motion } from "motion/react";
 import { useForm, ValidationError } from "@formspree/react";
+import { useMagnetic } from "../hooks/useMagnetic";
 
 const F = "var(--font-fraunces), Georgia, serif";
 const S = "var(--font-hanken), system-ui, sans-serif";
@@ -32,6 +34,11 @@ export function ContactDrawer3D() {
   const pillRef  = useRef<HTMLDivElement>(null);
   const firstRef = useRef<HTMLInputElement>(null);
   const [pillH, setPillH] = useState(46);
+  // Magnetism lives on the inner button — its parent drawer animates its own
+  // translateY, and both transforms must not fight over the same element.
+  // Destructured on purpose: the react-hooks/refs lint rule treats chained
+  // access on the hook's return object as a ref read.
+  const { ref: pillMagneticRef, style: pillMagneticStyle } = useMagnetic<HTMLButtonElement>();
 
   useEffect(() => {
     if (pillRef.current) setPillH(pillRef.current.offsetHeight);
@@ -83,7 +90,9 @@ export function ContactDrawer3D() {
       >
         {/* Pill trigger */}
         <div ref={pillRef} style={{ display: "flex", justifyContent: "center" }}>
-          <button
+          <motion.button
+            ref={pillMagneticRef}
+            data-cursor="link"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             style={{
@@ -102,6 +111,7 @@ export function ContactDrawer3D() {
               userSelect: "none",
               lineHeight: "1.2",
               boxShadow: "0 -4px 20px rgba(168,100,46,0.15)",
+              ...pillMagneticStyle,
             }}
           >
             <span style={{
@@ -112,7 +122,7 @@ export function ContactDrawer3D() {
               color: "#A8642E",
             }}>↑</span>
             {open ? "Close" : "Get in touch"}
-          </button>
+          </motion.button>
         </div>
 
         {/* Panel */}

@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback } from "react";
+import { motion } from "motion/react";
 import { useSceneStore } from "../../store/sceneStore";
+import { useMagnetic } from "../../hooks/useMagnetic";
 
 const F = "var(--font-fraunces), Georgia, serif";
 const S = "var(--font-hanken), system-ui, sans-serif";
@@ -11,6 +13,10 @@ export function HeroContent() {
   const openContact = useCallback(() => {
     window.dispatchEvent(new CustomEvent("open-contact-drawer"));
   }, []);
+  // Destructured on purpose: the react-hooks/refs lint rule treats chained
+  // access on the hook's return object as a ref read.
+  const { ref: viewWorkRef,   style: viewWorkStyle }   = useMagnetic<HTMLButtonElement>();
+  const { ref: getInTouchRef, style: getInTouchStyle } = useMagnetic<HTMLButtonElement>();
 
   return (
     <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
@@ -88,7 +94,9 @@ export function HeroContent() {
 
         {/* CTAs */}
         <div style={{ display: "flex", gap: "12px" }}>
-          <button
+          <motion.button
+            ref={viewWorkRef}
+            data-cursor="link"
             onClick={() => navigateTo("projects")}
             style={{
               padding: "12px 30px",
@@ -99,11 +107,14 @@ export function HeroContent() {
               fontFamily: S, fontSize: "13px", fontWeight: 500,
               cursor: "pointer", letterSpacing: "0.02em",
               boxShadow: "0 0 28px rgba(168,100,46,0.5)",
+              ...viewWorkStyle,
             }}
           >
             View work →
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            ref={getInTouchRef}
+            data-cursor="link"
             onClick={openContact}
             style={{
               padding: "12px 30px",
@@ -113,10 +124,11 @@ export function HeroContent() {
               borderRadius: "2px",
               fontFamily: S, fontSize: "13px", fontWeight: 500,
               cursor: "pointer", letterSpacing: "0.02em",
+              ...getInTouchStyle,
             }}
           >
             Get in touch
-          </button>
+          </motion.button>
         </div>
       </div>
     </div>

@@ -69,6 +69,19 @@
   box-sizing: border-box;
 }
 
+/*
+ * Cursor.tsx toggles this class on <body> while the custom cursor is active
+ * (fine pointers only — never on touch). `!important` is required: buttons
+ * set `cursor: pointer` via inline styles, which would otherwise win over
+ * any selector. Hiding the native cursor does NOT affect keyboard focus
+ * outlines: `cursor` and `outline` are independent, so :focus-visible rings
+ * keep rendering as usual.
+ */
+body.cursor-none-active,
+body.cursor-none-active * {
+  cursor: none !important;
+}
+
 body {
   background-color: var(--color-bg);
   color: var(--color-text-primary);

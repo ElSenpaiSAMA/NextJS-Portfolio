@@ -29,6 +29,10 @@ function applySection(id: string, op: number): void {
   if (!el) return;
   el.style.opacity = String(Math.round(op * 1000) / 1000);
   el.style.pointerEvents = op > 0.06 ? "auto" : "none";
+  // visibility gates hit-testing for the whole subtree: sections re-enable
+  // pointer-events on inner content, which would otherwise keep intercepting
+  // hover/clicks meant for the visible section stacked below.
+  el.style.visibility = op > 0.06 ? "visible" : "hidden";
   el.style.transform = `translateY(${(1 - Math.min(1, op * 1.5)) * 14}px)`;
 }
 
