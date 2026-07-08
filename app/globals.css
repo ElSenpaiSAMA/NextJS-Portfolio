@@ -1,16 +1,42 @@
 @import "tailwindcss";
 
-@theme {
-  /* Color tokens */
-  --color-paper: #FBFAF7;
-  --color-surface: #FFFFFF;
-  --color-ink: #1B1A17;
-  --color-muted: #6E6A62;
-  --color-faint: #9C988E;
-  --color-hairline: #E7E4DC;
-  --color-hairline-hover: #DAD6CC;
+/*
+ * `static` forces every token to be emitted as a CSS variable even when no
+ * Tailwind utility references it yet — these are also consumed from inline
+ * styles (var(--color-accent), etc.), which Tailwind's scanner can't see.
+ */
+@theme static {
+  /* Backgrounds */
+  --color-bg: #05050a;
+  --color-bg-alt: #050508;
+  --color-bg-elevated: #0e0d14;
+
+  /* Text scale — from primary to nearly invisible */
+  --color-text-primary: #F0EDE8;
+  --color-text-secondary: #8A8680;
+  --color-text-tertiary: #6A6460;
+  --color-text-muted: #5A5650;
+  --color-text-faint: #4A4640;
+  --color-text-ghost: #3A3830;
+
+  /* Brand accents */
   --color-accent: #A8642E;
   --color-available: #5B7F58;
+
+  /* 3D scene palette (lights, particles, fog) */
+  --color-scene-amber: #ffaa44;
+  --color-scene-amber-dim: #6B3D18;
+  --color-scene-blue: #4488ff;
+  --color-scene-blue-dim: #2A5FA8;
+  --color-scene-purple: #6040A0;
+  --color-scene-purple-dim: #2A1848;
+  --color-scene-navy: #162248;
+  --color-scene-ambient: #1a1228;
+  --color-scene-particle: #c8c0b8;
+
+  /* Easing — generates Tailwind ease-out-expo / ease-out-circ utilities */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-circ: cubic-bezier(0.76, 0, 0.24, 1);
 
   /* Font stacks — variables injected by next/font in layout.tsx */
   --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
@@ -21,14 +47,31 @@
   --radius-md: 3px;
 }
 
+/*
+ * Non-utility variables live outside @theme on purpose:
+ * the *-rgb triplets would otherwise generate invalid Tailwind color
+ * utilities, and glass/grain values are plain CSS vars, not design-token
+ * namespaces. Consume them as rgba(var(--color-accent-rgb), X), etc.
+ */
+:root {
+  --color-accent-rgb: 168, 100, 46;
+  --color-available-rgb: 91, 127, 88;
+
+  --glass-bg: rgba(14, 13, 20, 0.6);
+  --glass-border: rgba(168, 100, 46, 0.18);
+  --glass-blur: 20px;
+
+  --grain-opacity: 0.035;
+}
+
 * {
   scroll-behavior: smooth;
   box-sizing: border-box;
 }
 
 body {
-  background-color: #FBFAF7;
-  color: #1B1A17;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

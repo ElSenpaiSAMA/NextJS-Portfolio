@@ -3,6 +3,7 @@ import { ContentOverlay } from "./components/ContentOverlay";
 import { SiteChrome }     from "./components/SiteChrome";
 import { ScrollHint }     from "./components/ScrollHint";
 import { ContactDrawer3D } from "./components/ContactDrawer3D";
+import { GrainOverlay }   from "./components/GrainOverlay";
 
 export const metadata = {
   title: "Matias Speroni",
@@ -17,6 +18,7 @@ export default function Home() {
       <SiteChrome />
       <ScrollHint />
       <ContactDrawer3D />
+      <GrainOverlay />
     </>
   );
 }
