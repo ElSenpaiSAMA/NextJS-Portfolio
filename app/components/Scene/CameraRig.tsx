@@ -47,6 +47,9 @@ export function CameraRig() {
   const sectionRef   = useRef<Section>("hero");
   const lookTarget   = useRef(new THREE.Vector3(0, 2.5, 4));
   const destLook     = useRef(new THREE.Vector3());
+  const mouseRef     = useRef({ x: 0, y: 0 });   // normalized pointer (-1..1)
+  const parallaxRef  = useRef({ x: 0, y: 0 });   // lerped camera offset
+  const publishedRef = useRef(-1);               // last progress sent to store
 
   // Nav dot click → jump to section
   useEffect(() => {
@@ -75,15 +78,21 @@ export function CameraRig() {
       else if (e.key === "ArrowUp" || e.key === "ArrowLeft")
         targetRef.current = clamp(targetRef.current - 0.38, 0, 1);
     };
-    window.addEventListener("wheel",      onWheel,      { passive: false });
-    window.addEventListener("touchstart", onTouchStart, { passive: true  });
-    window.addEventListener("touchmove",  onTouchMove,  { passive: true  });
-    window.addEventListener("keydown",    onKeyDown);
+    const onPointerMove = (e: PointerEvent) => {
+      mouseRef.current.x = (e.clientX / window.innerWidth)  * 2 - 1;
+      mouseRef.current.y = (e.clientY / window.innerHeight) * 2 - 1;
+    };
+    window.addEventListener("wheel",       onWheel,      { passive: false });
+    window.addEventListener("touchstart",  onTouchStart, { passive: true  });
+    window.addEventListener("touchmove",   onTouchMove,  { passive: true  });
+    window.addEventListener("keydown",     onKeyDown);
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
     return () => {
-      window.removeEventListener("wheel",      onWheel);
-      window.removeEventListener("touchstart", onTouchStart);
-      window.removeEventListener("touchmove",  onTouchMove);
-      window.removeEventListener("keydown",    onKeyDown);
+      window.removeEventListener("wheel",       onWheel);
+      window.removeEventListener("touchstart",  onTouchStart);
+      window.removeEventListener("touchmove",   onTouchMove);
+      window.removeEventListener("keydown",     onKeyDown);
+      window.removeEventListener("pointermove", onPointerMove);
     };
   }, []);
 
@@ -106,10 +115,30 @@ export function CameraRig() {
       camZ,
     );
 
+    // Mouse parallax — small lerped offset on top of the sinusoidal sway
+    parallaxRef.current.x = THREE.MathUtils.lerp(parallaxRef.current.x,  mouseRef.current.x * 0.4,  0.05);
+    parallaxRef.current.y = THREE.MathUtils.lerp(parallaxRef.current.y, -mouseRef.current.y * 0.25, 0.05);
+    camera.position.set(
+      camera.position.x + parallaxRef.current.x,
+      camera.position.y + parallaxRef.current.y,
+      camera.position.z,
+    );
+
     // Smooth lookAt
     destLook.current.set(0, 2.5, camZ - 18);
     lookTarget.current.lerp(destLook.current, 0.055);
     camera.lookAt(lookTarget.current);
+
+    // Subtle roll (applied after lookAt, which resets orientation) for an
+    // organic "banking" feel while flying down the corridor
+    camera.rotateZ(Math.sin(p * Math.PI * 0.8) * 0.015);
+
+    // Publish progress for shaders/effects — static setState (no hook) avoids
+    // React re-renders; throttled so near-idle frames don't spam the store
+    if (Math.abs(p - publishedRef.current) > 0.001) {
+      publishedRef.current = p;
+      useSceneStore.setState({ scrollProgress: p });
+    }
 
     // ── Section opacity (each section is a "moment" in the corridor) ──
     // hero:     full 0.00–0.26, fades out by 0.33
