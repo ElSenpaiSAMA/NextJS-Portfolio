@@ -68,32 +68,41 @@ npm run lint     # Linter
 
 ## Flujo de trabajo con Git
 
-Cada tarea se ejecuta **paso a paso**, y cada paso genera su propio ciclo completo:
+### Ramas / entornos
 
-1. Crear una nueva rama descriptiva desde `main`:
+| Rama | Rol | Quién la toca |
+|------|-----|---------------|
+| `feat` | Rama de trabajo. **Todos los commits de Claude van acá.** | Claude |
+| `dev` | Entorno de desarrollo/staging | Solo el usuario |
+| `main` | Producción | Solo el usuario |
+
+Claude **nunca** commitea, mergea ni pushea a `main` ni a `dev`, ni crea otras ramas.
+
+### Commits por capa
+
+Se commitea **una vez por capa** (ver tabla de capas en "Contexto para IA"), cuando
+los cambios de esa capa están terminados — no un commit por cada micro-paso.
+
+1. Trabajar en `feat`:
    ```bash
-   git checkout main && git pull
-   git checkout -b <nombre-descriptivo>
+   git checkout feat
    ```
-2. Implementar **solo ese paso**.
-3. Commitear y pushear esa rama:
+2. Implementar los cambios de la tarea.
+3. Al terminar los cambios de una capa, verificar (`npm run lint && npm run build`) y
+   commitear **solo los archivos de esa capa**:
    ```bash
-   git add <archivos>
-   git commit -m "descripción del paso"
-   git push -u origin <nombre-descriptivo>
+   git add <archivos de la capa>
+   git commit -m "<tipo>(<capa>): descripción"
    ```
-4. Mergear a `main`:
-   ```bash
-   git checkout main
-   git merge <nombre-descriptivo>
-   git push origin main
-   ```
-5. Repetir desde el paso 1 para el siguiente paso.
+   Capas para el scope: `app-shell`, `design-system`, `scene-3d`, `ui`, `state`, `content`,
+   `backend`, `quality`, y `ai-docs` para `docs/ai/`, `.claude/` y `CLAUDE.md`.
+4. Si una tarea toca varias capas → un commit por cada capa tocada.
+5. Push: `git push origin feat`.
 
 **Reglas:**
-- Nunca commitear directamente a `main`.
-- Una tarea grande = muchos commits pequeños, cada uno con su propia rama.
-- No agrupar pasos en un solo commit.
+- Nunca commitear directamente a `main` ni a `dev`.
+- No mezclar archivos de distintas capas en un mismo commit.
+- Actualizar el doc de `docs/ai/` de una capa va en el commit de **esa** capa.
 - Claude no debe aparecer como colaborador en ningún commit (sin `Co-Authored-By` ni ninguna mención).
 
 ## Estándares de código

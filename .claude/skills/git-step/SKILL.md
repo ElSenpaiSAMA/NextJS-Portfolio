@@ -1,48 +1,60 @@
 ---
 name: git-step
-description: Ejecuta el ciclo de Git del repo para UN paso de trabajo — rama desde main, commit, push y merge a main — según CLAUDE.md. Usar al terminar cada paso de una tarea, o cuando el usuario diga "commiteá", "subí esto", "mergeá".
+description: Commitea los cambios terminados de UNA capa en la rama `feat` y la pushea, según CLAUDE.md. Usar al terminar los cambios de cada capa de una tarea, o cuando el usuario diga "commiteá", "subí esto".
 ---
 
 # git-step
 
-Ciclo obligatorio del repo (ver `CLAUDE.md` → "Flujo de trabajo con Git").
-Un paso = una rama = un commit.
+Ciclo del repo (ver `CLAUDE.md` → "Flujo de trabajo con Git"): **un commit por capa, siempre en `feat`**.
 
-## Antes de empezar el paso
+## Ramas
 
-```bash
-git checkout main && git pull
-git checkout -b <tipo>/<descripcion-kebab>
-```
+- `feat` → la única rama donde se commitea.
+- `dev` y `main` → entornos del usuario. **Nunca** commitear, mergear ni pushear ahí.
+- No crear ramas nuevas.
 
-Tipos de rama/commit: `feat`, `fix`, `refactor`, `docs`, `chore`, `test`, `perf`, `style`.
+## Pasos
 
-## Al terminar el paso
+1. Estar en `feat`:
+   ```bash
+   git branch --show-current   # debe decir feat; si no: git checkout feat
+   ```
+2. Agrupar los archivos cambiados por capa (`git status`). Mapa de capas:
 
-1. Verificar (si falla, **no** commitear; arreglar primero):
+   | Scope | Archivos |
+   |-------|----------|
+   | `app-shell` | `app/layout.tsx`, `app/page.tsx`, `LoadingScreen.tsx`, `next.config.ts` |
+   | `design-system` | `app/globals.css`, `app/lib/tokens.ts` |
+   | `scene-3d` | `app/components/Scene/**` |
+   | `ui` | `app/components/*.tsx`, `app/components/sections/**`, `app/hooks/**` |
+   | `state` | `app/store/**` |
+   | `content` | `app/data/**`, `public/**` |
+   | `backend` | `app/api/**`, `app/actions/**`, `app/lib/server/**`, `.env.example` |
+   | `quality` | tests, `eslint.config.mjs`, `.github/**`, `package.json` (deps de tooling) |
+   | `ai-docs` | `docs/ai/**`, `.claude/**`, `CLAUDE.md` |
+
+   El doc `docs/ai/0X-*.md` de una capa va en el commit de **esa** capa, no en `ai-docs`.
+3. Verificar (si falla, **no** commitear; arreglar primero):
    ```bash
    npm run lint
    npm run build
    ```
    (Para cambios solo en `.md` o `.claude/` se puede omitir el build.)
-2. Revisar qué entra: `git status` y `git diff`. Agregar **archivos explícitos**, nunca `git add -A` a ciegas.
-3. Commit con mensaje convencional en inglés, imperativo, ≤ 72 caracteres en la primera línea:
+4. Por cada capa con cambios terminados, un commit con archivos explícitos (nunca `git add -A`):
    ```bash
-   git commit -m "feat: add project filter to projects grid"
+   git add <archivos de la capa>
+   git commit -m "feat(ui): add project filter to projects grid"
    ```
+   Formato: `<tipo>(<capa>): <descripción en inglés, imperativo>` — tipos `feat`, `fix`, `refactor`,
+   `docs`, `chore`, `test`, `perf`, `style`. Primera línea ≤ 72 caracteres.
    **Prohibido**: `Co-Authored-By`, "Generated with Claude" o cualquier mención a Claude/IA.
-4. Push y merge:
+5. Push:
    ```bash
-   git push -u origin <rama>
-   git checkout main
-   git merge <rama>
-   git push origin main
+   git push origin feat
    ```
 
 ## Reglas
 
-- Nunca commitear directamente en `main`.
-- No agrupar varios pasos en un commit.
-- Si `git push` falla por autenticación, completar el merge local y avisar al usuario qué ramas quedaron sin pushear.
-- Si hay conflictos en el merge, detenerse y mostrarlos; no resolver a ciegas.
-- Nunca `--force`, `--no-verify` ni reescribir historia de `main`.
+- Si una capa todavía tiene cambios a medio hacer, no la commitees.
+- Si `git push` falla (autenticación o conflicto de nombres), avisar al usuario con el error exacto; no intentar workarounds.
+- Nunca `--force`, `--no-verify` ni reescribir historia ya pusheada.

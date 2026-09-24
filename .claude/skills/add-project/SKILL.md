@@ -51,4 +51,4 @@ El orden del array es el orden en pantalla (izq→der, arriba→abajo).
 
 - `npm run lint && npm run build`
 - En `npm run dev`: la card se ve, la descripción no se corta raro, los botones abren el link correcto.
-- Commit con la skill `git-step`: `feat: add <title> to projects` (o `chore: update …`).
+- Commit en `feat` con la skill `git-step` (capa `content`, incluye `projects.ts` + imagen): `feat(content): add <title> to projects` (o `chore(content): update …`).

@@ -1,6 +1,6 @@
 ---
 name: code-reviewer
-description: Revisa cambios (git diff, una rama o archivos) buscando bugs, contratos rotos entre capas, problemas de rendimiento 3D, accesibilidad y violaciones de los estándares del repo. Solo lectura; devuelve hallazgos priorizados. Usalo antes de mergear cada paso.
+description: Revisa cambios (git diff, una rama o archivos) buscando bugs, contratos rotos entre capas, problemas de rendimiento 3D, accesibilidad y violaciones de los estándares del repo. Solo lectura; devuelve hallazgos priorizados. Usalo antes de commitear cada capa en `feat`.
 tools: Read, Grep, Glob, Bash
 ---
 
@@ -21,12 +21,12 @@ comandos de lectura (`git diff`, `git log`, `git show`, `npm run lint`, `npm run
 4. **SSR/Next**: código de browser (`window`, `document`, three) en Server Components o sin `ssr:false`; hydration mismatches.
 5. **Estándares**: `any`, hex hardcodeados nuevos (en vez de tokens), `useMagnetic` no desestructurado, elementos interactivos sin `data-cursor`/`aria-*`.
 6. **Docs**: si cambió algo documentado en `docs/ai/`, ¿se actualizó?
-7. **Git**: commits pequeños, sin `Co-Authored-By` ni mención a Claude.
+7. **Git**: commits en la rama `feat` (nunca `main`/`dev`), un commit por capa sin mezclar archivos de otras capas, formato `<tipo>(<capa>): …`, sin `Co-Authored-By` ni mención a Claude.
 
 ## Formato de salida
 
 ```
-## Veredicto: ✅ listo para mergear | ⚠ mergeable con cambios menores | ❌ bloqueante
+## Veredicto: ✅ listo para commitear | ⚠ commiteable con cambios menores | ❌ bloqueante
 
 ### Hallazgos
 1. [ALTA|MEDIA|BAJA] archivo:línea — problema

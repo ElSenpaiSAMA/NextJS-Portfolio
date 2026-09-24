@@ -31,10 +31,12 @@ Solo hace falta el lado TS si el valor se usa en three.js o `motion`; pero por c
    - three.js: `new THREE.Color(tokens.colors.<camel>)`
    - motion: `ease: tokens.easing.<camel>.array`
 5. Si el token es nuevo en la tabla de paleta, agregarlo a `docs/ai/02-design-system.md`.
-6. `npm run lint && npm run build`, luego `git-step`.
+6. `npm run lint && npm run build`, luego `git-step` (commit de capa `design-system`:
+   `globals.css` + `tokens.ts` + `docs/ai/02-design-system.md`). Los componentes que consumen
+   el token nuevo van en el commit de su propia capa (`ui` o `scene-3d`).
 
 ## Migrar hex hardcodeados
 
-Hacerlo en un paso propio (`refactor: use design tokens in <Componente>`), un componente
-por commit, sin cambios visuales. Verificar que cada hex reemplazado coincide exactamente
+Es un refactor de la capa del componente (`refactor(ui): use design tokens in overlay components`),
+sin cambios visuales ni mezclado con cambios de comportamiento. Verificar que cada hex reemplazado coincide exactamente
 con el token (si no coincide, es un color nuevo: crear token o preguntar).

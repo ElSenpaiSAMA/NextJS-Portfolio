@@ -23,7 +23,12 @@ secciones vecinas deben solaparse poco (≈0.05). `SECTION_PROGRESS` debe caer d
 ventana full. Si el corredor queda corto, evaluar subir `Z_RANGE` (y revisar Nebula/fog —
 ver capa 03). Mostrar la tabla nueva al usuario antes de implementar.
 
-## 2. Implementar (orden recomendado, puede ser un paso por punto)
+## 2. Implementar (orden recomendado)
+
+Commits en `feat`, uno por capa: `state` (punto 1), `scene-3d` (punto 4 + `docs/ai/03`),
+`ui` (puntos 2, 3, 5 + `docs/ai/04`/`05`). Como los puntos dependen entre sí, commitear
+recién cuando las tres capas compilan juntas.
+
 
 1. **`app/store/sceneStore.ts`**: agregar el nombre a `Section` y su valor en `SECTION_PROGRESS`.
 2. **`app/components/sections/<Nombre>Content.tsx`**: `"use client"`, raíz `position: absolute; inset: 0`,

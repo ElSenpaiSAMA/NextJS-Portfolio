@@ -33,4 +33,4 @@ description: Carga el contexto de arquitectura correcto antes de tocar código. 
 | `backend-developer` | Formspree, API routes, Server Actions, env, SEO |
 | `content-editor` | proyectos, textos, imágenes |
 | `test-engineer` | tests y verificación |
-| `code-reviewer` | revisión antes de mergear (solo lectura) |
+| `code-reviewer` | revisión antes de commitear cada capa (solo lectura) |
