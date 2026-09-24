@@ -54,7 +54,7 @@ export const projects: CaseStudy[] = [
     deployment:
       "Vercel Git integration: every pull request gets a preview URL; merging deploys to production. The deployed commit is shown in the footer.",
     outcome:
-      "Lighthouse lab run (mobile, median of 3): 95 performance, 100 accessibility, 100 best practices, 100 SEO — budgets enforced in CI. Replacing a WebGL-heavy first version with static HTML is what made those numbers possible.",
+      "Lighthouse lab run (mobile, median of 3, every page type): 92–93 performance, 100 accessibility, 100 best practices, 100 SEO — budgets enforced in CI. Replacing a WebGL-heavy first version with static HTML is what made those numbers possible.",
     nextSteps: [
       "Scheduled uptime / smoke check against production.",
       "Content-Security-Policy header with a nonce for the theme script.",
@@ -131,3 +131,7 @@ export const projects: CaseStudy[] = [
     featured: false,
   },
 ];
+
+export function findProject(slug: string): CaseStudy | undefined {
+  return projects.find((p) => p.slug === slug);
+}

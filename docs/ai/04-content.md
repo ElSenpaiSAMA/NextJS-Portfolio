@@ -26,8 +26,8 @@ Vacío salvo lo que se agregue. CV: `public/cv.pdf` + `profile.cvUrl = "/cv.pdf"
 
 ## Integridad
 
-`app/data/data.test.ts` valida: URLs https, slugs únicos y que no choquen con ids de sección,
-case studies completos, anclas del Hero existentes, skills sin duplicados, about ≤ 3 párrafos.
+`app/data/data.test.ts` valida: URLs https, slugs únicos y URL-safe,
+case studies completos, `findProject`, Spotify Pipeline y portfolio como featured, skills sin duplicados, about ≤ 3 párrafos.
 
 ## Deuda técnica conocida
 
