@@ -2,68 +2,73 @@
 
 ## Stack
 
-- **Framework:** Next.js 16 (App Router)
-- **Lenguaje:** TypeScript
-- **Estilos:** Tailwind CSS v4
-- **React:** v19
-- **3D:** three.js + React Three Fiber + drei + postprocessing
-- **Animación / estado:** motion, zustand
-- **Formularios:** Formspree
+- **Framework:** Next.js 16 (App Router), React 19, TypeScript strict, Node 22
+- **Estilos:** Tailwind CSS v4 (tokens CSS, tema claro/oscuro)
+- **Formularios:** Formspree (fetch directo)
+- **Tests:** Vitest + Testing Library, Playwright + axe, Lighthouse CI
+- **Deploy:** Vercel (preview por PR)
 
 ## Qué es
 
-Portfolio single-page: el scroll mueve una cámara por un corredor 3D y `CameraRig`
-controla la opacidad de tres secciones HTML superpuestas (Hero → Projects → About).
-Sin backend propio.
+Portfolio single-page estático de Matias Speroni, posicionado como **Junior Platform / DevOps
+Engineer**. Contenido en inglés. El propio sitio es evidencia de DevOps: CI completo, tests,
+accesibilidad, Lighthouse y logs estructurados (`/api/log`).
 
 ## Estructura del proyecto
 
 ```
 app/
-  components/     # UI overlay (SiteChrome, ContentOverlay, Cursor, ContactDrawer3D…)
-    Scene/        # Escena 3D (Canvas, CameraRig, shaders)
-    sections/     # Contenido de cada sección
-  hooks/          # Hooks de UI (useMagnetic)
-  lib/            # tokens.ts (design tokens para JS/three.js)
-  data/           # Datos estáticos (proyectos)
-  store/          # Estado global (sceneStore)
-  layout.tsx      # Layout raíz
-  page.tsx        # Página principal (single-page con escena 3D)
-public/           # Assets estáticos (imágenes, íconos)
+  components/{layout,sections,ui}/   # UI
+  data/           # TODO el contenido (tipado) — no poner copy en componentes
+  lib/            # logger, client-logger, log-schema, contact, theme, site
+  api/log/        # ingesta de logs del navegador
+  layout.tsx, page.tsx, error.tsx, global-error.tsx, not-found.tsx
+  opengraph-image.tsx, sitemap.ts, robots.ts, icon.svg
+e2e/              # Playwright (fixture que falla ante cualquier error)
+scripts/          # tooling del repo
+instrumentation.ts, instrumentation-client.ts
 docs/ai/          # Contexto por capas para IA
 .claude/          # Agentes y skills de Claude Code
 ```
+
+## Reglas de contenido
+
+- No inventar métricas, fechas, empleadores, certificaciones ni uso de herramientas.
+- Herramientas que faltan para el rol → nivel `learning`, ligadas al roadmap.
+- Dato desconocido → `[COMPLETAR: …]` (listados por `npm run check:placeholders`).
 
 ## Contexto para IA (leer antes de tocar código)
 
 La documentación de arquitectura está dividida por capas en [docs/ai/](docs/ai/README.md).
 Leé `docs/ai/00-overview.md` la primera vez y después **solo la capa que vas a modificar**:
 
-| Capa | Doc |
-|------|-----|
-| App shell (layout, page, loading) | `docs/ai/01-app-shell.md` |
-| Design system (tokens, tipografía, z-index) | `docs/ai/02-design-system.md` |
-| Escena 3D | `docs/ai/03-scene-3d.md` |
-| UI overlay | `docs/ai/04-ui-overlay.md` |
-| Estado y contratos 3D ↔ UI | `docs/ai/05-state-contracts.md` |
-| Datos y contenido | `docs/ai/06-data-content.md` |
-| Integraciones / backend | `docs/ai/07-integrations-backend.md` |
-| Calidad, CI, testing | `docs/ai/08-quality-ci.md` |
+| Capa (scope) | Doc |
+|--------------|-----|
+| App shell, SEO, headers (`app-shell`) | `docs/ai/01-app-shell.md` |
+| Design system, tema (`design-system`) | `docs/ai/02-design-system.md` |
+| UI (`ui`) | `docs/ai/03-ui.md` |
+| Contenido (`content`) | `docs/ai/04-content.md` |
+| Backend y observabilidad (`backend`) | `docs/ai/05-backend-observability.md` |
+| Calidad y CI (`quality`) | `docs/ai/06-quality-ci.md` |
 
-Si un cambio altera algo documentado (contratos, rangos, tokens), actualizá el doc de esa capa en el mismo commit.
+Si un cambio altera algo documentado (contratos, tokens, eventos de log), actualizá el doc de esa capa en el commit de esa capa.
 
-**Agentes** (`.claude/agents/`): `architect`, `frontend-developer`, `scene-3d-developer`,
-`backend-developer`, `content-editor`, `test-engineer`, `code-reviewer`.
+**Agentes** (`.claude/agents/`): `architect`, `frontend-developer`, `backend-developer`,
+`devops-engineer`, `content-editor`, `test-engineer`, `code-reviewer`.
 
-**Skills** (`.claude/skills/`): `git-step`, `verify`, `layer-context`, `add-project`,
-`design-token`, `new-section`, `shader-material`.
+**Skills** (`.claude/skills/`): `git-step`, `verify`, `layer-context`, `add-project`, `design-token`.
 
 ## Comandos
 
 ```bash
-npm run dev      # Servidor de desarrollo
-npm run build    # Build de producción
-npm run lint     # Linter
+npm run dev                 # Servidor de desarrollo
+npm run lint                # ESLint
+npm run typecheck           # tsc --noEmit
+npm test                    # Vitest (unit + componentes)
+npm run build               # Build de producción
+npm run test:e2e            # Playwright contra el build
+npm run check:placeholders  # Lista [COMPLETAR] pendientes
+npm run verify              # Todo lo anterior en orden de CI
 ```
 
 ## Flujo de trabajo con Git
@@ -88,14 +93,15 @@ los cambios de esa capa están terminados — no un commit por cada micro-paso.
    git checkout feat
    ```
 2. Implementar los cambios de la tarea.
-3. Al terminar los cambios de una capa, verificar (`npm run lint && npm run build`) y
-   commitear **solo los archivos de esa capa**:
+3. Al terminar los cambios de una capa, verificar (`npm run verify`) y
+   commitear **solo los archivos de esa capa** (mapa archivo → capa en la skill `git-step`):
    ```bash
    git add <archivos de la capa>
    git commit -m "<tipo>(<capa>): descripción"
    ```
-   Capas para el scope: `app-shell`, `design-system`, `scene-3d`, `ui`, `state`, `content`,
-   `backend`, `quality`, y `ai-docs` para `docs/ai/`, `.claude/` y `CLAUDE.md`.
+   Capas para el scope: `app-shell`, `design-system`, `ui`, `content`, `backend`, `quality`,
+   y `ai-docs` para `docs/ai/`, `.claude/`, `CLAUDE.md` y `README.md`.
+   Los tests van en `quality`.
 4. Si una tarea toca varias capas → un commit por cada capa tocada.
 5. Push: `git push origin feat`.
 

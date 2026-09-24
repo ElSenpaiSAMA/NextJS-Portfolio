@@ -1,58 +1,43 @@
-# 01 — App shell
+# 01 — App shell (`app-shell`)
 
-**Archivos:** `app/layout.tsx`, `app/page.tsx`, `app/components/LoadingScreen.tsx`, `app/icon.jpg`, `next.config.ts`
+**Archivos:** `app/layout.tsx`, `app/page.tsx`, `app/not-found.tsx`, `app/opengraph-image.tsx`,
+`app/icon.svg`, `app/sitemap.ts`, `app/robots.ts`, `next.config.ts`
 
-## Responsabilidad
+## layout.tsx
 
-Montar la página, cargar fuentes, definir metadata y el orden de las capas visuales.
-No contiene lógica de negocio.
+- Fuentes `Geist` (`--font-geist-sans`) y `Geist_Mono` (`--font-geist-mono`) vía `next/font/google`, mapeadas en `globals.css`.
+- `metadata`: `metadataBase` = `siteUrl` (`NEXT_PUBLIC_SITE_URL` o el dominio de Vercel), título con template,
+  description, canonical `/`, Open Graph (`type: profile`), Twitter `summary_large_image`, robots.
+- `viewport.themeColor` claro/oscuro.
+- `<script>` inline en `<head>` con `THEME_INIT_SCRIPT` (capa 02): fija `data-theme` antes del primer paint.
+  Por eso `<html suppressHydrationWarning>`.
 
-## layout.tsx (Server Component)
+## page.tsx
 
-- Carga fuentes con `next/font/google`:
-  - `Fraunces` → variable CSS `--font-fraunces` (400, normal + italic) — títulos.
-  - `Hanken_Grotesk` → `--font-hanken` (400, 500) — cuerpo/UI.
-- Las variables se inyectan en `<body className>` y `globals.css` las mapea a
-  `--font-serif` / `--font-sans`.
-- Renderiza `<LoadingScreen />` **antes** de `children` (overlay z-100).
-- `<html lang="en">`: el contenido público está en inglés.
+Compone header, `<main id="main">` con las secciones en orden, footer y JSON-LD `Person`.
+**El orden de secciones y su numeración (`index="01"`…) deben coincidir con `NAV_ITEMS` en `lib/site.ts`.**
 
-## page.tsx (Server Component)
+## SEO / archivos de metadata
 
-Solo compone. **El orden de los hijos importa** para el apilado cuando z-index empata:
+| Archivo | Genera |
+|---------|--------|
+| `opengraph-image.tsx` | `/opengraph-image` PNG 1200×630 con `ImageResponse` (estático en build) |
+| `icon.svg` | favicon |
+| `sitemap.ts` | `/sitemap.xml` |
+| `robots.ts` | `/robots.txt` (bloquea `/api/`) |
+| `not-found.tsx` | 404 con link a home |
 
-```tsx
-<SceneLoader />      // Canvas 3D (z-0)
-<ContentOverlay />   // secciones (z-5)
-<SiteChrome />       // z-20
-<ScrollHint />       // z-20
-<ContactDrawer3D />  // z-40 / z-50
-<GrainOverlay />     // z-50
-<Cursor />           // z-60 — siempre último
-```
+## next.config.ts
 
-Al agregar un overlay global nuevo: elegí su z-index según la tabla de
-[02-design-system](02-design-system.md#z-index) y montalo acá.
-
-## LoadingScreen.tsx (client)
-
-- Máquina de fases: `init → in → line → exit → done` con `setTimeout` calculados
-  a partir de constantes (`LETTER_DELAY`, `LETTER_DUR`, etc.). Duración total ≈ 2.5 s.
-- En `done` retorna `null` (se desmonta).
-- Doble `requestAnimationFrame` para que la transición inicial se aplique.
-- `aria-hidden` — es decorativo.
+`poweredByHeader: false` y headers de seguridad en todas las rutas: `X-Content-Type-Options`,
+`Referrer-Policy`, `X-Frame-Options: DENY`, `Permissions-Policy`. El E2E `seo-and-api.spec.ts` los verifica.
 
 ## Reglas
 
-- `layout.tsx` y `page.tsx` deben seguir siendo **Server Components**. Todo lo
-  interactivo va en componentes con `"use client"`.
-- La escena 3D siempre se importa vía `SceneLoader` (`dynamic(..., { ssr: false })`):
-  three.js no puede ejecutarse en el servidor.
-- No agregar rutas nuevas sin considerar que `Scene.tsx` pone `body.style.overflow = "hidden"`.
+- `layout.tsx`, `page.tsx` y las secciones son Server Components.
+- La página debe seguir siendo **estática** (`○` en el output de `next build`). Si algo la vuelve dinámica, justificarlo.
+- Metadata solo en `layout.tsx` (no duplicar en `page.tsx`).
 
 ## Deuda técnica conocida
 
-- `metadata` está duplicada en `layout.tsx` y `page.tsx` (idéntica). Debería vivir solo en `layout.tsx`.
-- Faltan Open Graph / Twitter cards y `metadataBase`.
-- `next.config.ts` vacío: no hay `images.remotePatterns` ni headers.
-- `package.json` se llama `"mi-proyecto"`.
+- Sin Content-Security-Policy (requiere nonce/hash para el script de tema y el JSON-LD).

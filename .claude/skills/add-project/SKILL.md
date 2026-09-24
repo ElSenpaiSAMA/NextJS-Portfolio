@@ -1,54 +1,49 @@
 ---
 name: add-project
-description: Agrega, reemplaza o edita un proyecto en la sección Projects del portfolio (app/data/projects.ts + imagen en public/). Usar cuando el usuario pida "agregá este proyecto", "sacá X", "actualizá la descripción de Y".
+description: Agrega, reemplaza o edita un proyecto como case study DevOps en app/data/projects.ts (o mueve un ítem del roadmap a proyectos). Usar cuando el usuario pida "agregá este proyecto", "terminé X del roadmap", "actualizá Y".
 ---
 
 # add-project
 
-Contexto: `docs/ai/06-data-content.md`.
+Contexto: `docs/ai/04-content.md`.
 
-## 1. Reunir datos
+## 1. Reunir datos (no inventar)
 
-Pedir lo que falte (no inventar URLs):
-- `title`, `description` (1–2 frases, en inglés), `tech` (las 2 más importantes primero)
-- `github` y/o `siteLink` (opcionales, URL completa)
-- imagen (ruta a un archivo existente o a copiar a `public/`)
-- ¿está en desarrollo? → `inDevelopment: true` (badge WIP)
+Preguntá lo que falte:
+- repo público (obligatorio salvo que haya demo) y demo
+- problema real que resuelve · solución · cómo se despliega hoy
+- stack real
+- resultado verificable (métrica que se pueda comprobar en el repo o el deploy) o aprendizaje concreto
+- qué le falta para ser evidencia sólida (Dockerfile, CI, deploy automatizado, IaC, monitoreo…)
 
-## 2. Chequear capacidad del grid
+Si no hay dato → `"[COMPLETAR: …]"`.
 
-`ProjectsContent.tsx` usa un grid **fijo 3×2 → máximo 6 proyectos**. Contar los actuales:
-
-- Si hay < 6 → agregar.
-- Si hay 6 → **preguntar** qué proyecto reemplazar, o si se prefiere rediseñar el grid
-  (eso es otra tarea para `frontend-developer`, en su propio paso).
-
-## 3. Imagen
-
-- Copiar a `public/` con nombre `kebab-case` sin espacios (ej. `public/study-bot.jpg`).
-- Horizontal, ≥ 800px de ancho, idealmente < 300 KB.
-- Verificar que existe: `ls public/<archivo>`.
-- Si no hay imagen, `image: null` → la card muestra la inicial sobre gradiente.
-
-## 4. Editar `app/data/projects.ts`
+## 2. Escribir el case study
 
 ```ts
 {
-  id: <siguiente id único>,
+  slug: "kebab-case",               // único; se usa como ancla #slug
   title: "…",
-  description: "…",
-  tech: ["Más relevante", "Segunda", "…"],
-  github: "https://github.com/…",      // omitir si no hay
-  siteLink: "https://…",               // omitir si no hay
-  image: "/<archivo>",
-  inDevelopment: true,                 // omitir si no aplica
-},
+  tagline: "…",                     // ángulo DevOps primero
+  problem: "…",
+  solution: "…",
+  architecture: [                   // 2+ nodos en orden del flujo
+    { label: "…", detail: "…", kind: "trigger" | "process" | "store" | "deploy" },
+  ],
+  stack: ["…"],
+  deployment: "…",
+  outcome: "…",
+  nextSteps: ["…"],
+  links: { repo: "https://…", demo: "https://…" },
+  featured: true,                   // true = case study completo; false = card compacta
+}
 ```
 
-El orden del array es el orden en pantalla (izq→der, arriba→abajo).
+- Ordená el array por relevancia para Platform/DevOps (los featured primero).
+- Si viene del roadmap: borralo de `roadmap.ts` y actualizá skills (`learning` → `used`, con el proyecto en `context`).
 
-## 5. Verificar y commitear
+## 3. Verificar y commitear
 
-- `npm run lint && npm run build`
-- En `npm run dev`: la card se ve, la descripción no se corta raro, los botones abren el link correcto.
-- Commit en `feat` con la skill `git-step` (capa `content`, incluye `projects.ts` + imagen): `feat(content): add <title> to projects` (o `chore(content): update …`).
+- `npm test` (integridad de datos) → `npm run build` → `npm run test:e2e`.
+- En `npm run dev`: diagrama legible en desktop y mobile.
+- `git-step`, capa `content`: `feat(content): add <title> case study`.

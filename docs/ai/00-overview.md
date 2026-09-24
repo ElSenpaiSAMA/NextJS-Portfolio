@@ -2,94 +2,68 @@
 
 ## Qué es
 
-Portfolio personal de **Matias Speroni** (Backend & Fullstack Developer, Barcelona).
-Es una **single-page** donde el usuario "vuela" por un corredor 3D; el scroll no
-desplaza el documento, mueve la cámara. Tres "momentos" del corredor muestran
-contenido HTML superpuesto: **Hero → Projects → About**. El contacto es un drawer
-inferior con formulario (Formspree).
+Portfolio de **Matias Speroni**, posicionado como **Junior Platform / DevOps Engineer** (Barcelona).
+Viene de backend/fullstack y está cambiando de área. Objetivo del sitio: que un reclutador técnico
+entienda en < 30 s quién es, qué sabe y qué evidencia tiene — y que **el propio sitio sea evidencia
+de DevOps** (CI completo, tests, a11y, Lighthouse, logs estructurados, previews por PR).
 
-Estética: editorial, oscura, acento ámbar (`#A8642E`), serif Fraunces + sans
-Hanken Grotesk, grano de película, bloom y viñeta.
+Single-page estática, en **inglés**, modo claro/oscuro, responsive. Sin backend propio salvo
+`/api/log` (ingesta de logs del navegador).
 
-## Stack real (package.json)
+## Stack
 
-| Área | Librería |
-|------|----------|
-| Framework | Next.js 16 (App Router), React 19.2, TypeScript strict |
-| 3D | three 0.185, @react-three/fiber 9, @react-three/drei 10, @react-three/postprocessing 3 |
-| Animación UI | `motion` 12 (`motion/react`) |
-| Estado | zustand 5 |
-| Estilos | Tailwind v4 (`@theme` en `globals.css`) + **mayormente inline styles** |
-| Formularios | @formspree/react |
-| Instalados pero sin uso actual | `next-view-transitions`, `opentype.js` |
+Next.js 16 (App Router) · React 19 · TypeScript strict · Tailwind CSS 4 · Formspree (fetch directo,
+sin SDK) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel · Node 22.
+
+Sin librerías de UI, animación ni estado global: casi no se envía JavaScript al cliente
+(solo `ThemeToggle` y `ContactForm` son client components).
 
 ## Árbol de render
 
 ```
-RootLayout (server)              app/layout.tsx
-├─ <LoadingScreen/>              z-100, se desmonta al terminar (~2.5 s)
-└─ Home (server)                 app/page.tsx
-   ├─ <SceneLoader/>             dynamic(ssr:false) → <Scene/> Canvas fijo z-0
-   │   └─ SceneEnvironment (luces, Nebula, CorridorField) + CameraRig + EffectComposer
-   ├─ <ContentOverlay/>          3 divs fijos apilados z-5: #section-hero/projects/about
-   ├─ <SiteChrome/>              logo "MS" + dots de navegación z-20
-   ├─ <ScrollHint/>              #scroll-hint z-20
-   ├─ <ContactDrawer3D/>         backdrop z-40, drawer z-50
-   ├─ <GrainOverlay/>            z-50, pointer-events none
-   └─ <Cursor/>                  z-60, solo pointer fino
+RootLayout (server)            layout.tsx — fuentes Geist, metadata, script de tema en <head>
+└─ Home (server)               page.tsx
+   ├─ SiteHeader               nav por anclas + ThemeToggle (client)
+   ├─ <main id="main">
+   │   Hero · Skills(01) · Projects(02) · Roadmap(03) · Experience(04) · About(05) · Contact(06)
+   │                                                                   └─ ContactForm (client)
+   ├─ SiteFooter               entorno + commit desplegado + link al CI
+   └─ JSON-LD Person
 ```
 
-## Flujo de datos (lo más importante del repo)
+## Flujo de datos
 
 ```
-wheel / touch / flechas ──► CameraRig.targetRef (0..1)
-                              │ lerp 0.038 por frame
-                              ▼
-                        progress p ──┬─► posición/lookAt de cámara
-                                     ├─► setActive(section)  ──► SiteChrome (dots)
-                                     ├─► useSceneStore.setState({scrollProgress})  (shaders)
-                                     └─► applySection(id, opacity) ── muta el DOM directo
-                                                                     (#section-*, #scroll-hint)
+app/data/*.ts  (contenido tipado)  ──►  components/sections/*  (presentación pura)
+lib/site.ts    (NAV_ITEMS, siteUrl, build info)
 
-Click en dot / CTA ──► navigateTo(section) ──► scrollTarget ──► CameraRig lo consume y lo limpia
-"Get in touch" ──► window.dispatchEvent("open-contact-drawer") ──► ContactDrawer3D
+Errores:
+  browser ─► clientLogger ─(warn/error, sendBeacon)─► POST /api/log ─► logger (JSON stdout) ─► Vercel logs
+  server  ─► instrumentation.ts onRequestError ───────────────────────► logger
 ```
-
-**Clave:** la opacidad de las secciones HTML **no** la maneja React: la escribe
-`CameraRig` en cada frame vía `document.getElementById`. Ver [05](05-state-contracts.md).
 
 ## Mapa de carpetas
 
 ```
 app/
-  layout.tsx, page.tsx, globals.css, icon.jpg
-  components/
-    Scene/            capa 03 (todo client, R3F)
-      shaders/        GLSL como strings TS
-    sections/         capa 04 (contenido de cada momento)
-    *.tsx             capa 04 (chrome, cursor, drawer, grain, loading, hint)
-  hooks/useMagnetic.ts
-  lib/tokens.ts       capa 02
-  store/sceneStore.ts capa 05
-  data/projects.ts    capa 06
-public/               imágenes de proyectos, avatar, logos de tecnologías
-docs/ai/              este contexto
+  components/{layout,sections,ui}/   capa 03
+  data/                              capa 04
+  lib/                               theme (02), site (03), logger/log-schema/client-logger/contact (05)
+  api/log/                           capa 05
+e2e/  scripts/  .github/             capa 06
+instrumentation.ts, instrumentation-client.ts   capa 05
 ```
 
-## Principios de diseño del código existente
+## Principios
 
-1. **Nada de re-renders por frame.** Todo lo animado por frame se muta vía refs,
-   `useFrame`, motion values o estilos DOM directos.
-2. **Determinismo.** La escena usa `pr(seed)` (pseudo-random) en vez de `Math.random`.
-3. **Tokens duplicados a propósito**: CSS (`globals.css`) + TS (`tokens.ts`) para
-   lo que CSS no alcanza (three.js, motion).
-4. **Comentarios explican el *por qué*** (reglas de lint, z-index, trade-offs). Mantené ese estilo.
-5. Idioma: código y comentarios en **inglés**; docs internos en español.
+1. **Contenido separado de presentación**: todo texto vive en `app/data/`. Los componentes no tienen copy de negocio.
+2. **Honestidad del contenido**: niveles de skill `used | basic | learning`; lo que no se sabe va como `[COMPLETAR: …]`, nunca inventado.
+3. **Server Components por defecto**; `"use client"` solo donde hay interacción.
+4. **Nada falla en silencio**: todo error de cliente/servidor se loguea con un `event` estable.
+5. **Todo cambio verificable**: `npm run verify` reproduce el CI localmente.
+6. Código y comentarios en inglés; docs internos en español.
 
 ## Deuda técnica transversal
 
-- Muchos componentes usan hex hardcodeados (`#A8642E`, `#F0EDE8`...) en vez de `var(--color-*)`/`tokens`.
-- Constantes de fuente `F`/`S`/`SERIF`/`SANS` duplicadas en cada componente.
-- Layout **no responsive**: grids fijos (3×2 proyectos, 2 columnas About/drawer).
-- `README.md` desactualizado (menciona `app/styles/`, no menciona 3D).
-- No hay tests (ver [08](08-quality-ci.md)).
+- Quedan placeholders `[COMPLETAR]` (ver `npm run check:placeholders`).
+- Sin CSP todavía (el script inline de tema requiere nonce o hash).

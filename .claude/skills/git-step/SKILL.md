@@ -23,15 +23,13 @@ Ciclo del repo (ver `CLAUDE.md` → "Flujo de trabajo con Git"): **un commit por
 
    | Scope | Archivos |
    |-------|----------|
-   | `app-shell` | `app/layout.tsx`, `app/page.tsx`, `LoadingScreen.tsx`, `next.config.ts` |
-   | `design-system` | `app/globals.css`, `app/lib/tokens.ts` |
-   | `scene-3d` | `app/components/Scene/**` |
-   | `ui` | `app/components/*.tsx`, `app/components/sections/**`, `app/hooks/**` |
-   | `state` | `app/store/**` |
-   | `content` | `app/data/**`, `public/**` |
-   | `backend` | `app/api/**`, `app/actions/**`, `app/lib/server/**`, `.env.example` |
-   | `quality` | tests, `eslint.config.mjs`, `.github/**`, `package.json` (deps de tooling) |
-   | `ai-docs` | `docs/ai/**`, `.claude/**`, `CLAUDE.md` |
+   | `app-shell` | `app/layout.tsx`, `app/page.tsx`, `app/not-found.tsx`, `app/opengraph-image.tsx`, `app/icon.svg`, `app/sitemap.ts`, `app/robots.ts`, `next.config.ts` |
+   | `design-system` | `app/globals.css`, `app/lib/theme.ts` |
+   | `ui` | `app/components/**` (sin tests), `app/lib/site.ts` |
+   | `content` | `app/data/**` (sin tests), `public/**` |
+   | `backend` | `app/api/**` (sin tests), `app/lib/{logger,client-logger,log-schema,contact}.ts`, `instrumentation*.ts`, `app/error.tsx`, `app/global-error.tsx`, `.env.example` |
+   | `quality` | `**/*.test.ts(x)`, `e2e/**`, `vitest.*`, `playwright.config.ts`, `lighthouserc.json`, `.github/**`, `scripts/**`, `eslint.config.mjs`, `tsconfig.json`, `package.json`, `package-lock.json`, `.nvmrc`, `.gitignore` |
+   | `ai-docs` | `docs/ai/**`, `.claude/**`, `CLAUDE.md`, `README.md` |
 
    El doc `docs/ai/0X-*.md` de una capa va en el commit de **esa** capa, no en `ai-docs`.
 3. Verificar (si falla, **no** commitear; arreglar primero):

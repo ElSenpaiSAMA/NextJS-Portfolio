@@ -1,24 +1,23 @@
 # Contexto por capas para IA
 
-Documentación pensada para que un agente de IA tome contexto rápido y preciso
-antes de tocar código. **Leé solo la capa que vas a modificar** (más el overview
-si es tu primera vez en el repo).
+Documentación para que un agente de IA tome contexto rápido antes de tocar código.
+**Leé solo la capa que vas a modificar** (más el overview la primera vez).
 
-| # | Capa | Archivos que cubre | Cuándo leerla |
-|---|------|--------------------|---------------|
-| 00 | [Overview y arquitectura](00-overview.md) | todo el repo | Siempre la primera vez |
-| 01 | [App shell](01-app-shell.md) | `app/layout.tsx`, `app/page.tsx`, `LoadingScreen.tsx` | Metadata, fuentes, orden de montaje |
-| 02 | [Design system](02-design-system.md) | `app/globals.css`, `app/lib/tokens.ts` | Colores, tipografía, easing, z-index |
-| 03 | [Escena 3D](03-scene-3d.md) | `app/components/Scene/**` | Cámara, luces, shaders, post-procesado |
-| 04 | [UI overlay](04-ui-overlay.md) | `app/components/*.tsx`, `sections/`, `hooks/` | Secciones HTML, nav, cursor, drawer |
-| 05 | [Estado y contratos](05-state-contracts.md) | `app/store/sceneStore.ts` + contratos DOM/eventos | Navegación, comunicación 3D ↔ HTML |
-| 06 | [Datos y contenido](06-data-content.md) | `app/data/`, `public/`, textos en secciones | Agregar proyectos, skills, textos |
-| 07 | [Integraciones / backend](07-integrations-backend.md) | Formspree, futuras API routes | Formularios, APIs, env vars |
-| 08 | [Calidad, CI y testing](08-quality-ci.md) | `eslint.config.mjs`, `.github/workflows/ci.yml` | Lint, build, tests, verificación |
+| # | Capa (scope de commit) | Archivos | Cuándo leerla |
+|---|------------------------|----------|---------------|
+| 00 | [Overview](00-overview.md) | todo el repo | Siempre la primera vez |
+| 01 | [App shell](01-app-shell.md) · `app-shell` | `layout.tsx`, `page.tsx`, SEO (OG, sitemap, robots, icon), `not-found.tsx`, `next.config.ts` | Metadata, SEO, orden de secciones, headers |
+| 02 | [Design system](02-design-system.md) · `design-system` | `globals.css`, `lib/theme.ts` | Colores, tema claro/oscuro, tipografía |
+| 03 | [UI](03-ui.md) · `ui` | `app/components/**`, `lib/site.ts` | Secciones, componentes, accesibilidad |
+| 04 | [Contenido](04-content.md) · `content` | `app/data/**`, `public/**` | Textos, proyectos, skills, roadmap, CV |
+| 05 | [Backend y observabilidad](05-backend-observability.md) · `backend` | `app/api/**`, `lib/logger*`, `lib/log-schema.ts`, `lib/contact.ts`, `instrumentation*.ts`, `error.tsx`, `global-error.tsx` | Logs, errores, formulario, endpoints |
+| 06 | [Calidad y CI](06-quality-ci.md) · `quality` | tests, `e2e/`, configs, `.github/`, `scripts/`, `package.json` | Tests, pipeline, Lighthouse, dependencias |
 
-## Reglas para mantener estos docs
+Los docs de IA, `.claude/`, `CLAUDE.md` y `README.md` van en el scope `ai-docs`.
 
-- Si un cambio altera un **contrato** (ids DOM, eventos, rangos de scroll, tokens),
-  actualizá la capa correspondiente **en el mismo commit**.
-- Estos archivos describen el *por qué* y los *contratos*; no copies código entero.
-- Cada doc termina con una sección **Deuda técnica conocida**: si la resolvés, borrala del doc.
+## Reglas
+
+- Si un cambio altera algo documentado acá (contratos, tokens, eventos de log, estructura), actualizá
+  el doc de esa capa **en el commit de esa capa**.
+- Describí el *por qué* y los contratos; no copies código entero.
+- Cada doc termina con **Deuda técnica conocida**: si la resolvés, borrala.

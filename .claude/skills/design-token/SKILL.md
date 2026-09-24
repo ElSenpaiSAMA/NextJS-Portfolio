@@ -1,42 +1,27 @@
 ---
 name: design-token
-description: Agrega o modifica un design token (color, easing, variable de glass/grain) manteniendo sincronizados app/globals.css y app/lib/tokens.ts. Usar siempre que se necesite un color nuevo, al cambiar la paleta, o al migrar hex hardcodeados a tokens.
+description: Agrega o modifica un design token (color del tema claro/oscuro) en app/globals.css manteniendo los tres bloques sincronizados y el contraste WCAG AA. Usar cuando se necesite un color nuevo o cambiar la paleta.
 ---
 
 # design-token
 
-Contexto: `docs/ai/02-design-system.md`. Los tokens viven en **dos** archivos que se
-sincronizan a mano; ninguno deriva del otro.
+Contexto: `docs/ai/02-design-system.md`.
 
-## Decidir dónde va
+## Dónde va un token
 
-| Tipo de valor | `globals.css` | `tokens.ts` |
-|---------------|---------------|-------------|
-| Color de UI / escena | `@theme static` → `--color-<kebab>` | `tokens.colors.<camel>` |
-| Triplete RGB para `rgba()` | `:root` → `--color-<kebab>-rgb` (**no** en `@theme`: generaría utilidades inválidas) | `tokens.colors.<camel>Rgb` como `"R, G, B"` |
-| Easing | `@theme static` → `--ease-<kebab>` | `tokens.easing.<camel> = { css, array }` |
-| Glass / grain / valores sueltos | `:root` | `tokens.glass.*` / `tokens.grain.*` |
+Cada color se define **4 veces** en `app/globals.css`:
 
-Solo hace falta el lado TS si el valor se usa en three.js o `motion`; pero por convención
-**ambos archivos listan todos los colores**, así que agregalo en los dos.
+1. `:root` → valor claro (`--<nombre>`)
+2. `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) }` → valor oscuro
+3. `[data-theme="dark"]` → el **mismo** valor oscuro
+4. `@theme inline` → `--color-<nombre>: var(--<nombre>);` (genera `bg-<nombre>`, `text-<nombre>`, `border-<nombre>/40`…)
 
 ## Pasos
 
-1. Buscar si ya existe un token equivalente (`Grep` el hex en ambos archivos). Reutilizar antes que crear.
-2. Nombrar por **rol**, no por color (`textMuted`, `sceneBlueDim`), ubicándolo en el grupo comentado correspondiente.
-3. Agregar en `globals.css` y en `tokens.ts` con el **mismo valor exacto**.
-4. Consumir:
-   - Inline style / CSS: `var(--color-<kebab>)` o `rgba(var(--color-<kebab>-rgb), 0.3)`
-   - Tailwind: `text-<kebab>`, `bg-<kebab>`, `ease-<kebab>`
-   - three.js: `new THREE.Color(tokens.colors.<camel>)`
-   - motion: `ease: tokens.easing.<camel>.array`
-5. Si el token es nuevo en la tabla de paleta, agregarlo a `docs/ai/02-design-system.md`.
-6. `npm run lint && npm run build`, luego `git-step` (commit de capa `design-system`:
-   `globals.css` + `tokens.ts` + `docs/ai/02-design-system.md`). Los componentes que consumen
-   el token nuevo van en el commit de su propia capa (`ui` o `scene-3d`).
-
-## Migrar hex hardcodeados
-
-Es un refactor de la capa del componente (`refactor(ui): use design tokens in overlay components`),
-sin cambios visuales ni mezclado con cambios de comportamiento. Verificar que cada hex reemplazado coincide exactamente
-con el token (si no coincide, es un color nuevo: crear token o preguntar).
+1. ¿Existe uno equivalente? Reutilizá antes de crear. Nombrá por **rol** (`warn`, `surface`), no por color.
+2. Agregá los 4 puntos. Los bloques 2 y 3 deben ser idénticos.
+3. Contraste: texto sobre `bg` y `surface` ≥ 4.5:1 en ambos temas.
+4. Si el valor se usa donde no llegan variables CSS (`opengraph-image.tsx`, `icon.svg`, `viewport.themeColor`), actualizalo ahí también.
+5. Actualizá la tabla de `docs/ai/02-design-system.md`.
+6. `npm run build && npm run test:e2e` (axe verifica contraste en claro y oscuro).
+7. `git-step`, capa `design-system`. Los componentes que lo usen van en el commit de `ui`.
