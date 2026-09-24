@@ -1,12 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Newsreader } from "next/font/google";
 import "./globals.css";
+import { SiteFooter } from "./components/layout/SiteFooter";
+import { SiteHeader } from "./components/layout/SiteHeader";
 import { profile } from "./data/profile";
 import { siteUrl } from "./lib/site";
 import { THEME_INIT_SCRIPT } from "./lib/theme";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"], display: "swap" });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" });
+const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
+// Headings only, one style. Not preloaded: body text (Inter) is the LCP element,
+// so the serif shouldn't compete with it for bandwidth on first load.
+const newsreader = Newsreader({ variable: "--font-newsreader", subsets: ["latin"], display: "swap", preload: false });
 
 const TITLE = `${profile.name} — ${profile.role}`;
 const DESCRIPTION =
@@ -19,10 +23,8 @@ export const metadata: Metadata = {
   applicationName: profile.name,
   authors: [{ name: profile.name, url: siteUrl }],
   keywords: ["Platform Engineer", "DevOps", "CI/CD", "GitHub Actions", "Docker", "Barcelona", "Junior"],
-  alternates: { canonical: "/" },
   openGraph: {
     type: "profile",
-    url: "/",
     siteName: profile.name,
     title: TITLE,
     description: DESCRIPTION,
@@ -34,8 +36,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fafaf9" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b0b0c" },
+    { media: "(prefers-color-scheme: light)", color: "#f8f5f0" },
+    { media: "(prefers-color-scheme: dark)", color: "#1b1815" },
   ],
 };
 
@@ -43,11 +45,17 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     // data-theme is set by THEME_INIT_SCRIPT before hydration, so React must
     // not warn about the attribute differing from the server markup.
-    <html lang="en" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${newsreader.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
-      <body className="min-h-screen antialiased">{children}</body>
+      <body className="flex min-h-screen flex-col antialiased">
+        <SiteHeader />
+        <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-6">
+          {children}
+        </main>
+        <SiteFooter />
+      </body>
     </html>
   );
 }

@@ -16,20 +16,18 @@ export default function OpengraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          padding: "72px",
-          background: "#0b0b0c",
-          color: "#ededec",
+          padding: "80px",
+          background: "#f8f5f0",
+          color: "#1f1b16",
         }}
       >
-        <div style={{ display: "flex", fontSize: 28, color: "#2dd4bf", fontFamily: "monospace" }}>
-          $ whoami
-        </div>
+        <div style={{ display: "flex", width: 64, height: 4, background: "#9c4a24" }} />
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ fontSize: 84, fontWeight: 700, letterSpacing: "-0.03em" }}>{profile.name}</div>
-          <div style={{ fontSize: 40, color: "#a8a29e", marginTop: 12 }}>{profile.role}</div>
+          <div style={{ fontSize: 88, letterSpacing: "-0.03em", fontFamily: "serif" }}>{profile.name}</div>
+          <div style={{ fontSize: 40, color: "#5c544a", marginTop: 16 }}>{profile.role}</div>
         </div>
-        <div style={{ display: "flex", fontSize: 26, color: "#8f8a85", fontFamily: "monospace" }}>
-          CI/CD · GitHub Actions · Docker · Observability · Barcelona
+        <div style={{ display: "flex", fontSize: 26, color: "#6f665a" }}>
+          CI/CD · Automation · Containers · Observability — {profile.location}
         </div>
       </div>
     ),

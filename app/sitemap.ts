@@ -1,6 +1,15 @@
 import type { MetadataRoute } from "next";
-import { siteUrl } from "./lib/site";
+import { projects } from "./data/projects";
+import { NAV_ITEMS, projectHref, siteUrl } from "./lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [{ url: siteUrl, lastModified: new Date(), changeFrequency: "monthly", priority: 1 }];
+  const lastModified = new Date();
+  const paths = ["/", ...NAV_ITEMS.map((item) => item.href), ...projects.map((p) => projectHref(p.slug))];
+
+  return paths.map((path) => ({
+    url: path === "/" ? siteUrl : `${siteUrl}${path}`,
+    lastModified,
+    changeFrequency: "monthly",
+    priority: path === "/" ? 1 : 0.7,
+  }));
 }
