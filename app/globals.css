@@ -4,53 +4,56 @@
  * Theme = CSS variables switched by [data-theme] on <html> (set before paint
  * by THEME_INIT_SCRIPT in app/lib/theme.ts). Without JS, the media query
  * below still follows the OS preference.
+ *
+ * Palette: warm paper and ink, one terracotta accent. Every text/background
+ * pair meets WCAG AA — axe checks it in CI for both themes.
  */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 :root {
-  --bg: #fafaf9;
-  --surface: #ffffff;
-  --fg: #0c0a09;
-  --muted: #57534e;
-  --subtle: #6b6560;
-  --border: #e7e5e4;
-  --accent: #0f766e;
-  --accent-fg: #ffffff;
-  --ok: #15803d;
-  --warn: #a16207;
-  --info: #1d4ed8;
+  --bg: #f8f5f0;
+  --surface: #fffdf9;
+  --fg: #1f1b16;
+  --muted: #5c544a;
+  --subtle: #6f665a;
+  --border: #e6dfd3;
+  --accent: #9c4a24;
+  --accent-fg: #fffdf9;
+  --ok: #4a6638;
+  --warn: #85590c;
+  --info: #3d5d78;
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0b0b0c;
-    --surface: #131315;
-    --fg: #ededec;
-    --muted: #a8a29e;
-    --subtle: #8f8a85;
-    --border: #2a2a2e;
-    --accent: #2dd4bf;
-    --accent-fg: #042f2e;
-    --ok: #4ade80;
-    --warn: #fbbf24;
-    --info: #93c5fd;
+    --bg: #1b1815;
+    --surface: #221f1b;
+    --fg: #ede6da;
+    --muted: #b8ad9e;
+    --subtle: #9d9284;
+    --border: #36312a;
+    --accent: #e0a47a;
+    --accent-fg: #1b1815;
+    --ok: #a8c28f;
+    --warn: #e2b96b;
+    --info: #a3bdd4;
     color-scheme: dark;
   }
 }
 
 [data-theme="dark"] {
-  --bg: #0b0b0c;
-  --surface: #131315;
-  --fg: #ededec;
-  --muted: #a8a29e;
-  --subtle: #8f8a85;
-  --border: #2a2a2e;
-  --accent: #2dd4bf;
-  --accent-fg: #042f2e;
-  --ok: #4ade80;
-  --warn: #fbbf24;
-  --info: #93c5fd;
+  --bg: #1b1815;
+  --surface: #221f1b;
+  --fg: #ede6da;
+  --muted: #b8ad9e;
+  --subtle: #9d9284;
+  --border: #36312a;
+  --accent: #e0a47a;
+  --accent-fg: #1b1815;
+  --ok: #a8c28f;
+  --warn: #e2b96b;
+  --info: #a3bdd4;
   color-scheme: dark;
 }
 
@@ -69,20 +72,11 @@
   --color-info: var(--info);
 
   /* Variables injected by next/font in app/layout.tsx */
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
-}
-
-html {
-  scroll-behavior: smooth;
-  /* Keeps anchor targets clear of the sticky header */
-  scroll-padding-top: 5rem;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-newsreader), ui-serif, Georgia, serif;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
   *,
   *::before,
   *::after {
@@ -100,11 +94,21 @@ body {
 
 :focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline-offset: 3px;
   border-radius: 2px;
 }
 
 ::selection {
   background: var(--accent);
   color: var(--accent-fg);
+}
+
+/* Small uppercase label used above sections and in definition lists. */
+@utility label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--subtle);
 }
