@@ -6,19 +6,57 @@
 - **Lenguaje:** TypeScript
 - **Estilos:** Tailwind CSS v4
 - **React:** v19
+- **3D:** three.js + React Three Fiber + drei + postprocessing
+- **Animación / estado:** motion, zustand
 - **Formularios:** Formspree
+
+## Qué es
+
+Portfolio single-page: el scroll mueve una cámara por un corredor 3D y `CameraRig`
+controla la opacidad de tres secciones HTML superpuestas (Hero → Projects → About).
+Sin backend propio.
 
 ## Estructura del proyecto
 
 ```
 app/
-  components/     # Componentes reutilizables (SiteChrome, ContentOverlay, Scene/, sections/)
-  data/           # Datos estáticos (proyectos, skills, etc.)
-  store/          # Estado global
+  components/     # UI overlay (SiteChrome, ContentOverlay, Cursor, ContactDrawer3D…)
+    Scene/        # Escena 3D (Canvas, CameraRig, shaders)
+    sections/     # Contenido de cada sección
+  hooks/          # Hooks de UI (useMagnetic)
+  lib/            # tokens.ts (design tokens para JS/three.js)
+  data/           # Datos estáticos (proyectos)
+  store/          # Estado global (sceneStore)
   layout.tsx      # Layout raíz
   page.tsx        # Página principal (single-page con escena 3D)
 public/           # Assets estáticos (imágenes, íconos)
+docs/ai/          # Contexto por capas para IA
+.claude/          # Agentes y skills de Claude Code
 ```
+
+## Contexto para IA (leer antes de tocar código)
+
+La documentación de arquitectura está dividida por capas en [docs/ai/](docs/ai/README.md).
+Leé `docs/ai/00-overview.md` la primera vez y después **solo la capa que vas a modificar**:
+
+| Capa | Doc |
+|------|-----|
+| App shell (layout, page, loading) | `docs/ai/01-app-shell.md` |
+| Design system (tokens, tipografía, z-index) | `docs/ai/02-design-system.md` |
+| Escena 3D | `docs/ai/03-scene-3d.md` |
+| UI overlay | `docs/ai/04-ui-overlay.md` |
+| Estado y contratos 3D ↔ UI | `docs/ai/05-state-contracts.md` |
+| Datos y contenido | `docs/ai/06-data-content.md` |
+| Integraciones / backend | `docs/ai/07-integrations-backend.md` |
+| Calidad, CI, testing | `docs/ai/08-quality-ci.md` |
+
+Si un cambio altera algo documentado (contratos, rangos, tokens), actualizá el doc de esa capa en el mismo commit.
+
+**Agentes** (`.claude/agents/`): `architect`, `frontend-developer`, `scene-3d-developer`,
+`backend-developer`, `content-editor`, `test-engineer`, `code-reviewer`.
+
+**Skills** (`.claude/skills/`): `git-step`, `verify`, `layer-context`, `add-project`,
+`design-token`, `new-section`, `shader-material`.
 
 ## Comandos
 
