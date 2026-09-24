@@ -19,7 +19,7 @@ const FIELDS: { name: ContactField; label: string; type: "text" | "email" | "tex
 ];
 
 const INPUT_CLASS =
-  "mt-1 w-full rounded-md border border-border bg-bg px-3 py-2 text-sm text-fg placeholder:text-subtle focus:border-accent aria-[invalid=true]:border-warn";
+  "mt-2 w-full rounded-sm border border-border bg-surface px-3 py-2.5 text-fg placeholder:text-subtle focus:border-accent aria-[invalid=true]:border-warn";
 
 function readValues(form: HTMLFormElement): ContactValues {
   const data = new FormData(form);
@@ -66,8 +66,8 @@ export function ContactForm({ formId }: { formId: string }) {
 
   if (status === "success") {
     return (
-      <div role="status" className="rounded-lg border border-ok/40 bg-surface p-6">
-        <p className="font-semibold">Message sent.</p>
+      <div role="status" className="border-l-2 border-ok py-2 pl-5">
+        <p className="font-serif text-xl">Message sent.</p>
         <p className="mt-1 text-sm text-muted">Thanks — I will get back to you soon.</p>
         <button type="button" onClick={() => setStatus("idle")} className="mt-4 text-sm font-medium text-accent hover:underline">
           Send another message
@@ -79,7 +79,7 @@ export function ContactForm({ formId }: { formId: string }) {
   const submitting = status === "submitting";
 
   return (
-    <form onSubmit={handleSubmit} noValidate aria-describedby={formError ? "contact-form-error" : undefined} className="space-y-4">
+    <form onSubmit={handleSubmit} noValidate aria-describedby={formError ? "contact-form-error" : undefined} className="space-y-5">
       {FIELDS.map(({ name, label, type, autoComplete }) => {
         const error = fieldErrors[name];
         const errorId = `contact-${name}-error`;
@@ -95,7 +95,7 @@ export function ContactForm({ formId }: { formId: string }) {
         };
         return (
           <div key={name}>
-            <label htmlFor={common.id} className="text-sm font-medium">
+            <label htmlFor={common.id} className="label">
               {label}
             </label>
             {type === "textarea" ? <textarea {...common} rows={5} /> : <input {...common} type={type} />}
@@ -120,7 +120,7 @@ export function ContactForm({ formId }: { formId: string }) {
       <button
         type="submit"
         disabled={submitting}
-        className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-fg hover:opacity-90 disabled:opacity-60"
+        className="rounded-sm bg-fg px-5 py-2.5 text-sm font-medium text-bg transition-colors hover:bg-accent hover:text-accent-fg disabled:opacity-60"
       >
         {submitting ? "Sending…" : "Send message"}
       </button>

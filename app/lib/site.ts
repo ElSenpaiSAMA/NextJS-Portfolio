@@ -1,6 +1,6 @@
 /**
  * Site-wide configuration and build metadata. Values are read at build time
- * (the page is static), so the footer shows the commit that is deployed.
+ * (pages are static), so the footer shows the commit that is deployed.
  */
 
 const DEFAULT_SITE_URL = "https://matias-nicolas-speroni.vercel.app";
@@ -24,13 +24,21 @@ export function getBuildInfo(repoUrl: string): BuildInfo {
   };
 }
 
+/** Top-level pages, in navigation order. Sitemap and E2E tests read this too. */
 export const NAV_ITEMS = [
-  { id: "skills", label: "Skills" },
-  { id: "projects", label: "Projects" },
-  { id: "roadmap", label: "Roadmap" },
-  { id: "experience", label: "Experience" },
-  { id: "about", label: "About" },
-  { id: "contact", label: "Contact" },
+  { href: "/projects", label: "Work" },
+  { href: "/skills", label: "Skills" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
 ] as const;
 
-export type SectionId = (typeof NAV_ITEMS)[number]["id"];
+export type NavHref = (typeof NAV_ITEMS)[number]["href"];
+
+export function projectHref(slug: string): string {
+  return `/projects/${slug}`;
+}
+
+/** Nav item is active on its own page and on any nested page (/projects/x). */
+export function isActivePath(pathname: string, href: string): boolean {
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
