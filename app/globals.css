@@ -1,91 +1,110 @@
 @import "tailwindcss";
 
 /*
- * `static` forces every token to be emitted as a CSS variable even when no
- * Tailwind utility references it yet — these are also consumed from inline
- * styles (var(--color-accent), etc.), which Tailwind's scanner can't see.
+ * Theme = CSS variables switched by [data-theme] on <html> (set before paint
+ * by THEME_INIT_SCRIPT in app/lib/theme.ts). Without JS, the media query
+ * below still follows the OS preference.
  */
-@theme static {
-  /* Backgrounds */
-  --color-bg: #05050a;
-  --color-bg-alt: #050508;
-  --color-bg-elevated: #0e0d14;
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-  /* Text scale — from primary to nearly invisible */
-  --color-text-primary: #F0EDE8;
-  --color-text-secondary: #8A8680;
-  --color-text-tertiary: #6A6460;
-  --color-text-muted: #5A5650;
-  --color-text-faint: #4A4640;
-  --color-text-ghost: #3A3830;
-
-  /* Brand accents */
-  --color-accent: #A8642E;
-  --color-available: #5B7F58;
-
-  /* 3D scene palette (lights, particles, fog) */
-  --color-scene-amber: #ffaa44;
-  --color-scene-amber-dim: #6B3D18;
-  --color-scene-blue: #4488ff;
-  --color-scene-blue-dim: #2A5FA8;
-  --color-scene-purple: #6040A0;
-  --color-scene-purple-dim: #2A1848;
-  --color-scene-navy: #162248;
-  --color-scene-ambient: #1a1228;
-  --color-scene-particle: #c8c0b8;
-
-  /* Easing — generates Tailwind ease-out-expo / ease-out-circ utilities */
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-out-circ: cubic-bezier(0.76, 0, 0.24, 1);
-
-  /* Font stacks — variables injected by next/font in layout.tsx */
-  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
-
-  /* Border radius */
-  --radius-sm: 2px;
-  --radius-md: 3px;
-}
-
-/*
- * Non-utility variables live outside @theme on purpose:
- * the *-rgb triplets would otherwise generate invalid Tailwind color
- * utilities, and glass/grain values are plain CSS vars, not design-token
- * namespaces. Consume them as rgba(var(--color-accent-rgb), X), etc.
- */
 :root {
-  --color-accent-rgb: 168, 100, 46;
-  --color-available-rgb: 91, 127, 88;
-
-  --glass-bg: rgba(14, 13, 20, 0.6);
-  --glass-border: rgba(168, 100, 46, 0.18);
-  --glass-blur: 20px;
-
-  --grain-opacity: 0.035;
+  --bg: #fafaf9;
+  --surface: #ffffff;
+  --fg: #0c0a09;
+  --muted: #57534e;
+  --subtle: #6b6560;
+  --border: #e7e5e4;
+  --accent: #0f766e;
+  --accent-fg: #ffffff;
+  --ok: #15803d;
+  --warn: #a16207;
+  --info: #1d4ed8;
+  color-scheme: light;
 }
 
-* {
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b0b0c;
+    --surface: #131315;
+    --fg: #ededec;
+    --muted: #a8a29e;
+    --subtle: #8f8a85;
+    --border: #2a2a2e;
+    --accent: #2dd4bf;
+    --accent-fg: #042f2e;
+    --ok: #4ade80;
+    --warn: #fbbf24;
+    --info: #93c5fd;
+    color-scheme: dark;
+  }
+}
+
+[data-theme="dark"] {
+  --bg: #0b0b0c;
+  --surface: #131315;
+  --fg: #ededec;
+  --muted: #a8a29e;
+  --subtle: #8f8a85;
+  --border: #2a2a2e;
+  --accent: #2dd4bf;
+  --accent-fg: #042f2e;
+  --ok: #4ade80;
+  --warn: #fbbf24;
+  --info: #93c5fd;
+  color-scheme: dark;
+}
+
+/* `inline` so utilities reference the live variables and follow the theme. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-info: var(--info);
+
+  /* Variables injected by next/font in app/layout.tsx */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+html {
   scroll-behavior: smooth;
-  box-sizing: border-box;
+  /* Keeps anchor targets clear of the sticky header */
+  scroll-padding-top: 5rem;
 }
 
-/*
- * Cursor.tsx toggles this class on <body> while the custom cursor is active
- * (fine pointers only — never on touch). `!important` is required: buttons
- * set `cursor: pointer` via inline styles, which would otherwise win over
- * any selector. Hiding the native cursor does NOT affect keyboard focus
- * outlines: `cursor` and `outline` are independent, so :focus-visible rings
- * keep rendering as usual.
- */
-body.cursor-none-active,
-body.cursor-none-active * {
-  cursor: none !important;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
 }
 
 body {
-  background-color: var(--color-bg);
-  color: var(--color-text-primary);
+  background-color: var(--bg);
+  color: var(--fg);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-fg);
 }
