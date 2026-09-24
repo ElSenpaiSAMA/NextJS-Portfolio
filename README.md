@@ -34,7 +34,7 @@ Extras: concurrency cancels superseded runs, least-privilege `permissions: conte
 Node version pinned in `.nvmrc`, Dependabot for npm and GitHub Actions, Playwright report
 uploaded as an artifact on failure.
 
-**Last local Lighthouse run (mobile, median of 3):** Performance 95 · Accessibility 100 · Best Practices 100 · SEO 100.
+**Last local Lighthouse run (mobile, median of 3, home / projects / case study / contact):** Performance 92–93 · Accessibility 100 · Best Practices 100 · SEO 100.
 
 ## Observability
 
@@ -56,10 +56,10 @@ server errors land in the same Vercel log stream. A per-page cap prevents error 
 
 ## Stack
 
-Next.js 16 (App Router, fully static page) · React 19 · TypeScript (strict) · Tailwind CSS 4 ·
+Next.js 16 (App Router, every page static) · React 19 · TypeScript (strict) · Tailwind CSS 4 ·
 Formspree (contact) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel.
 
-No UI or animation libraries: the page ships almost no client JavaScript (theme toggle and contact form only).
+No UI or animation libraries: pages ship almost no client JavaScript (theme toggle, active nav link and contact form only).
 
 ## Local development
 
@@ -89,15 +89,19 @@ E2E_BASE_URL=https://<preview-url> npm run test:e2e
 
 ```
 app/
-  layout.tsx, page.tsx      shell, metadata, JSON-LD
+  layout.tsx                shell (header, main, footer), fonts, metadata
+  page.tsx                  /            intro, selected work, next step
+  projects/page.tsx         /projects    case studies, earlier projects, roadmap
+  projects/[slug]/page.tsx  /projects/*  one static page per case study
+  skills/ about/ contact/   /skills, /about, /contact
   opengraph-image.tsx       generated social card
   sitemap.ts, robots.ts, icon.svg, not-found.tsx
   error.tsx, global-error.tsx
   api/log/route.ts          browser log ingestion
   components/
     layout/                 header, footer, theme toggle
-    sections/               Hero, Skills, Projects (case studies), Roadmap, Experience, About, Contact
-    ui/                     small primitives (Section, Tag, ButtonLink, icons)
+    projects/ skills/ about/ contact/   feature components
+    ui/                     small primitives (PageHeader, Block, TextLink, ExternalLink, Tag, icons)
   data/                     all copy and content, typed — edit here, not in components
   lib/                      logger, client logger, log schema, contact, theme, site config
 e2e/                        Playwright specs + shared "no errors" fixture
@@ -134,5 +138,4 @@ This site:
 - [ ] Scheduled smoke/uptime check against production (GitHub Actions cron + Playwright).
 - [ ] Log drain with alerting on `level=error` instead of reading Vercel logs manually.
 - [ ] Rate limiting on `/api/log` (e.g. Vercel Firewall rule or an edge KV counter).
-- [ ] Architecture diagram: avoid the trailing arrow when a row wraps on medium screens.
 - [ ] Branch protection on `main`/`dev` requiring the three CI jobs; resolve the `feat` vs `feat/*` ref conflict on the remote.

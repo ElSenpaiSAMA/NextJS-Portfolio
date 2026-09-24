@@ -45,5 +45,5 @@ Si no hay dato → `"[COMPLETAR: …]"`.
 ## 3. Verificar y commitear
 
 - `npm test` (integridad de datos) → `npm run build` → `npm run test:e2e`.
-- En `npm run dev`: diagrama legible en desktop y mobile.
+- En `npm run dev`: `/projects/<slug>` completo y legible en desktop y mobile (la ruta, el sitemap y los tests se generan solos desde `projects.ts`).
 - `git-step`, capa `content`: `feat(content): add <title> case study`.

@@ -10,7 +10,7 @@
 
 ## Qué es
 
-Portfolio single-page estático de Matias Speroni, posicionado como **Junior Platform / DevOps
+Portfolio multipágina estático de Matias Speroni, posicionado como **Junior Platform / DevOps
 Engineer**. Contenido en inglés. El propio sitio es evidencia de DevOps: CI completo, tests,
 accesibilidad, Lighthouse y logs estructurados (`/api/log`).
 

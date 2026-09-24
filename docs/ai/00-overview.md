@@ -3,67 +3,56 @@
 ## Qué es
 
 Portfolio de **Matias Speroni**, posicionado como **Junior Platform / DevOps Engineer** (Barcelona).
-Viene de backend/fullstack y está cambiando de área. Objetivo del sitio: que un reclutador técnico
-entienda en < 30 s quién es, qué sabe y qué evidencia tiene — y que **el propio sitio sea evidencia
-de DevOps** (CI completo, tests, a11y, Lighthouse, logs estructurados, previews por PR).
+Viene de backend/fullstack y está cambiando de área. Objetivo: que un reclutador técnico entienda
+en < 30 s quién es, qué sabe y qué evidencia tiene — y que **el propio sitio sea evidencia de DevOps**
+(CI completo, tests, a11y, Lighthouse, logs estructurados, previews por PR).
 
-Single-page estática, en **inglés**, modo claro/oscuro, responsive. Sin backend propio salvo
-`/api/log` (ingesta de logs del navegador).
+Sitio **multipágina estático**, en **inglés**. Estética: limpia, formal, tranquila y minimalista,
+colores cálidos (papel + tinta + acento terracota), títulos serif, modo claro/oscuro, responsive.
 
 ## Stack
 
-Next.js 16 (App Router) · React 19 · TypeScript strict · Tailwind CSS 4 · Formspree (fetch directo,
-sin SDK) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel · Node 22.
+Next.js 16 (App Router) · React 19 · TypeScript strict · Tailwind CSS 4 · Formspree (fetch directo)
+· Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel · Node 22.
+Sin librerías de UI, animación ni estado global. Client components: `ThemeToggle`, `NavLinks`, `ContactForm`.
 
-Sin librerías de UI, animación ni estado global: casi no se envía JavaScript al cliente
-(solo `ThemeToggle` y `ContactForm` son client components).
+## Rutas (todas estáticas)
 
-## Árbol de render
+| Ruta | Archivo | Contenido |
+|------|---------|-----------|
+| `/` | `app/page.tsx` | presentación, trabajo destacado (featured), próximo ítem del roadmap, estado + email |
+| `/projects` | `app/projects/page.tsx` | case studies, proyectos anteriores, roadmap (`#roadmap`) |
+| `/projects/[slug]` | `app/projects/[slug]/page.tsx` | un case study; `generateStaticParams` + `dynamicParams = false` (slug desconocido → 404) |
+| `/skills` | `app/skills/page.tsx` | leyenda de niveles + categorías |
+| `/about` | `app/about/page.tsx` | bio, experiencia, formación, datos, CV |
+| `/contact` | `app/contact/page.tsx` | email/LinkedIn/GitHub + formulario |
+| `/api/log` | `app/api/log/route.ts` | ingesta de logs del navegador (única ruta dinámica) |
 
-```
-RootLayout (server)            layout.tsx — fuentes Geist, metadata, script de tema en <head>
-└─ Home (server)               page.tsx
-   ├─ SiteHeader               nav por anclas + ThemeToggle (client)
-   ├─ <main id="main">
-   │   Hero · Skills(01) · Projects(02) · Roadmap(03) · Experience(04) · About(05) · Contact(06)
-   │                                                                   └─ ContactForm (client)
-   ├─ SiteFooter               entorno + commit desplegado + link al CI
-   └─ JSON-LD Person
-```
+`app/layout.tsx` envuelve todo con `SiteHeader`, `<main id="main">` (max-w-3xl) y `SiteFooter`.
 
 ## Flujo de datos
 
 ```
-app/data/*.ts  (contenido tipado)  ──►  components/sections/*  (presentación pura)
-lib/site.ts    (NAV_ITEMS, siteUrl, build info)
+app/data/*.ts (contenido tipado) ──► pages (composición) ──► components/* (presentación)
+lib/site.ts   NAV_ITEMS (rutas), projectHref, isActivePath, siteUrl, build info
+              ↳ también lo leen sitemap.ts y e2e/routes.ts → una sola fuente de rutas
 
 Errores:
   browser ─► clientLogger ─(warn/error, sendBeacon)─► POST /api/log ─► logger (JSON stdout) ─► Vercel logs
   server  ─► instrumentation.ts onRequestError ───────────────────────► logger
 ```
 
-## Mapa de carpetas
-
-```
-app/
-  components/{layout,sections,ui}/   capa 03
-  data/                              capa 04
-  lib/                               theme (02), site (03), logger/log-schema/client-logger/contact (05)
-  api/log/                           capa 05
-e2e/  scripts/  .github/             capa 06
-instrumentation.ts, instrumentation-client.ts   capa 05
-```
-
 ## Principios
 
-1. **Contenido separado de presentación**: todo texto vive en `app/data/`. Los componentes no tienen copy de negocio.
-2. **Honestidad del contenido**: niveles de skill `used | basic | learning`; lo que no se sabe va como `[COMPLETAR: …]`, nunca inventado.
-3. **Server Components por defecto**; `"use client"` solo donde hay interacción.
-4. **Nada falla en silencio**: todo error de cliente/servidor se loguea con un `event` estable.
-5. **Todo cambio verificable**: `npm run verify` reproduce el CI localmente.
-6. Código y comentarios en inglés; docs internos en español.
+1. **Contenido separado de presentación**: todo texto de negocio vive en `app/data/`.
+2. **Honestidad**: niveles de skill `used | basic | learning`; datos desconocidos como `[COMPLETAR: …]`.
+3. **Server Components por defecto**; `"use client"` solo con interacción real.
+4. **Todas las páginas estáticas** (`○`/`●` en `next build`).
+5. **Nada falla en silencio**: todo error se loguea con un `event` estable.
+6. **Todo verificable**: `npm run verify` reproduce el CI.
+7. Código y comentarios en inglés; docs internos en español.
 
 ## Deuda técnica transversal
 
-- Quedan placeholders `[COMPLETAR]` (ver `npm run check:placeholders`).
+- Quedan placeholders `[COMPLETAR]` (`npm run check:placeholders`).
 - Sin CSP todavía (el script inline de tema requiere nonce o hash).

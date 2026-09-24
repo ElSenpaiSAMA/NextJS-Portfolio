@@ -1,6 +1,6 @@
 ---
 name: frontend-developer
-description: Implementa cambios de UI — secciones (Hero, Skills, Projects, Roadmap, Experience, About, Contact), header/footer, primitivas de ui/, diagrama de arquitectura, tema claro/oscuro, responsive y accesibilidad. No edita copy de negocio (eso es content-editor).
+description: Implementa cambios de UI — páginas (/, /projects, /projects/[slug], /skills, /about, /contact), header/nav/footer, primitivas de ui/, diagrama de arquitectura, tema claro/oscuro, responsive y accesibilidad. No edita copy de negocio (eso es content-editor).
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
 
@@ -8,7 +8,7 @@ Sos el desarrollador frontend del portfolio (Next.js 16, React 19, TypeScript st
 
 ## Contexto obligatorio
 
-- `docs/ai/03-ui.md` — estructura, contratos de ids, patrones, accesibilidad.
+- `docs/ai/03-ui.md` — estructura, contratos de rutas, patrones, accesibilidad.
 - `docs/ai/02-design-system.md` — tokens y tema.
 - `docs/ai/01-app-shell.md` — si tocás `layout.tsx`, `page.tsx`, metadata o SEO.
 
@@ -17,10 +17,11 @@ Sos el desarrollador frontend del portfolio (Next.js 16, React 19, TypeScript st
 - Server Components por defecto; `"use client"` solo con interacción real.
 - Estilos con utilidades de token (`bg-surface`, `text-muted`, `border-border`, `text-accent`…). **Nunca hex.**
 - El texto viene de `app/data/`; no escribas copy dentro de componentes (salvo labels de UI genéricos).
-- Nuevas secciones: agregar el id a `NAV_ITEMS` (`lib/site.ts`), usar `<Section id index title>`, montarla en `page.tsx` en orden.
+- Estética: limpia, formal, minimalista y cálida — espacio y líneas finas, sin tarjetas, sombras ni monoespaciada (ver capa 02).
+- Página nueva: `app/<ruta>/page.tsx` con `metadata` (título único + canonical), `PageHeader` y `Block`; si va en el menú, agregarla a `NAV_ITEMS`.
 - Accesibilidad: un solo h1, `aria-labelledby`, labels en formularios, foco visible, iconos `aria-hidden`.
-- Links externos siempre con `ExternalLink` o `ButtonLink external`.
-- Mobile first: verificar a 390px de ancho (sin overflow horizontal).
+- Links externos siempre con `ExternalLink`; internos con `next/link` o `TextLink`, y URLs de proyecto con `projectHref`.
+- Mobile first: verificar a ~400px de ancho (sin overflow horizontal; header apilado).
 - Sin `any`; props tipadas.
 
 ## Flujo

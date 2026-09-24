@@ -10,9 +10,9 @@ description: Carga el contexto de arquitectura correcto antes de tocar código. 
 
 | Si vas a tocar… | Leé | Scope de commit |
 |-----------------|-----|-----------------|
-| `layout.tsx`, `page.tsx`, metadata, OG, sitemap, robots, icon, 404, `next.config.ts` | `docs/ai/01-app-shell.md` | `app-shell` |
+| `layout.tsx`, cualquier `page.tsx`, rutas, metadata, OG, sitemap, robots, icon, 404, `next.config.ts` | `docs/ai/01-app-shell.md` | `app-shell` |
 | colores, tema claro/oscuro, tipografía, `globals.css`, `lib/theme.ts` | `docs/ai/02-design-system.md` | `design-system` |
-| componentes, secciones, nav, diagrama, `lib/site.ts` | `docs/ai/03-ui.md` | `ui` |
+| componentes, nav, diagrama, `lib/site.ts` | `docs/ai/03-ui.md` | `ui` |
 | textos, proyectos, skills, roadmap, experiencia, CV, `public/` | `docs/ai/04-content.md` | `content` |
 | logs, errores, `/api`, instrumentation, formulario de contacto | `docs/ai/05-backend-observability.md` | `backend` |
 | tests, E2E, CI, Lighthouse, Dependabot, scripts, dependencias | `docs/ai/06-quality-ci.md` | `quality` |
