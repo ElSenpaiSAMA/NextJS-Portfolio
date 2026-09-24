@@ -24,3 +24,9 @@ yarn-error.log*
 
 # TypeScript
 *.tsbuildinfo
+# Test & audit artifacts
+/coverage
+/playwright-report
+/test-results
+/blob-report
+/.lighthouseci
