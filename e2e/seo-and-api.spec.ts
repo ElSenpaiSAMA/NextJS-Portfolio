@@ -1,20 +1,38 @@
 import { expect, test } from "./fixtures";
+import { ALL_ROUTES } from "./routes";
 
 test.describe("SEO & metadata", () => {
-  test("exposes title, description, canonical and Open Graph tags", async ({ page }) => {
+  test("home exposes title, description, Open Graph and JSON-LD", async ({ page }) => {
     await page.goto("/");
-    await expect(page).toHaveTitle(/Matias Speroni — Junior Platform \/ DevOps Engineer/);
+    await expect(page).toHaveTitle("Matias Speroni — Junior Platform / DevOps Engineer");
 
     const meta = (selector: string) => page.locator(selector).first().getAttribute("content");
     expect(await meta('meta[name="description"]')).toBeTruthy();
     expect(await meta('meta[property="og:title"]')).toContain("DevOps");
     expect(await meta('meta[property="og:image"]')).toContain("/opengraph-image");
     expect(await meta('meta[name="twitter:card"]')).toBe("summary_large_image");
-    await expect(page.locator('link[rel="canonical"]')).toHaveCount(1);
     await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(1);
   });
 
-  test("serves robots.txt, sitemap.xml, favicon and OG image", async ({ request }) => {
+  test("every page has a unique title and its own canonical URL", async ({ page }) => {
+    const titles = new Set<string>();
+    for (const route of ALL_ROUTES) {
+      await page.goto(route);
+      titles.add(await page.title());
+      const canonical = await page.locator('link[rel="canonical"]').getAttribute("href");
+      expect(new URL(canonical!).pathname.replace(/\/$/, "") || "/", route).toBe(route);
+    }
+    expect(titles.size).toBe(ALL_ROUTES.length);
+  });
+
+  test("sitemap lists every page", async ({ request }) => {
+    const xml = await (await request.get("/sitemap.xml")).text();
+    for (const route of ALL_ROUTES.filter((r) => r !== "/")) {
+      expect(xml, route).toContain(`${route}</loc>`);
+    }
+  });
+
+  test("serves robots.txt, favicon and OG image", async ({ request }) => {
     for (const [path, type] of [
       ["/robots.txt", "text/plain"],
       ["/sitemap.xml", "xml"],

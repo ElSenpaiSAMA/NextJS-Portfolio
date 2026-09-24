@@ -1,8 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { NAV_ITEMS } from "../lib/site";
 import { education, experience } from "./experience";
 import { profile } from "./profile";
-import { projects } from "./projects";
+import { findProject, projects } from "./projects";
 import { roadmap } from "./roadmap";
 import { skillCategories } from "./skills";
 
@@ -36,14 +35,15 @@ describe("profile", () => {
 });
 
 describe("projects", () => {
-  it("have unique slugs that don't collide with section ids", () => {
+  it("have unique, URL-safe slugs", () => {
     const slugs = projects.map((p) => p.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
-    const sectionIds: string[] = NAV_ITEMS.map((n) => n.id);
-    for (const slug of slugs) {
-      expect(slug).toMatch(/^[a-z0-9-]+$/);
-      expect(sectionIds).not.toContain(slug);
-    }
+    for (const slug of slugs) expect(slug).toMatch(/^[a-z0-9-]+$/);
+  });
+
+  it("findProject resolves known slugs and rejects unknown ones", () => {
+    expect(findProject(projects[0].slug)).toBe(projects[0]);
+    expect(findProject("does-not-exist")).toBeUndefined();
   });
 
   it("are complete case studies with valid links", () => {
@@ -62,10 +62,10 @@ describe("projects", () => {
     expect(projects.some((p) => p.featured)).toBe(true);
   });
 
-  it("hero evidence anchors point at existing projects", () => {
-    const slugs = projects.map((p) => p.slug);
-    expect(slugs).toContain("spotify-pipeline");
-    expect(slugs).toContain("portfolio");
+  it("keeps the strongest DevOps evidence featured", () => {
+    const featured = projects.filter((p) => p.featured).map((p) => p.slug);
+    expect(featured).toContain("spotify-pipeline");
+    expect(featured).toContain("portfolio");
   });
 });
 
