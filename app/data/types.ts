@@ -49,14 +49,10 @@ export interface Project {
   inDevelopment?: boolean;
 }
 
-/** Self-assessed level, as stated in the CV. Omitted when the CV gives none. */
-export type SkillLevel = "Basic" | "Intermediate" | "Advanced";
-
 export interface StackItem {
   name: string;
   /** Path under /public/stack; items without a logo show their initials. */
   logo?: string;
-  level?: SkillLevel;
 }
 
 export interface StackGroup {

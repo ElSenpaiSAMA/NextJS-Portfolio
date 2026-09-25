@@ -26,7 +26,8 @@ export const profile: Profile = {
   phone: "+34 689 51 82 35",
   phoneHref: "+34689518235",
   githubUrl: "https://github.com/ElSenpaiSAMA",
-  linkedinUrl: "https://www.linkedin.com/in/matias-speroni",
+  // The slug has an accent ("matías") — without it LinkedIn resolves to a different person.
+  linkedinUrl: "https://www.linkedin.com/in/matías-speroni",
   cvUrl: "/cv.pdf",
   formspreeId: "mrbzwjdp",
   repoUrl: REPO_URL,

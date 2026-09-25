@@ -1,8 +1,7 @@
 import type { StackGroup } from "./types";
 
 /**
- * Full stack from the CV, grouped by area. Levels are the CV's own
- * self-assessment; items without a level in the CV show none.
+ * Full stack from the CV, grouped by area.
  * Logos live in public/stack; items without one show their initials.
  */
 export const stack: StackGroup[] = [
@@ -10,10 +9,10 @@ export const stack: StackGroup[] = [
     id: "cicd",
     title: "CI/CD & Automation",
     items: [
-      { name: "GitHub Actions", logo: "/stack/github-actions.svg", level: "Intermediate" },
-      { name: "Git", logo: "/stack/git.svg", level: "Intermediate" },
-      { name: "Python scripting", logo: "/stack/python.svg", level: "Intermediate" },
-      { name: "Bash", level: "Basic" },
+      { name: "GitHub Actions", logo: "/stack/github-actions.svg" },
+      { name: "Git", logo: "/stack/git.svg" },
+      { name: "Python scripting", logo: "/stack/python.svg" },
+      { name: "Bash" },
       { name: "n8n", logo: "/stack/n8n.svg" },
     ],
   },
@@ -21,10 +20,10 @@ export const stack: StackGroup[] = [
     id: "containers-cloud",
     title: "Containers, Cloud & IaC",
     items: [
-      { name: "Docker", logo: "/stack/docker.svg", level: "Intermediate" },
-      { name: "Kubernetes", level: "Basic" },
-      { name: "AWS", level: "Basic" },
-      { name: "Terraform", level: "Basic" },
+      { name: "Docker", logo: "/stack/docker.svg" },
+      { name: "Kubernetes" },
+      { name: "AWS" },
+      { name: "Terraform" },
       { name: "Coolify (self-hosted PaaS)" },
       { name: "Vercel" },
     ],
@@ -33,12 +32,12 @@ export const stack: StackGroup[] = [
     id: "systems-security",
     title: "Systems & Security",
     items: [
-      { name: "Linux", level: "Intermediate" },
-      { name: "Windows", level: "Advanced" },
+      { name: "Linux" },
+      { name: "Windows" },
       { name: "Pomerium Zero Trust" },
       { name: "Row Level Security" },
       { name: "JWT & role-based auth" },
-      { name: "SSH, HTTPS/TLS", level: "Basic" },
+      { name: "SSH, HTTPS/TLS" },
     ],
   },
   {
@@ -67,7 +66,7 @@ export const stack: StackGroup[] = [
     id: "databases",
     title: "Databases",
     items: [
-      { name: "PostgreSQL", logo: "/stack/postgresql.svg", level: "Intermediate" },
+      { name: "PostgreSQL", logo: "/stack/postgresql.svg" },
       { name: "SQL Server", logo: "/stack/sqlserver.svg" },
       { name: "MySQL", logo: "/stack/mysql.svg" },
       { name: "Supabase", logo: "/stack/supabase.svg" },

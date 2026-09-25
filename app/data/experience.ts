@@ -5,7 +5,7 @@ export const experience: ExperienceItem[] = [
   {
     company: "Imagine Group",
     location: "Barcelona, Spain",
-    roles: [{ title: "Software Developer", period: "05/2026 – 2026" }],
+    roles: [{ title: "Software Developer", period: "05/2026 – 07/2026" }],
     highlights: [
       "Built CI/CD pipelines with GitHub Actions that build and publish Docker images, deployed automatically to a self-hosted Coolify hub.",
       "Maintained isolated development and production environments per app, each with its own PostgreSQL database, on a centralized hub secured with Pomerium Zero Trust access control.",
