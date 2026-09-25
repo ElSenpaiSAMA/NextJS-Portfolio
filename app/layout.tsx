@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Newsreader } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { SiteFooter } from "./components/layout/SiteFooter";
 import { SiteHeader } from "./components/layout/SiteHeader";
@@ -7,14 +7,12 @@ import { profile } from "./data/profile";
 import { siteUrl } from "./lib/site";
 import { THEME_INIT_SCRIPT } from "./lib/theme";
 
+// One font family for everything keeps the look formal and the critical path short.
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
-// Headings only, one style. Not preloaded: body text (Inter) is the LCP element,
-// so the serif shouldn't compete with it for bandwidth on first load.
-const newsreader = Newsreader({ variable: "--font-newsreader", subsets: ["latin"], display: "swap", preload: false });
 
 const TITLE = `${profile.name} — ${profile.role}`;
 const DESCRIPTION =
-  "Junior Platform / DevOps Engineer in Barcelona. CI/CD with GitHub Actions, automation, containers and observability — with a backend background in .NET, TypeScript and Python.";
+  "Backend & DevOps engineer in Barcelona. .NET, React and TypeScript backends; CI/CD with GitHub Actions, Docker and automation; data and AI tools.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -22,9 +20,11 @@ export const metadata: Metadata = {
   description: DESCRIPTION,
   applicationName: profile.name,
   authors: [{ name: profile.name, url: siteUrl }],
-  keywords: ["Platform Engineer", "DevOps", "CI/CD", "GitHub Actions", "Docker", "Barcelona", "Junior"],
+  keywords: ["Backend", "DevOps", "CI/CD", "GitHub Actions", "Docker", ".NET", "React", "Barcelona"],
+  alternates: { canonical: "/" },
   openGraph: {
     type: "profile",
+    url: "/",
     siteName: profile.name,
     title: TITLE,
     description: DESCRIPTION,
@@ -36,8 +36,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8f5f0" },
-    { media: "(prefers-color-scheme: dark)", color: "#1b1815" },
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b1120" },
   ],
 };
 
@@ -45,13 +45,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     // data-theme is set by THEME_INIT_SCRIPT before hydration, so React must
     // not warn about the attribute differing from the server markup.
-    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${newsreader.variable}`}>
+    <html lang="en" suppressHydrationWarning className={inter.variable}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body className="flex min-h-screen flex-col antialiased">
         <SiteHeader />
-        <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-6">
+        <main id="main" className="flex-1">
           {children}
         </main>
         <SiteFooter />

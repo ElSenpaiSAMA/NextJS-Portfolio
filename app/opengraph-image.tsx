@@ -17,17 +17,33 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "80px",
-          background: "#f8f5f0",
-          color: "#1f1b16",
+          background: "#ffffff",
+          color: "#0f172a",
+          borderTop: "16px solid #1e3a8a",
         }}
       >
-        <div style={{ display: "flex", width: 64, height: 4, background: "#9c4a24" }} />
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ fontSize: 88, letterSpacing: "-0.03em", fontFamily: "serif" }}>{profile.name}</div>
-          <div style={{ fontSize: 40, color: "#5c544a", marginTop: 16 }}>{profile.role}</div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: 72,
+            height: 72,
+            borderRadius: 12,
+            background: "#1e3a8a",
+            color: "#ffffff",
+            fontSize: 28,
+            fontWeight: 700,
+          }}
+        >
+          MS
         </div>
-        <div style={{ display: "flex", fontSize: 26, color: "#6f665a" }}>
-          CI/CD · Automation · Containers · Observability — {profile.location}
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ fontSize: 84, fontWeight: 700, letterSpacing: "-0.03em" }}>{profile.name}</div>
+          <div style={{ fontSize: 42, color: "#1e3a8a", marginTop: 12 }}>{profile.role}</div>
+        </div>
+        <div style={{ display: "flex", fontSize: 26, color: "#475569" }}>
+          .NET · React · TypeScript · Docker · GitHub Actions — {profile.location}
         </div>
       </div>
     ),
