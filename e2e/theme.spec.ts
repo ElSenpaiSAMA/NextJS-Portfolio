@@ -22,6 +22,6 @@ test.describe("theme", () => {
     await expect(html).toHaveAttribute("data-theme", "dark");
 
     const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
-    expect(bg).toBe("rgb(27, 24, 21)"); // --bg in the warm dark theme (#1b1815)
+    expect(bg).toBe("rgb(11, 17, 32)"); // --bg in the dark theme (#0b1120)
   });
 });

@@ -10,7 +10,7 @@ async function fillValid(page: import("@playwright/test").Page) {
 
 test.describe("contact page", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/contact");
+    await page.goto("/#contact");
   });
 
   test("email and LinkedIn are visible without using the form", async ({ page }) => {

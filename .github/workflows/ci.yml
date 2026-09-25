@@ -32,9 +32,9 @@ jobs:
         run: npm run typecheck
       - name: Unit & component tests
         run: npm test -- --coverage
-      - name: Report content placeholders
-        # Warns (does not fail) while [COMPLETAR] placeholders remain.
-        run: npm run check:placeholders
+      - name: No content placeholders
+        # All content is filled in: a new [COMPLETAR] marker fails the build.
+        run: npm run check:placeholders -- --strict
 
   e2e:
     name: Build & E2E (Playwright + axe)

@@ -1,24 +1,11 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { getBuildInfo, isActivePath, NAV_ITEMS, projectHref } from "./site";
+import { getBuildInfo, NAV_ITEMS } from "./site";
 
-describe("isActivePath", () => {
-  it("matches the page itself and nested pages only", () => {
-    expect(isActivePath("/projects", "/projects")).toBe(true);
-    expect(isActivePath("/projects/portfolio", "/projects")).toBe(true);
-    expect(isActivePath("/projectsx", "/projects")).toBe(false);
-    expect(isActivePath("/", "/projects")).toBe(false);
-  });
-});
-
-describe("routes", () => {
-  it("nav hrefs are unique absolute paths", () => {
-    const hrefs = NAV_ITEMS.map((n) => n.href);
-    expect(new Set(hrefs).size).toBe(hrefs.length);
-    for (const href of hrefs) expect(href).toMatch(/^\/[a-z-]+$/);
-  });
-
-  it("builds project URLs under /projects", () => {
-    expect(projectHref("spotify-pipeline")).toBe("/projects/spotify-pipeline");
+describe("NAV_ITEMS", () => {
+  it("has unique, anchor-safe section ids", () => {
+    const ids = NAV_ITEMS.map((n) => n.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    for (const id of ids) expect(id).toMatch(/^[a-z-]+$/);
   });
 });
 
