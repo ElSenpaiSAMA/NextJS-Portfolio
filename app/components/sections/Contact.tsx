@@ -6,8 +6,9 @@ import { Section } from "../ui/Section";
 const CHANNELS = [
   { label: "Email", value: profile.email, href: `mailto:${profile.email}`, Icon: MailIcon, external: false },
   { label: "Phone", value: profile.phone, href: `tel:${profile.phoneHref}`, Icon: PhoneIcon, external: false },
-  { label: "LinkedIn", value: "linkedin.com/in/matias-speroni", href: profile.linkedinUrl, Icon: LinkedInIcon, external: true },
-  { label: "GitHub", value: "github.com/ElSenpaiSAMA", href: profile.githubUrl, Icon: GitHubIcon, external: true },
+  // Display text derives from the URL so the two can never drift apart.
+  { label: "LinkedIn", value: profile.linkedinUrl.replace(/^https:\/\/(www\.)?/, ""), href: profile.linkedinUrl, Icon: LinkedInIcon, external: true },
+  { label: "GitHub", value: profile.githubUrl.replace(/^https:\/\//, ""), href: profile.githubUrl, Icon: GitHubIcon, external: true },
 ] as const;
 
 export function Contact() {

@@ -31,13 +31,7 @@ function StackTile({ item }: { item: StackItem }) {
 
 export function Stack() {
   return (
-    <Section
-      id="stack"
-      eyebrow="Tech stack"
-      title="What I work with"
-      intro="Levels are my own assessment, as stated in my CV."
-      tinted
-    >
+    <Section id="stack" eyebrow="Tech stack" title="What I work with" tinted>
       <div className="grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
         {stack.map((group) => (
           <div key={group.id}>
@@ -46,8 +40,7 @@ export function Stack() {
               {group.items.map((item) => (
                 <li key={item.name} className="flex items-center gap-2.5 text-sm">
                   <StackTile item={item} />
-                  <span className="flex-1">{item.name}</span>
-                  {item.level && <span className="text-xs text-subtle">{item.level}</span>}
+                  {item.name}
                 </li>
               ))}
             </ul>
