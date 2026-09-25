@@ -7,7 +7,7 @@ Portfolio de **Matias Speroni**, **Backend & DevOps Engineer** en Barcelona. Vie
 
 **Single-page estática** en inglés, con la estructura original del autor: Hero (quién soy) → Projects
 (con imágenes) → Experience → Stack completo (con logos, sin niveles) → About (foto, bio, datos,
-educación, certificaciones) → Contact. **El contenido sale del CV del autor** (`public/cv.pdf`). Estética **neutra
+educación, certificaciones) → Contact. **El contenido sale del CV del autor** (`public/CV_Matias_Speroni.pdf`). Estética **neutra
 corporativa**: blanco y grises slate, acento azul marino, una sola fuente (Inter), modo claro/oscuro.
 
 > Historial de decisiones: se probaron un rediseño "DevOps case studies" y uno multipágina cálido; el
@@ -41,7 +41,7 @@ RootLayout (server)       layout.tsx — Inter, metadata, script de tema, SiteHe
 ```
 app/data/{profile,projects,experience,stack}.ts ──► components/sections/* (presentación)
 lib/site.ts  NAV_ITEMS (ids de sección), siteUrl, build info
-public/      avatar.jpg, cv.pdf, projects/*.{png,jpg}, stack/*.svg
+public/      avatar.jpg, CV_Matias_Speroni.pdf, projects/*.{png,jpg}, stack/*.svg
 
 Errores:
   browser ─► clientLogger ─(warn/error, sendBeacon)─► POST /api/log ─► logger (JSON) ─► Vercel logs

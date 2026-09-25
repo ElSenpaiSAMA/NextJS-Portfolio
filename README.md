@@ -102,7 +102,7 @@ app/
   data/                     all copy and content, typed — edit here, not in components
   lib/                      logger, client logger, log schema, contact, theme, site config
 public/
-  avatar.jpg, cv.pdf, projects/<slug>.*, stack/<tech>.svg
+  avatar.jpg, CV_Matias_Speroni.pdf, projects/<slug>.*, stack/<tech>.svg
 e2e/                        Playwright specs + shared "no errors" fixture
 scripts/                    repo tooling
 instrumentation.ts          server error hook
@@ -121,7 +121,7 @@ Branches: work happens on `feat`; `dev` and `main` are the staging and productio
 ## Pending improvements
 
 Content (owner):
-- [ ] Update the CV PDF: Imagine Group still says "05/2026 – Present"; the site shows "05/2026 – 07/2026". Replace `public/cv.pdf` and keep `app/data` in sync.
+- [ ] CV PDF: the LinkedIn link text reads `linkedin.com/in/matias-speroni` (no accent), which is another person; the correct slug is `matías-speroni`.
 - [ ] Recompress the larger project screenshots (`mundo-del-libro.png` is 2.2 MB; served optimized, but the repo stays heavy).
 
 DevOps evidence to build next:
