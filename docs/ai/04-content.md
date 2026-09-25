@@ -1,35 +1,36 @@
 # 04 — Contenido (`content`)
 
-**Archivos:** `app/data/*.ts` (tipos en `types.ts`), `public/`
+**Archivos:** `app/data/{types,profile,projects,stack}.ts`, `public/`
 
-Todo el texto del sitio vive acá. Idioma: **inglés**. Tono: profesional, directo, sin relleno
-("passionate about technology" prohibido). Nivel junior honesto.
+Todo el texto del sitio vive acá. Idioma: **inglés**. Es el contenido original del autor, actualizado:
+ya no trabaja en Imagine ("Previously at Imagine") y el rol es **Backend & DevOps**.
 
 | Archivo | Exporta | Notas |
 |---------|---------|-------|
-| `profile.ts` | `profile` | nombre, rol, propuesta de valor, links, `cvUrl` (null oculta el botón), about (máx. 3 párrafos), `formspreeId`, URLs de repo/CI/badge |
-| `skills.ts` | `skillCategories`, labels de nivel | nivel `used` (proyecto público, nombrarlo en `context`) · `basic` · `learning` (roadmap) |
-| `projects.ts` | `projects: CaseStudy[]` | problema → solución → arquitectura → stack → deploy → resultado → `nextSteps` (gaps honestos). `featured: true` = case study completo |
-| `roadmap.ts` | `roadmap` | proyectos futuros ordenados por impacto; al terminar uno, pasa a `projects.ts` |
-| `experience.ts` | `experience`, `education` | cortos, orientados al rol |
-
-## Reglas de honestidad
-
-- No inventar métricas, fechas, empleadores, certificaciones ni uso de herramientas.
-- Herramientas que falten para el rol → nivel `learning` y ligadas a un ítem del roadmap.
-- Dato desconocido → `"[COMPLETAR: qué falta]"`. `npm run check:placeholders` los lista; CI los reporta como warnings.
-- Métricas solo si son verificables (ej. los 14 snapshots del Spotify Pipeline se cuentan en el repo).
+| `profile.ts` | `profile` | nombre, rol, disponibilidad, intro, `highlights`, about (≤ 3 párrafos), `facts` (≤ 4), avatar, email, links, `cvUrl` (null oculta el botón), `formspreeId`, URLs de repo/CI |
+| `projects.ts` | `projects: Project[]` | slug, título, descripción, tech, imagen, github/siteLink, `inDevelopment` |
+| `stack.ts` | `stack: StackGroup[]` | grupos (Backend, Frontend, DevOps & Tooling, Databases, Data & AI) con logo opcional y `note` |
 
 ## `public/`
 
-Vacío salvo lo que se agregue. CV: `public/cv.pdf` + `profile.cvUrl = "/cv.pdf"`.
+| Ruta | Contenido |
+|------|-----------|
+| `avatar.jpg` | foto del About |
+| `projects/<slug>.{png,jpg}` | screenshot de cada proyecto (nombre = slug) |
+| `stack/<tecnología>.svg` | logos del stack (kebab-case) |
+| `cv.pdf` | (pendiente) activar con `profile.cvUrl = "/cv.pdf"` |
+
+## Reglas
+
+- No inventar métricas, fechas, empleadores, certificaciones ni uso de herramientas.
+- Lo que se está aprendiendo va en la `note` del grupo (ej. "Learning next: Kubernetes, Terraform and AWS"), no como ítem del stack.
+- Dato desconocido → `"[COMPLETAR: …]"`. **CI corre `check:placeholders --strict`**: un placeholder rompe el build a propósito.
 
 ## Integridad
 
-`app/data/data.test.ts` valida: URLs https, slugs únicos y URL-safe,
-case studies completos, `findProject`, Spotify Pipeline y portfolio como featured, skills sin duplicados, about ≤ 3 párrafos.
+`app/data/data.test.ts` valida: URLs https, **que cada imagen/logo/avatar/CV exista en `public/`**,
+slugs únicos, descripciones y tech presentes, grupos del stack sin duplicados, about y facts cortos.
 
 ## Deuda técnica conocida
 
-- Placeholders pendientes en `experience.ts`, `projects.ts` (Study Bot, Sala de Reservas) y `skills.ts` (Supabase).
-- Mira quedó fuera hasta confirmar si hay repo/demo compartible.
+- Algunos screenshots pesan > 1 MB (se sirven optimizados por `next/image`, pero conviene recomprimirlos).

@@ -4,83 +4,9 @@
  * `npm run check:placeholders` lists every remaining one.
  */
 
-/**
- * How honestly-sourced a skill is:
- * - used:     used in a public project (the context names it)
- * - basic:    coursework, small labs or base knowledge — no public project yet
- * - learning: on the roadmap, not used in a project yet
- */
-export type SkillLevel = "used" | "basic" | "learning";
-
-export interface Skill {
-  name: string;
-  level: SkillLevel;
-  /** Where / how it was used. One short sentence. */
-  context: string;
-}
-
-export interface SkillCategory {
-  id: string;
-  title: string;
-  skills: Skill[];
-}
-
-/** Colour-codes a node in the architecture diagram. */
-export type ArchitectureNodeKind = "trigger" | "process" | "store" | "deploy";
-
-export interface ArchitectureNode {
+export interface Fact {
   label: string;
-  detail?: string;
-  kind: ArchitectureNodeKind;
-}
-
-export interface ProjectLinks {
-  repo?: string;
-  demo?: string;
-}
-
-export interface CaseStudy {
-  /** Also used as the DOM id / anchor (#<slug>). */
-  slug: string;
-  title: string;
-  /** One line, DevOps angle first. */
-  tagline: string;
-  problem: string;
-  solution: string;
-  architecture: ArchitectureNode[];
-  stack: string[];
-  deployment: string;
-  outcome: string;
-  /** Honest gaps: what it still needs to be solid DevOps evidence. */
-  nextSteps: string[];
-  links: ProjectLinks;
-  /** Featured projects render as full case studies; the rest as compact cards. */
-  featured: boolean;
-}
-
-export type RoadmapStatus = "planned" | "in-progress" | "done";
-
-export interface RoadmapItem {
-  title: string;
-  goal: string;
-  /** Skills/gaps the project closes. */
-  covers: string[];
-  deliverables: string[];
-  status: RoadmapStatus;
-}
-
-export interface ExperienceItem {
-  role: string;
-  organization: string;
-  period: string;
-  points: string[];
-}
-
-export interface EducationItem {
-  title: string;
-  organization: string;
-  period: string;
-  note?: string;
+  value: string;
 }
 
 export interface Profile {
@@ -88,17 +14,47 @@ export interface Profile {
   role: string;
   location: string;
   availability: string;
-  valueProposition: string;
+  /** One-sentence introduction under the name. */
+  intro: string;
+  /** Short context items shown under the intro, e.g. "Previously at Imagine". */
+  highlights: string[];
+  about: string[];
+  facts: Fact[];
+  /** Path under /public for the portrait. */
+  avatar: string;
   email: string;
   githubUrl: string;
   linkedinUrl: string;
   /** Path under /public (e.g. "/cv.pdf"). null hides the CV button. */
   cvUrl: string | null;
-  about: string[];
-  languages: string[];
   /** Formspree form id used by the contact form. */
   formspreeId: string;
   repoUrl: string;
   ciWorkflowUrl: string;
-  ciBadgeUrl: string;
+}
+
+export interface Project {
+  slug: string;
+  title: string;
+  description: string;
+  tech: string[];
+  /** Path under /public. */
+  image: string;
+  github?: string;
+  siteLink?: string;
+  inDevelopment?: boolean;
+}
+
+export interface StackItem {
+  name: string;
+  /** Path under /public/stack; omitted items render as text only. */
+  logo?: string;
+}
+
+export interface StackGroup {
+  id: string;
+  title: string;
+  items: StackItem[];
+  /** Optional footnote, e.g. what is being learned next in this area. */
+  note?: string;
 }
