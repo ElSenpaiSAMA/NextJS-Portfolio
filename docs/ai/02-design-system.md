@@ -4,12 +4,9 @@
 
 ## Dirección visual
 
-Limpia, formal, tranquila, minimalista, cálida. Papel + tinta + un acento terracota.
-- Títulos en **serif** (Newsreader, peso normal, tracking ajustado). Texto en **Inter**.
-- Sin tarjetas ni sombras: separación con **espacio** y **líneas finas** (`border-border`).
-- Ancho de lectura angosto (`max-w-3xl` global, `max-w-xl` para párrafos largos).
-- Labels pequeños en mayúsculas con la utilidad `label` (definida con `@utility` en `globals.css`).
-- Nada de tipografía monoespaciada ni colores saturados.
+**Neutra corporativa**, seria y formal: blanco y grises slate, un acento azul marino, una sola fuente
+(Inter). Tarjetas con borde fino y radio moderado (`rounded-lg`), secciones alternando fondo `bg`/`surface`,
+sombras solo en hover de cards. Nada de glow, grano, 3D ni colores saturados.
 
 ## Tokens (variables CSS)
 
@@ -18,19 +15,23 @@ para `:root:not([data-theme="light"])`. **Los tres bloques deben tener las misma
 
 | Token | Claro | Oscuro | Uso |
 |-------|-------|--------|-----|
-| `bg` | `#f8f5f0` papel | `#1b1815` carbón cálido | fondo |
-| `surface` | `#fffdf9` | `#221f1b` | inputs, hover |
-| `fg` | `#1f1b16` tinta | `#ede6da` | texto principal |
-| `muted` | `#5c544a` | `#b8ad9e` | texto secundario |
-| `subtle` | `#6f665a` | `#9d9284` | labels, metadatos |
-| `border` | `#e6dfd3` | `#36312a` | líneas finas |
-| `accent` / `accent-fg` | `#9c4a24` terracota / `#fffdf9` | `#e0a47a` arcilla / `#1b1815` | links, CTA, foco |
-| `ok` / `warn` / `info` | oliva / ocre / azul grisáceo | versiones claras | niveles de skill, estados, diagrama |
+| `bg` | `#ffffff` | `#0b1120` | fondo |
+| `surface` | `#f8fafc` | `#111a2e` | secciones alternas |
+| `fg` | `#0f172a` | `#e2e8f0` | texto principal |
+| `muted` | `#475569` | `#a3b1c6` | texto secundario |
+| `subtle` | `#64748b` | `#8391a7` | labels, metadatos |
+| `border` | `#e2e8f0` | `#1e293b` | bordes |
+| `accent` / `accent-hover` | `#1e3a8a` / `#1e40af` | `#93b4f5` / `#b4cbf8` | rol, CTA, links, foco |
+| `accent-fg` | `#ffffff` | `#0b1120` | texto sobre acento |
+| `accent-soft` | `#eff4ff` | `#15213b` | chips de tecnología, iconos de contacto |
+| `ok` / `warn` | verde / ámbar | versiones claras | "Available", "In development" |
 
-Utilidades Tailwind vía `@theme inline`: `bg-bg`, `text-muted`, `border-border`, `text-accent`,
-`font-serif`, `font-sans`. **Nunca hex en componentes.**
+Utilidades Tailwind vía `@theme inline`: `bg-surface`, `text-muted`, `border-border`, `bg-accent`,
+`hover:bg-accent-hover`, `bg-accent-soft`… Utilidad propia `label` (mayúsculas pequeñas).
+**Nunca hex en componentes.** Excepción documentada: los tiles de logos del stack son `bg-white` fijo
+para que logos oscuros (Next.js) se vean en modo oscuro.
 
-Contraste: todos los pares texto/fondo cumplen WCAG AA; axe lo verifica en las 10 páginas y ambos temas.
+Contraste: todos los pares cumplen WCAG AA; axe lo verifica en claro y oscuro.
 
 ## Tema claro/oscuro
 

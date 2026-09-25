@@ -5,55 +5,58 @@
  * by THEME_INIT_SCRIPT in app/lib/theme.ts). Without JS, the media query
  * below still follows the OS preference.
  *
- * Palette: warm paper and ink, one terracotta accent. Every text/background
- * pair meets WCAG AA — axe checks it in CI for both themes.
+ * Palette: neutral corporate — white and slate greys with a navy accent.
+ * Every text/background pair meets WCAG AA; axe checks it in CI.
  */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 :root {
-  --bg: #f8f5f0;
-  --surface: #fffdf9;
-  --fg: #1f1b16;
-  --muted: #5c544a;
-  --subtle: #6f665a;
-  --border: #e6dfd3;
-  --accent: #9c4a24;
-  --accent-fg: #fffdf9;
-  --ok: #4a6638;
-  --warn: #85590c;
-  --info: #3d5d78;
+  --bg: #ffffff;
+  --surface: #f8fafc;
+  --fg: #0f172a;
+  --muted: #475569;
+  --subtle: #64748b;
+  --border: #e2e8f0;
+  --accent: #1e3a8a;
+  --accent-hover: #1e40af;
+  --accent-fg: #ffffff;
+  --accent-soft: #eff4ff;
+  --ok: #15803d;
+  --warn: #b45309;
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #1b1815;
-    --surface: #221f1b;
-    --fg: #ede6da;
-    --muted: #b8ad9e;
-    --subtle: #9d9284;
-    --border: #36312a;
-    --accent: #e0a47a;
-    --accent-fg: #1b1815;
-    --ok: #a8c28f;
-    --warn: #e2b96b;
-    --info: #a3bdd4;
+    --bg: #0b1120;
+    --surface: #111a2e;
+    --fg: #e2e8f0;
+    --muted: #a3b1c6;
+    --subtle: #8391a7;
+    --border: #1e293b;
+    --accent: #93b4f5;
+    --accent-hover: #b4cbf8;
+    --accent-fg: #0b1120;
+    --accent-soft: #15213b;
+    --ok: #4ade80;
+    --warn: #fbbf24;
     color-scheme: dark;
   }
 }
 
 [data-theme="dark"] {
-  --bg: #1b1815;
-  --surface: #221f1b;
-  --fg: #ede6da;
-  --muted: #b8ad9e;
-  --subtle: #9d9284;
-  --border: #36312a;
-  --accent: #e0a47a;
-  --accent-fg: #1b1815;
-  --ok: #a8c28f;
-  --warn: #e2b96b;
-  --info: #a3bdd4;
+  --bg: #0b1120;
+  --surface: #111a2e;
+  --fg: #e2e8f0;
+  --muted: #a3b1c6;
+  --subtle: #8391a7;
+  --border: #1e293b;
+  --accent: #93b4f5;
+  --accent-hover: #b4cbf8;
+  --accent-fg: #0b1120;
+  --accent-soft: #15213b;
+  --ok: #4ade80;
+  --warn: #fbbf24;
   color-scheme: dark;
 }
 
@@ -66,17 +69,26 @@
   --color-subtle: var(--subtle);
   --color-border: var(--border);
   --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
   --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
   --color-ok: var(--ok);
   --color-warn: var(--warn);
-  --color-info: var(--info);
 
-  /* Variables injected by next/font in app/layout.tsx */
+  /* Injected by next/font in app/layout.tsx */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-newsreader), ui-serif, Georgia, serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Keeps anchor targets clear of the sticky header */
+  scroll-padding-top: 4.5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   *,
   *::before,
   *::after {
@@ -94,7 +106,7 @@ body {
 
 :focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: 3px;
+  outline-offset: 2px;
   border-radius: 2px;
 }
 
@@ -103,12 +115,12 @@ body {
   color: var(--accent-fg);
 }
 
-/* Small uppercase label used above sections and in definition lists. */
+/* Small uppercase label used for section eyebrows and fact labels. */
 @utility label {
   font-size: 0.75rem;
   line-height: 1rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--subtle);
 }
