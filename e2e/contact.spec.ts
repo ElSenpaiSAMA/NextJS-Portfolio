@@ -16,7 +16,10 @@ test.describe("contact page", () => {
   test("email, phone and LinkedIn are visible without using the form", async ({ page }) => {
     await expect(page.getByRole("link", { name: "mnicolas03sp@gmail.com" })).toHaveAttribute("href", "mailto:mnicolas03sp@gmail.com");
     await expect(page.getByRole("link", { name: /\+34 689 51 82 35/ })).toHaveAttribute("href", "tel:+34689518235");
-    await expect(page.getByRole("link", { name: /linkedin\.com/ })).toBeVisible();
+    const linkedin = page.getByRole("link", { name: /linkedin\.com\/in\/matías-speroni/ });
+    await expect(linkedin).toBeVisible();
+    // The browser percent-encodes the accent: í → %C3%AD.
+    expect(await linkedin.evaluate((a: HTMLAnchorElement) => a.href)).toBe("https://www.linkedin.com/in/mat%C3%ADas-speroni");
   });
 
   test("blocks invalid input without calling Formspree", async ({ page }) => {

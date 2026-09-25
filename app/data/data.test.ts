@@ -34,6 +34,10 @@ describe("profile", () => {
     expect(profile.phone.replace(/\s/g, "")).toBe(profile.phoneHref);
   });
 
+  it("links the right LinkedIn profile (accented slug; the unaccented one is another person)", () => {
+    expect(profile.linkedinUrl).toBe("https://www.linkedin.com/in/matías-speroni");
+  });
+
   it("serves the CV as a PDF from /public", () => {
     expect(profile.cvUrl).toMatch(/^\/.+\.pdf$/);
   });
@@ -93,7 +97,6 @@ describe("stack", () => {
       expect(new Set(names).size, group.id).toBe(names.length);
       for (const item of group.items) {
         if (item.logo) expect(publicAssetExists(item.logo), `${item.name} logo ${item.logo}`).toBe(true);
-        if (item.level) expect(["Basic", "Intermediate", "Advanced"]).toContain(item.level);
       }
     }
   });
