@@ -11,7 +11,7 @@ export const profile: Profile = {
     "Software developer moving into Platform / DevOps: CI/CD pipelines with GitHub Actions, Docker images and self-hosted deployments with isolated development and production environments.",
   highlights: ["Production experience since 2024", "Previously at Imagine Group & Novicell", "Applied Data Science at UOC"],
   about: [
-    "Software developer moving into Platform / DevOps engineering. I build CI/CD pipelines with GitHub Actions, publish Docker images and deploy them to a self-hosted Coolify hub secured with Pomerium Zero Trust, with isolated dev and prod environments per application.",
+    "Junior Platform / DevOps Engineer with a software development background. I build CI/CD pipelines with GitHub Actions, publish Docker images and deploy them to a self-hosted Coolify hub secured with Pomerium Zero Trust, with isolated dev and prod environments per application.",
     "In production since 11/2024 with .NET/C#, PostgreSQL and Python automation — promoted from intern to developer in under six months. I also build AI agents and agentic workflows, and I'm growing into infrastructure as code, Kubernetes and cloud.",
     "Outside of work: technology, cinema and music — and travelling to discover new cultures.",
   ],
@@ -28,7 +28,7 @@ export const profile: Profile = {
   githubUrl: "https://github.com/ElSenpaiSAMA",
   // The slug has an accent ("matías") — without it LinkedIn resolves to a different person.
   linkedinUrl: "https://www.linkedin.com/in/matías-speroni",
-  cvUrl: "/cv.pdf",
+  cvUrl: "/CV_Matias_Speroni.pdf",
   formspreeId: "mrbzwjdp",
   repoUrl: REPO_URL,
   ciWorkflowUrl: `${REPO_URL}/actions/workflows/ci.yml`,

@@ -26,6 +26,7 @@ export const stack: StackGroup[] = [
       { name: "Terraform" },
       { name: "Coolify (self-hosted PaaS)" },
       { name: "Vercel" },
+      { name: "Dev/prod environment isolation" },
     ],
   },
   {
@@ -37,6 +38,8 @@ export const stack: StackGroup[] = [
       { name: "Pomerium Zero Trust" },
       { name: "Row Level Security" },
       { name: "JWT & role-based auth" },
+      { name: "Secrets & environment variables" },
+      { name: "Least-privilege access" },
       { name: "SSH, HTTPS/TLS" },
     ],
   },

@@ -29,7 +29,7 @@ export interface Profile {
   phoneHref: string;
   githubUrl: string;
   linkedinUrl: string;
-  /** Path under /public (e.g. "/cv.pdf"). null hides the CV button. */
+  /** Path under /public (e.g. "/CV_Matias_Speroni.pdf"). null hides the CV button. */
   cvUrl: string | null;
   /** Formspree form id used by the contact form. */
   formspreeId: string;

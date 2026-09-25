@@ -3,8 +3,8 @@
 **Archivos:** `app/data/{types,profile,projects,stack}.ts`, `public/`
 
 Todo el texto del sitio vive acá. Idioma: **inglés**. **Fuente de verdad: el CV del autor**
-(`public/cv.pdf`). Rol en el sitio: **Backend & DevOps Engineer**. Imagine Group se muestra como
-experiencia terminada ("05/2026 – 07/2026") por indicación del autor, aunque el PDF todavía dice "Present".
+(`public/CV_Matias_Speroni.pdf`). Rol en el sitio: **Backend & DevOps Engineer**. Imagine Group:
+05/2026 – 07/2026 (coincide con el CV).
 
 | Archivo | Exporta | Notas |
 |---------|---------|-------|
@@ -20,13 +20,13 @@ experiencia terminada ("05/2026 – 07/2026") por indicación del autor, aunque 
 | `avatar.jpg` | foto del About |
 | `projects/<slug>.{png,jpg}` | screenshot de cada proyecto (nombre = slug) |
 | `stack/<tecnología>.svg` | logos del stack (kebab-case) |
-| `cv.pdf` | CV descargable (copia de `Desktop/devop/CV_Matias_Speroni.pdf`); reemplazarlo cuando cambie el CV |
+| `CV_Matias_Speroni.pdf` | CV descargable (lo sube el autor); reemplazarlo con el mismo nombre cuando cambie el CV |
 
 ## Reglas
 
 - No inventar métricas, fechas, empleadores, certificaciones ni uso de herramientas: todo sale del CV.
 - El stack **no muestra niveles de dominio** ni notas de "learning" (decisión del autor): solo nombre y logo.
-- Si el CV cambia, actualizar `public/cv.pdf` **y** los datos en el mismo commit para que no se contradigan.
+- Si el CV cambia, actualizar `public/CV_Matias_Speroni.pdf` **y** los datos en el mismo commit para que no se contradigan.
 - Dato desconocido → `"[COMPLETAR: …]"`. **CI corre `check:placeholders --strict`**: un placeholder rompe el build a propósito.
 
 ## Integridad
