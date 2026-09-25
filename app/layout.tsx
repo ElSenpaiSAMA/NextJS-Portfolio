@@ -12,7 +12,7 @@ const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "sw
 
 const TITLE = `${profile.name} — ${profile.role}`;
 const DESCRIPTION =
-  "Backend & DevOps engineer in Barcelona. .NET, React and TypeScript backends; CI/CD with GitHub Actions, Docker and automation; data and AI tools.";
+  "Backend & DevOps engineer in Barcelona. CI/CD with GitHub Actions, Docker images and self-hosted deployments (Coolify, Pomerium Zero Trust), Linux, and .NET, Python and TypeScript backends.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   description: DESCRIPTION,
   applicationName: profile.name,
   authors: [{ name: profile.name, url: siteUrl }],
-  keywords: ["Backend", "DevOps", "CI/CD", "GitHub Actions", "Docker", ".NET", "React", "Barcelona"],
+  keywords: ["DevOps", "Platform Engineer", "Backend", "CI/CD", "GitHub Actions", "Docker", "Linux", ".NET", "Barcelona"],
   alternates: { canonical: "/" },
   openGraph: {
     type: "profile",

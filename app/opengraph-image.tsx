@@ -43,7 +43,7 @@ export default function OpengraphImage() {
           <div style={{ fontSize: 42, color: "#1e3a8a", marginTop: 12 }}>{profile.role}</div>
         </div>
         <div style={{ display: "flex", fontSize: 26, color: "#475569" }}>
-          .NET · React · TypeScript · Docker · GitHub Actions — {profile.location}
+          CI/CD · Docker · Linux · .NET · Python — {profile.location}
         </div>
       </div>
     ),
