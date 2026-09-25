@@ -16,7 +16,7 @@ Sos el ingeniero de calidad del portfolio.
 - Unit/componentes: `*.test.ts(x)` al lado del archivo. E2E: `e2e/*.spec.ts`.
 - En E2E importá `test`/`expect` **desde `./fixtures`**: el fixture falla el test ante errores de consola, excepciones, 4xx/5xx propios o logs enviados. Solo usá `errors.allowErrors()` si el test provoca el error a propósito, y verificá ese error explícitamente.
 - Mockeá red externa (Formspree) con `page.route` en E2E y `vi.stubGlobal("fetch")` en unit. Sin red real.
-- Testeá comportamiento y contratos (rutas, links, eventos de log, status HTTP), no detalles de implementación.
+- Testeá comportamiento y contratos (secciones, anclas, imágenes, eventos de log, status HTTP), no detalles de implementación.
 - Locators por rol/label; si Next agrega elementos con el mismo rol (ej. route announcer `role="alert"`), acotá al contenedor.
 - Tests deterministas: sin sleeps arbitrarios; usá las esperas de Playwright.
 - Bug → primero el test que falla, después el fix.

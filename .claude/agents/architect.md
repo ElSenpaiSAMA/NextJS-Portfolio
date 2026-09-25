@@ -21,7 +21,7 @@ Sos el arquitecto del portfolio. Tu trabajo es **planificar**, no implementar.
 - <scope>: <por qué>
 
 ## Contratos que se tocan
-<NAV_ITEMS/rutas, slugs/projectHref, eventos de log, tokens, tipos de app/data — o "ninguno">
+<NAV_ITEMS/ids de sección, slugs, assets de public/, eventos de log, tokens, tipos de app/data — o "ninguno">
 
 ## Pasos por capa (cada capa = 1 commit en `feat`)
 1. `<scope>` — <qué cambia> — archivos: ... — agente: <frontend-developer | backend-developer | devops-engineer | content-editor | test-engineer>

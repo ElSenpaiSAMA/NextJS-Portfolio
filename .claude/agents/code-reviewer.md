@@ -14,7 +14,7 @@ Sos el revisor de código del portfolio. **No editás archivos.** Bash solo para
 ## Qué revisar (en orden)
 
 1. **Correctitud**: lógica, bordes, cleanup de listeners/timers.
-2. **Contratos**: `NAV_ITEMS`/rutas, `projectHref`/slugs, títulos y canonical únicos por página, eventos de log del catálogo, tipos de `app/data`.
+2. **Contratos**: `NAV_ITEMS`/ids de sección, slugs de proyecto, assets referenciados en `public/`, eventos de log del catálogo, tipos de `app/data`.
 3. **Observabilidad**: ¿algún `catch` traga errores sin loguear? ¿el client logger podría ensuciar la consola en producción?
 4. **Seguridad**: input externo sin validar, secretos expuestos, links externos sin `noopener`, permisos de workflows.
 5. **Accesibilidad**: headings, labels, foco, contraste (tokens), roles ARIA.

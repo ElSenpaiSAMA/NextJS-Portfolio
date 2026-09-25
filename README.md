@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/ElSenpaiSAMA/NextJS-Portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/ElSenpaiSAMA/NextJS-Portfolio/actions/workflows/ci.yml)
 
-Personal site of a **Junior Platform / DevOps Engineer** based in Barcelona.
+Personal site of **Matias Speroni**, Backend & DevOps Engineer based in Barcelona.
 Live: **https://matias-nicolas-speroni.vercel.app**
 
 The site is small on purpose; the engineering around it is the point. Every change goes
@@ -16,7 +16,7 @@ push / PR ──► quality ──────────────┬──�
               lint                  │    next build       │
               typecheck (tsc)       │    Playwright:      ├──► Vercel preview (per PR)
               unit tests + coverage │     desktop+mobile  │    / production (main)
-              placeholder report    │     console errors  │
+              no [COMPLETAR] left   │     console errors  │
                                     │     broken links    │
                                     │     axe (WCAG AA)   │
                                     └──► lighthouse ──────┘
@@ -26,15 +26,15 @@ push / PR ──► quality ──────────────┬──�
 
 | Job | Tooling | Fails the build when |
 |-----|---------|----------------------|
-| `quality` | ESLint, `tsc --noEmit`, Vitest | lint/type errors, any unit or component test fails |
-| `e2e` | Playwright + @axe-core/playwright | console error, uncaught exception, same-origin 4xx/5xx, error shipped to `/api/log`, WCAG violation, broken anchor, unsafe external link, mobile overflow |
+| `quality` | ESLint, `tsc --noEmit`, Vitest | lint/type errors, any unit or component test fails, a missing image/logo in `public/`, a `[COMPLETAR]` placeholder |
+| `e2e` | Playwright + @axe-core/playwright | an image that fails to load, console error, uncaught exception, same-origin 4xx/5xx, error shipped to `/api/log`, WCAG violation, broken anchor, unsafe external link, mobile overflow |
 | `lighthouse` | Lighthouse CI | accessibility < 95, best practices / SEO < 90 (performance < 90 warns) |
 
 Extras: concurrency cancels superseded runs, least-privilege `permissions: contents: read`,
 Node version pinned in `.nvmrc`, Dependabot for npm and GitHub Actions, Playwright report
 uploaded as an artifact on failure.
 
-**Last local Lighthouse run (mobile, median of 3, home / projects / case study / contact):** Performance 92–93 · Accessibility 100 · Best Practices 100 · SEO 100.
+**Last local Lighthouse run (mobile, median of 3):** Performance 95 · Accessibility 100 · Best Practices 100 · SEO 100.
 
 ## Observability
 
@@ -56,10 +56,10 @@ server errors land in the same Vercel log stream. A per-page cap prevents error 
 
 ## Stack
 
-Next.js 16 (App Router, every page static) · React 19 · TypeScript (strict) · Tailwind CSS 4 ·
+Next.js 16 (App Router, static single page, `next/image`) · React 19 · TypeScript (strict) · Tailwind CSS 4 ·
 Formspree (contact) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel.
 
-No UI or animation libraries: pages ship almost no client JavaScript (theme toggle, active nav link and contact form only).
+No UI or animation libraries: the page ships almost no client JavaScript (theme toggle and contact form only).
 
 ## Local development
 
@@ -76,7 +76,7 @@ npm run dev             # http://localhost:3000
 | `npm run typecheck` | TypeScript without emitting |
 | `npm test` | Unit + component tests (Vitest, jsdom) |
 | `npm run test:e2e` | Playwright against the **production build** (`npm run build` first) |
-| `npm run check:placeholders` | Lists content still marked `[COMPLETAR]` (`--strict` fails if any) |
+| `npm run check:placeholders` | Lists content marked `[COMPLETAR]` (`--strict` fails if any; CI runs strict) |
 | `npm run verify` | Everything above, in CI order |
 
 Run E2E against a deployed preview instead of a local server:
@@ -89,21 +89,20 @@ E2E_BASE_URL=https://<preview-url> npm run test:e2e
 
 ```
 app/
-  layout.tsx                shell (header, main, footer), fonts, metadata
-  page.tsx                  /            intro, selected work, next step
-  projects/page.tsx         /projects    case studies, earlier projects, roadmap
-  projects/[slug]/page.tsx  /projects/*  one static page per case study
-  skills/ about/ contact/   /skills, /about, /contact
+  layout.tsx                shell (sticky header, main, footer), font, metadata
+  page.tsx                  single page: Hero · Projects · Stack · About · Contact + JSON-LD
   opengraph-image.tsx       generated social card
   sitemap.ts, robots.ts, icon.svg, not-found.tsx
   error.tsx, global-error.tsx
   api/log/route.ts          browser log ingestion
   components/
     layout/                 header, footer, theme toggle
-    projects/ skills/ about/ contact/   feature components
-    ui/                     small primitives (PageHeader, Block, TextLink, ExternalLink, Tag, icons)
+    sections/               Hero, Projects + ProjectCard, Stack, About, Contact + ContactForm
+    ui/                     small primitives (Section, ButtonLink, ExternalLink, icons)
   data/                     all copy and content, typed — edit here, not in components
   lib/                      logger, client logger, log schema, contact, theme, site config
+public/
+  avatar.jpg, projects/<slug>.*, stack/<tech>.svg
 e2e/                        Playwright specs + shared "no errors" fixture
 scripts/                    repo tooling
 instrumentation.ts          server error hook
@@ -122,20 +121,18 @@ Branches: work happens on `feat`; `dev` and `main` are the staging and productio
 ## Pending improvements
 
 Content (owner):
-- [ ] Fill every `[COMPLETAR]` (`npm run check:placeholders`): Imagine dates and one concrete achievement, education institutions/dates, how Study Bot and Sala de Reservas run today, Supabase project.
-- [ ] Add `public/cv.pdf` and set `profile.cvUrl = "/cv.pdf"` (the button appears automatically).
-- [ ] Decide whether Mira goes back in as a project (needs a public repo or demo you can share).
-- [ ] Once content is complete, switch CI to `check:placeholders -- --strict`.
+- [ ] Add `public/cv.pdf` and set `profile.cvUrl = "/cv.pdf"` (the CV button appears automatically).
+- [ ] Recompress the larger project screenshots (`mundo-del-libro.png` is 2.2 MB; served optimized, but the repo stays heavy).
 
-DevOps evidence (see the Roadmap section on the site):
+DevOps evidence to build next:
 - [ ] Spotify Pipeline: Dockerfile, pin `checkout@v4` / deps, ruff job on PRs, stop committing `__pycache__` and the `.db`, failure alerts.
-- [ ] Roadmap #1: Sala de Reservas containerised with CI/CD to AWS (ECR + ECS Fargate, OIDC).
-- [ ] Roadmap #2: Terraform for that infrastructure (remote state, plan on PR).
-- [ ] Roadmap #3: kind + Helm + Prometheus/Grafana lab with one alert and a runbook.
+- [ ] Containerise Sala de Reservas with a full CI/CD pipeline to a cloud provider.
+- [ ] Terraform for that infrastructure (remote state, plan on PR).
+- [ ] Local Kubernetes lab (kind + Helm) with Prometheus/Grafana monitoring.
 
 This site:
 - [ ] Content-Security-Policy with a nonce for the inline theme script.
 - [ ] Scheduled smoke/uptime check against production (GitHub Actions cron + Playwright).
 - [ ] Log drain with alerting on `level=error` instead of reading Vercel logs manually.
 - [ ] Rate limiting on `/api/log` (e.g. Vercel Firewall rule or an edge KV counter).
-- [ ] Branch protection on `main`/`dev` requiring the three CI jobs; resolve the `feat` vs `feat/*` ref conflict on the remote.
+- [ ] Branch protection on `main`/`dev` requiring the three CI jobs.

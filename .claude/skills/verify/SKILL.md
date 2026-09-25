@@ -36,6 +36,6 @@ Solo los ítems relevantes al cambio:
 
 - [ ] Claro y oscuro (toggle + recarga mantiene el tema).
 - [ ] ~400px de ancho: sin scroll horizontal, header apilado (nombre / nav + toggle).
-- [ ] Home → Selected work → case study → "All projects" funciona; la nav marca la página actual.
+- [ ] Links de la nav y "View work" llevan a su sección; todas las imágenes (proyectos, foto, logos) cargan.
 - [ ] Formulario: validación, envío (real o mock) y mensaje de éxito/error.
 - [ ] Consola del navegador sin errores.

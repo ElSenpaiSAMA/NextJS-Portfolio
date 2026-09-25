@@ -1,6 +1,6 @@
 ---
 name: add-project
-description: Agrega, reemplaza o edita un proyecto como case study DevOps en app/data/projects.ts (o mueve un ítem del roadmap a proyectos). Usar cuando el usuario pida "agregá este proyecto", "terminé X del roadmap", "actualizá Y".
+description: Agrega, reemplaza o edita un proyecto de la sección Projects (app/data/projects.ts + screenshot en public/projects). Usar cuando el usuario pida "agregá este proyecto", "sacá X", "actualizá la descripción de Y".
 ---
 
 # add-project
@@ -9,41 +9,38 @@ Contexto: `docs/ai/04-content.md`.
 
 ## 1. Reunir datos (no inventar)
 
-Preguntá lo que falte:
-- repo público (obligatorio salvo que haya demo) y demo
-- problema real que resuelve · solución · cómo se despliega hoy
-- stack real
-- resultado verificable (métrica que se pueda comprobar en el repo o el deploy) o aprendizaje concreto
-- qué le falta para ser evidencia sólida (Dockerfile, CI, deploy automatizado, IaC, monitoreo…)
+Pedí lo que falte:
+- título y descripción (1–2 frases, inglés)
+- tecnologías (las más relevantes primero)
+- repo público y/o sitio en vivo (al menos uno)
+- screenshot
+- ¿está en desarrollo? → `inDevelopment: true` (badge "In development")
 
-Si no hay dato → `"[COMPLETAR: …]"`.
+## 2. Imagen
 
-## 2. Escribir el case study
+- Guardala como `public/projects/<slug>.png|jpg` (slug en kebab-case = nombre del archivo).
+- Horizontal (se muestra en 16:10 recortada desde arriba), idealmente < 500 KB.
+- `next/image` la optimiza; aun así, recomprimí las muy pesadas.
+
+## 3. Editar `app/data/projects.ts`
 
 ```ts
 {
-  slug: "kebab-case",               // único; se usa como ancla #slug
+  slug: "kebab-case",
   title: "…",
-  tagline: "…",                     // ángulo DevOps primero
-  problem: "…",
-  solution: "…",
-  architecture: [                   // 2+ nodos en orden del flujo
-    { label: "…", detail: "…", kind: "trigger" | "process" | "store" | "deploy" },
-  ],
-  stack: ["…"],
-  deployment: "…",
-  outcome: "…",
-  nextSteps: ["…"],
-  links: { repo: "https://…", demo: "https://…" },
-  featured: true,                   // true = case study completo; false = card compacta
-}
+  description: "…",
+  tech: ["…"],
+  image: "/projects/<slug>.png",
+  github: "https://github.com/…",   // omitir si no hay
+  siteLink: "https://…",            // omitir si no hay
+  inDevelopment: true,              // omitir si no aplica
+},
 ```
 
-- Ordená el array por relevancia para Platform/DevOps (los featured primero).
-- Si viene del roadmap: borralo de `roadmap.ts` y actualizá skills (`learning` → `used`, con el proyecto en `context`).
+El orden del array es el orden en la grilla (3 columnas en desktop). Si el proyecto suma una
+tecnología nueva que el autor usó, agregala también a `app/data/stack.ts` (con logo en `public/stack/` si hay).
 
-## 3. Verificar y commitear
+## 4. Verificar y commitear
 
-- `npm test` (integridad de datos) → `npm run build` → `npm run test:e2e`.
-- En `npm run dev`: `/projects/<slug>` completo y legible en desktop y mobile (la ruta, el sitemap y los tests se generan solos desde `projects.ts`).
-- `git-step`, capa `content`: `feat(content): add <title> case study`.
+- `npm test` (verifica que la imagen exista) → `npm run build` → `npm run test:e2e` (verifica que cargue).
+- `git-step`, capa `content`: `feat(content): add <title> project`.

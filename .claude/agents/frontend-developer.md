@@ -1,6 +1,6 @@
 ---
 name: frontend-developer
-description: Implementa cambios de UI — páginas (/, /projects, /projects/[slug], /skills, /about, /contact), header/nav/footer, primitivas de ui/, diagrama de arquitectura, tema claro/oscuro, responsive y accesibilidad. No edita copy de negocio (eso es content-editor).
+description: Implementa cambios de UI — secciones de la single-page (Hero, Projects, Stack, About, Contact), header/footer, primitivas de ui/, diagrama de arquitectura, tema claro/oscuro, responsive y accesibilidad. No edita copy de negocio (eso es content-editor).
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
 
@@ -17,10 +17,10 @@ Sos el desarrollador frontend del portfolio (Next.js 16, React 19, TypeScript st
 - Server Components por defecto; `"use client"` solo con interacción real.
 - Estilos con utilidades de token (`bg-surface`, `text-muted`, `border-border`, `text-accent`…). **Nunca hex.**
 - El texto viene de `app/data/`; no escribas copy dentro de componentes (salvo labels de UI genéricos).
-- Estética: limpia, formal, minimalista y cálida — espacio y líneas finas, sin tarjetas, sombras ni monoespaciada (ver capa 02).
-- Página nueva: `app/<ruta>/page.tsx` con `metadata` (título único + canonical), `PageHeader` y `Block`; si va en el menú, agregarla a `NAV_ITEMS`.
+- Estética: neutra corporativa — blanco/slate, acento azul marino, Inter, bordes finos; sin glow, grano ni 3D (ver capa 02).
+- Sección nueva: agregar su id a `NAV_ITEMS` (`lib/site.ts`), usar `<Section id eyebrow title>` y montarla en `page.tsx` en el mismo orden.
 - Accesibilidad: un solo h1, `aria-labelledby`, labels en formularios, foco visible, iconos `aria-hidden`.
-- Links externos siempre con `ExternalLink`; internos con `next/link` o `TextLink`, y URLs de proyecto con `projectHref`.
+- Links externos siempre con `ExternalLink`; anclas internas deben apuntar a ids existentes (`NAV_ITEMS`, `#top`, `#main`).
 - Mobile first: verificar a ~400px de ancho (sin overflow horizontal; header apilado).
 - Sin `any`; props tipadas.
 

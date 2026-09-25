@@ -10,7 +10,7 @@
 
 ## Qué es
 
-Portfolio multipágina estático de Matias Speroni, posicionado como **Junior Platform / DevOps
+Portfolio single-page estático de Matias Speroni, **Backend & DevOps
 Engineer**. Contenido en inglés. El propio sitio es evidencia de DevOps: CI completo, tests,
 accesibilidad, Lighthouse y logs estructurados (`/api/log`).
 
@@ -34,7 +34,8 @@ docs/ai/          # Contexto por capas para IA
 ## Reglas de contenido
 
 - No inventar métricas, fechas, empleadores, certificaciones ni uso de herramientas.
-- Herramientas que faltan para el rol → nivel `learning`, ligadas al roadmap.
+- Lo que se está aprendiendo va como nota del grupo en `stack.ts`, no como tecnología usada.
+- Estructura y contenido son los originales del autor con diseño corporativo: no cambiarlos sin pedirlo.
 - Dato desconocido → `[COMPLETAR: …]` (listados por `npm run check:placeholders`).
 
 ## Contexto para IA (leer antes de tocar código)

@@ -23,7 +23,7 @@ Ciclo del repo (ver `CLAUDE.md` → "Flujo de trabajo con Git"): **un commit por
 
    | Scope | Archivos |
    |-------|----------|
-   | `app-shell` | `app/layout.tsx`, `app/**/page.tsx`, `app/not-found.tsx`, `app/opengraph-image.tsx`, `app/icon.svg`, `app/sitemap.ts`, `app/robots.ts`, `next.config.ts` |
+   | `app-shell` | `app/layout.tsx`, `app/page.tsx`, `app/not-found.tsx`, `app/opengraph-image.tsx`, `app/icon.svg`, `app/sitemap.ts`, `app/robots.ts`, `next.config.ts` |
    | `design-system` | `app/globals.css`, `app/lib/theme.ts` |
    | `ui` | `app/components/**` (sin tests), `app/lib/site.ts` |
    | `content` | `app/data/**` (sin tests), `public/**` |
