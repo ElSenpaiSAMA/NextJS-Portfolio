@@ -25,7 +25,7 @@ Client components: `ThemeToggle` y `ContactForm`.
 ## Árbol de render
 
 ```
-RootLayout (server)       layout.tsx — Inter, metadata, script de tema, SiteHeader / <main> / SiteFooter
+RootLayout (server)       layout.tsx — Inter, metadata, scripts de tema + intro, IntroScreen / SiteHeader / <main> / SiteFooter
 └─ HomePage (server)      page.tsx
    ├─ Hero                #top — disponibilidad, nombre, rol, intro, highlights, CTAs
    ├─ Projects            #projects — grilla de ProjectCard (imagen, descripción, tech, links)

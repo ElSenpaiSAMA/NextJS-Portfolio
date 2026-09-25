@@ -59,7 +59,7 @@ server errors land in the same Vercel log stream. A per-page cap prevents error 
 Next.js 16 (App Router, static single page, `next/image`) · React 19 · TypeScript (strict) · Tailwind CSS 4 ·
 Formspree (contact) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel.
 
-No UI or animation libraries: the page ships almost no client JavaScript (theme toggle and contact form only).
+No UI or animation libraries: the page ships almost no client JavaScript (theme toggle and contact form only). The welcome intro is pure CSS, plays once per session and respects reduced-motion.
 
 ## Local development
 
