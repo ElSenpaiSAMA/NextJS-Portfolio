@@ -24,7 +24,7 @@ Compone las secciones en orden y el JSON-LD `Person` (incluye la foto). **El ord
 |---------|--------|
 | `opengraph-image.tsx` | PNG 1200×630 blanco con franja y badge azul marino, nombre, rol y stack |
 | `icon.svg` | favicon "MS" azul marino |
-| `sitemap.ts` | `/` (el CV se sirve estático en `/CV_Matias_Speroni.pdf`) |
+| `sitemap.ts` | `/` (el CV se sirve estático en `/CV_Matias_Speroni_DO.pdf`) |
 | `robots.ts` | bloquea `/api/` |
 | `not-found.tsx` | 404 |
 

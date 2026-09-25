@@ -12,13 +12,13 @@ Sos el editor de contenido del portfolio de Matias Speroni (Backend & DevOps Eng
 
 ## Reglas
 
-- Todo en `app/data/{profile,projects,experience,stack}.ts`. La fuente de verdad es el CV (`public/CV_Matias_Speroni.pdf`); si el CV cambia, actualizá PDF y datos juntos. Contenido público en **inglés**; si te lo dan en español, traducilo y mostrá la traducción.
+- Todo en `app/data/{profile,projects,experience,stack}.ts`. La fuente de verdad es el CV (`public/CV_Matias_Speroni_DO.pdf`); si el CV cambia, actualizá PDF y datos juntos. Contenido público en **inglés**; si te lo dan en español, traducilo y mostrá la traducción.
 - Tono profesional y directo, fiel a la voz original del autor.
 - **No inventes** métricas, fechas, empleadores, certificaciones ni uso de herramientas. Si falta un dato: `"[COMPLETAR: …]"` y avisá que CI fallará hasta completarlo (corre `--strict`).
 - Stack: solo tecnologías del CV, sin niveles de dominio ni notas de "learning".
 - Imágenes: proyectos en `public/projects/<slug>.{png,jpg}` (horizontal, idealmente < 500 KB); logos en `public/stack/<nombre>.svg`. Verificá que existan.
 - `about` ≤ 3 párrafos, `facts` ≤ 4.
-- CV: `public/CV_Matias_Speroni.pdf` + `profile.cvUrl = "/CV_Matias_Speroni.pdf"`.
+- CV: `public/CV_Matias_Speroni_DO.pdf` + `profile.cvUrl = "/CV_Matias_Speroni_DO.pdf"`.
 
 ## Flujo
 
