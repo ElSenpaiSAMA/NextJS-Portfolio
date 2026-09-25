@@ -90,19 +90,19 @@ E2E_BASE_URL=https://<preview-url> npm run test:e2e
 ```
 app/
   layout.tsx                shell (sticky header, main, footer), font, metadata
-  page.tsx                  single page: Hero · Projects · Stack · About · Contact + JSON-LD
+  page.tsx                  single page: Hero · Projects · Experience · Stack · About · Contact + JSON-LD
   opengraph-image.tsx       generated social card
   sitemap.ts, robots.ts, icon.svg, not-found.tsx
   error.tsx, global-error.tsx
   api/log/route.ts          browser log ingestion
   components/
     layout/                 header, footer, theme toggle
-    sections/               Hero, Projects + ProjectCard, Stack, About, Contact + ContactForm
+    sections/               Hero, Projects + ProjectCard, Experience, Stack, About, Contact + ContactForm
     ui/                     small primitives (Section, ButtonLink, ExternalLink, icons)
   data/                     all copy and content, typed — edit here, not in components
   lib/                      logger, client logger, log schema, contact, theme, site config
 public/
-  avatar.jpg, projects/<slug>.*, stack/<tech>.svg
+  avatar.jpg, cv.pdf, projects/<slug>.*, stack/<tech>.svg
 e2e/                        Playwright specs + shared "no errors" fixture
 scripts/                    repo tooling
 instrumentation.ts          server error hook
@@ -121,7 +121,8 @@ Branches: work happens on `feat`; `dev` and `main` are the staging and productio
 ## Pending improvements
 
 Content (owner):
-- [ ] Add `public/cv.pdf` and set `profile.cvUrl = "/cv.pdf"` (the CV button appears automatically).
+- [ ] Update the CV PDF: Imagine Group still says "05/2026 – Present"; the site shows it as a past role. Replace `public/cv.pdf` and keep `app/data` in sync.
+- [ ] Add the exact Imagine Group end month (`app/data/experience.ts`, currently "05/2026 – 2026").
 - [ ] Recompress the larger project screenshots (`mundo-del-libro.png` is 2.2 MB; served optimized, but the repo stays heavy).
 
 DevOps evidence to build next:

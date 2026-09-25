@@ -6,7 +6,8 @@ Portfolio de **Matias Speroni**, **Backend & DevOps Engineer** en Barcelona. Vie
 (.NET, React, TypeScript) y se orienta a DevOps (CI/CD, contenedores, automatización).
 
 **Single-page estática** en inglés, con la estructura original del autor: Hero (quién soy) → Projects
-(con imágenes) → Stack completo (con logos) → About (foto, bio, datos) → Contact. Estética **neutra
+(con imágenes) → Experience → Stack completo (logos + niveles del CV) → About (foto, bio, datos,
+educación, certificaciones) → Contact. **El contenido sale del CV del autor** (`public/cv.pdf`). Estética **neutra
 corporativa**: blanco y grises slate, acento azul marino, una sola fuente (Inter), modo claro/oscuro.
 
 > Historial de decisiones: se probaron un rediseño "DevOps case studies" y uno multipágina cálido; el
@@ -28,6 +29,7 @@ RootLayout (server)       layout.tsx — Inter, metadata, script de tema, SiteHe
 └─ HomePage (server)      page.tsx
    ├─ Hero                #top — disponibilidad, nombre, rol, intro, highlights, CTAs
    ├─ Projects            #projects — grilla de ProjectCard (imagen, descripción, tech, links)
+   ├─ Experience          #experience — empresas, roles y logros
    ├─ Stack               #stack — grupos con logos
    ├─ About               #about — foto, bio, facts
    ├─ Contact             #contact — canales directos + ContactForm (client)
@@ -37,9 +39,9 @@ RootLayout (server)       layout.tsx — Inter, metadata, script de tema, SiteHe
 ## Flujo de datos
 
 ```
-app/data/{profile,projects,stack}.ts ──► components/sections/* (presentación)
+app/data/{profile,projects,experience,stack}.ts ──► components/sections/* (presentación)
 lib/site.ts  NAV_ITEMS (ids de sección), siteUrl, build info
-public/      avatar.jpg, projects/*.{png,jpg}, stack/*.svg
+public/      avatar.jpg, cv.pdf, projects/*.{png,jpg}, stack/*.svg
 
 Errores:
   browser ─► clientLogger ─(warn/error, sendBeacon)─► POST /api/log ─► logger (JSON) ─► Vercel logs
