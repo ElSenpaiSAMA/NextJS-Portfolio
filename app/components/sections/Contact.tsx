@@ -1,17 +1,18 @@
 import { profile } from "../../data/profile";
 import { ContactForm } from "./ContactForm";
-import { GitHubIcon, LinkedInIcon, MailIcon } from "../ui/icons";
+import { GitHubIcon, LinkedInIcon, MailIcon, PhoneIcon } from "../ui/icons";
 import { Section } from "../ui/Section";
 
 const CHANNELS = [
   { label: "Email", value: profile.email, href: `mailto:${profile.email}`, Icon: MailIcon, external: false },
+  { label: "Phone", value: profile.phone, href: `tel:${profile.phoneHref}`, Icon: PhoneIcon, external: false },
   { label: "LinkedIn", value: "linkedin.com/in/matias-speroni", href: profile.linkedinUrl, Icon: LinkedInIcon, external: true },
   { label: "GitHub", value: "github.com/ElSenpaiSAMA", href: profile.githubUrl, Icon: GitHubIcon, external: true },
 ] as const;
 
 export function Contact() {
   return (
-    <Section id="contact" eyebrow="Contact" title="Get in touch" intro="Open to backend and DevOps opportunities. Email is the quickest way to reach me.">
+    <Section id="contact" eyebrow="Contact" title="Get in touch" intro="Open to Platform / DevOps and backend opportunities. Email is the quickest way to reach me." tinted>
       <div className="grid gap-12 md:grid-cols-[1fr_1.3fr]">
         <ul className="space-y-3">
           {CHANNELS.map(({ label, value, href, Icon, external }) => (

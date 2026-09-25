@@ -24,12 +24,17 @@ export function getBuildInfo(repoUrl: string): BuildInfo {
   };
 }
 
-/** Page sections, in order. The header nav and the tests read this list. */
+/**
+ * Page sections, in order. The header nav and the tests read this list.
+ * `hideOnNarrow` drops the link from the header on phones < 400px so Contact
+ * always fits; the section itself is still on the page.
+ */
 export const NAV_ITEMS = [
-  { id: "projects", label: "Projects" },
-  { id: "stack", label: "Stack" },
-  { id: "about", label: "About" },
-  { id: "contact", label: "Contact" },
+  { id: "projects", label: "Projects", hideOnNarrow: false },
+  { id: "experience", label: "Experience", hideOnNarrow: false },
+  { id: "stack", label: "Stack", hideOnNarrow: true },
+  { id: "about", label: "About", hideOnNarrow: false },
+  { id: "contact", label: "Contact", hideOnNarrow: false },
 ] as const;
 
 export type SectionId = (typeof NAV_ITEMS)[number]["id"];

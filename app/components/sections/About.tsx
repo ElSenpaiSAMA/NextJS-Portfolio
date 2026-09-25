@@ -1,10 +1,11 @@
 import Image from "next/image";
+import { certifications, education } from "../../data/experience";
 import { profile } from "../../data/profile";
 import { Section } from "../ui/Section";
 
 export function About() {
   return (
-    <Section id="about" eyebrow="About" title="Who I am" tinted>
+    <Section id="about" eyebrow="About" title="Who I am">
       <div className="grid gap-12 md:grid-cols-[auto_1fr]">
         <div className="flex items-center gap-4 md:flex-col md:items-start">
           <Image
@@ -35,6 +36,35 @@ export function About() {
               </div>
             ))}
           </dl>
+
+          <div className="mt-10 grid gap-10 border-t border-border pt-8 lg:grid-cols-2">
+            <div>
+              <h3 className="label">Education</h3>
+              <ul className="mt-4 space-y-4">
+                {education.map((item) => (
+                  <li key={item.title}>
+                    <p className="font-medium">{item.title}</p>
+                    <p className="text-sm text-muted">
+                      {item.institution} · <span className="tabular-nums">{item.period}</span>
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="label">Certifications</h3>
+              <ul className="mt-4 space-y-4">
+                {certifications.map((item) => (
+                  <li key={item.name}>
+                    <p className="font-medium">{item.name}</p>
+                    <p className="text-sm text-muted">
+                      {item.issuer} · <span className="tabular-nums">{item.date}</span>
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </Section>
