@@ -23,6 +23,10 @@ export interface Profile {
   /** Path under /public for the portrait. */
   avatar: string;
   email: string;
+  /** Display format, e.g. "+34 689 51 82 35". */
+  phone: string;
+  /** E.164 format for tel: links, e.g. "+34689518235". */
+  phoneHref: string;
   githubUrl: string;
   linkedinUrl: string;
   /** Path under /public (e.g. "/cv.pdf"). null hides the CV button. */
@@ -45,16 +49,43 @@ export interface Project {
   inDevelopment?: boolean;
 }
 
+/** Self-assessed level, as stated in the CV. Omitted when the CV gives none. */
+export type SkillLevel = "Basic" | "Intermediate" | "Advanced";
+
 export interface StackItem {
   name: string;
-  /** Path under /public/stack; omitted items render as text only. */
+  /** Path under /public/stack; items without a logo show their initials. */
   logo?: string;
+  level?: SkillLevel;
 }
 
 export interface StackGroup {
   id: string;
   title: string;
   items: StackItem[];
-  /** Optional footnote, e.g. what is being learned next in this area. */
-  note?: string;
+}
+
+export interface Role {
+  title: string;
+  period: string;
+}
+
+export interface ExperienceItem {
+  company: string;
+  location: string;
+  /** Most recent first; several roles at one company (e.g. intern → developer). */
+  roles: Role[];
+  highlights: string[];
+}
+
+export interface EducationItem {
+  title: string;
+  institution: string;
+  period: string;
+}
+
+export interface Certification {
+  issuer: string;
+  name: string;
+  date: string;
 }

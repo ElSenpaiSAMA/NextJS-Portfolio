@@ -5,10 +5,10 @@ const GITHUB = "https://github.com/ElSenpaiSAMA";
 export const projects: Project[] = [
   {
     slug: "mira",
-    title: "Mira",
+    title: "Mira.IA",
     description:
-      "Multi-tenant AI search analytics platform (GEO/AEO) that tracks how brands appear across AI engines like ChatGPT, Claude and Perplexity — measuring visibility, position and sentiment.",
-    tech: ["Next.js", "PostgreSQL", "Supabase", "Prisma", "OpenRouter"],
+      "Multi-tenant SaaS for AI search visibility (GEO/AEO): runs monitored prompts across ChatGPT, Claude, Perplexity and Gemini and extracts brand mentions, position and sentiment with structured-output LLM calls. JWT auth, server-side plan limits, daily scheduled runs and per-run cost tracking.",
+    tech: ["Next.js 16", "PostgreSQL", "Supabase", "Prisma", "LLM APIs"],
     siteLink: "https://mira-ia-demo.vercel.app",
     image: "/projects/mira.png",
     inDevelopment: true,
@@ -17,7 +17,7 @@ export const projects: Project[] = [
     slug: "spotify-pipeline",
     title: "Spotify Pipeline",
     description:
-      "Automated ETL pipeline that extracts tracks from the Spotify API, transforms them with Pandas and loads them into SQLite — scheduled weekly on GitHub Actions, with tests gating every run.",
+      "Automated ETL that extracts top tracks from the Spotify API, cleans them with Pandas, loads SQLite and renders a Plotly chart. Scheduled weekly with GitHub Actions, which runs the tests and commits the refreshed data back to the repo with no manual steps.",
     tech: ["Python", "GitHub Actions", "Pandas", "SQLite", "Plotly"],
     github: `${GITHUB}/Spotify-Track`,
     image: "/projects/spotify-pipeline.png",
@@ -36,7 +36,7 @@ export const projects: Project[] = [
     title: "Sala de Reservas",
     description:
       "Room booking platform with role-based authentication, admin panel and email notifications. Full backend in .NET with EF Core.",
-    tech: [".NET", "Entity Framework", "SQL Server", "Resend API"],
+    tech: [".NET", "EF Core", "SQL Server", "Tailwind CSS", "Resend API"],
     github: `${GITHUB}/SalaReservas`,
     image: "/projects/sala-de-reservas.jpg",
   },
