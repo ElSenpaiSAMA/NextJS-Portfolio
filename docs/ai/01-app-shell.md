@@ -9,7 +9,8 @@
 - `metadata`: `metadataBase` = `siteUrl`, título "Matias Speroni — Backend & DevOps Engineer", description,
   canonical `/`, Open Graph (`type: profile`), Twitter `summary_large_image`, robots.
 - `viewport.themeColor`: `#ffffff` / `#0b1120`.
-- `<script>` inline con `THEME_INIT_SCRIPT` (capa 02) → `<html suppressHydrationWarning>`.
+- `<script>` inline con `THEME_INIT_SCRIPT + INTRO_INIT_SCRIPT` (tema y "intro ya vista en esta sesión") → `<html suppressHydrationWarning>`.
+- `<IntroScreen />` es el primer hijo de `<body>` (capa 03).
 - Estructura: `SiteHeader` (sticky) → `<main id="main">` → `SiteFooter`.
 
 ## page.tsx

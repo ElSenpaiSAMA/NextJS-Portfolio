@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { IntroScreen } from "./components/layout/IntroScreen";
 import { SiteFooter } from "./components/layout/SiteFooter";
 import { SiteHeader } from "./components/layout/SiteHeader";
 import { profile } from "./data/profile";
 import { siteUrl } from "./lib/site";
+import { INTRO_INIT_SCRIPT } from "./lib/intro";
 import { THEME_INIT_SCRIPT } from "./lib/theme";
 
 // One font family for everything keeps the look formal and the critical path short.
@@ -47,9 +49,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     // not warn about the attribute differing from the server markup.
     <html lang="en" suppressHydrationWarning className={inter.variable}>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT + INTRO_INIT_SCRIPT }} />
       </head>
       <body className="flex min-h-screen flex-col antialiased">
+        <IntroScreen />
         <SiteHeader />
         <main id="main" className="flex-1">
           {children}
