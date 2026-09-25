@@ -117,22 +117,3 @@ The footer shows the environment and the deployed commit (`VERCEL_ENV`, `VERCEL_
 Optional env var: `NEXT_PUBLIC_SITE_URL` (canonical/OG base URL, defaults to the Vercel domain).
 
 Branches: work happens on `feat`; `dev` and `main` are the staging and production environments.
-
-## Pending improvements
-
-Content (owner):
-- [ ] CV PDF: the LinkedIn link text reads `linkedin.com/in/matias-speroni` (no accent), which is another person; the correct slug is `matías-speroni`.
-- [ ] Recompress the larger project screenshots (`mundo-del-libro.png` is 2.2 MB; served optimized, but the repo stays heavy).
-
-DevOps evidence to build next:
-- [ ] Spotify Pipeline: Dockerfile, pin `checkout@v4` / deps, ruff job on PRs, stop committing `__pycache__` and the `.db`, failure alerts.
-- [ ] Containerise Sala de Reservas with a full CI/CD pipeline to a cloud provider.
-- [ ] Terraform for that infrastructure (remote state, plan on PR).
-- [ ] Local Kubernetes lab (kind + Helm) with Prometheus/Grafana monitoring.
-
-This site:
-- [ ] Content-Security-Policy with a nonce for the inline theme script.
-- [ ] Scheduled smoke/uptime check against production (GitHub Actions cron + Playwright).
-- [ ] Log drain with alerting on `level=error` instead of reading Vercel logs manually.
-- [ ] Rate limiting on `/api/log` (e.g. Vercel Firewall rule or an edge KV counter).
-- [ ] Branch protection on `main`/`dev` requiring the three CI jobs.
