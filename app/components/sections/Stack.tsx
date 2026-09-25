@@ -40,7 +40,10 @@ export function Stack() {
               {group.items.map((item) => (
                 <li key={item.name} className="flex items-center gap-2.5 text-sm">
                   <StackTile item={item} />
-                  {item.name}
+                  <span>
+                    {item.name}
+                    {item.detail && <span className="block text-xs text-subtle">{item.detail}</span>}
+                  </span>
                 </li>
               ))}
             </ul>
