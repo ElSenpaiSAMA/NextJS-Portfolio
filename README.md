@@ -121,8 +121,7 @@ Branches: work happens on `feat`; `dev` and `main` are the staging and productio
 ## Pending improvements
 
 Content (owner):
-- [ ] Update the CV PDF: Imagine Group still says "05/2026 – Present"; the site shows it as a past role. Replace `public/cv.pdf` and keep `app/data` in sync.
-- [ ] Add the exact Imagine Group end month (`app/data/experience.ts`, currently "05/2026 – 2026").
+- [ ] Update the CV PDF: Imagine Group still says "05/2026 – Present"; the site shows "05/2026 – 07/2026". Replace `public/cv.pdf` and keep `app/data` in sync.
 - [ ] Recompress the larger project screenshots (`mundo-del-libro.png` is 2.2 MB; served optimized, but the repo stays heavy).
 
 DevOps evidence to build next:

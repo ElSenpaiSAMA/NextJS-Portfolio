@@ -6,7 +6,7 @@ Portfolio de **Matias Speroni**, **Backend & DevOps Engineer** en Barcelona. Vie
 (.NET, React, TypeScript) y se orienta a DevOps (CI/CD, contenedores, automatización).
 
 **Single-page estática** en inglés, con la estructura original del autor: Hero (quién soy) → Projects
-(con imágenes) → Experience → Stack completo (logos + niveles del CV) → About (foto, bio, datos,
+(con imágenes) → Experience → Stack completo (con logos, sin niveles) → About (foto, bio, datos,
 educación, certificaciones) → Contact. **El contenido sale del CV del autor** (`public/cv.pdf`). Estética **neutra
 corporativa**: blanco y grises slate, acento azul marino, una sola fuente (Inter), modo claro/oscuro.
 
