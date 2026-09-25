@@ -124,3 +124,108 @@ body {
   text-transform: uppercase;
   color: var(--subtle);
 }
+
+/*
+ * Intro / welcome screen (app/components/layout/IntroScreen.tsx).
+ * Timeline: letters rise (0–1.0s) → line draws (1.0–1.5s) → subtitle fades
+ * (1.3–1.7s) → panel slides up (1.9–2.6s). CSS only, no client JavaScript.
+ */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  color: var(--fg);
+  pointer-events: none;
+  animation: intro-exit 0.7s cubic-bezier(0.76, 0, 0.24, 1) 1.9s forwards;
+}
+
+/* Already played this session, or the visitor prefers reduced motion. */
+html[data-intro="seen"] .intro {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro {
+    display: none;
+  }
+}
+
+.intro-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.intro-name {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.28em;
+  font-size: clamp(2.75rem, 7vw, 5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.intro-word {
+  display: inline-flex;
+}
+
+/* Clips each letter so it can rise from below its baseline. */
+.intro-letter-mask {
+  display: inline-block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+
+.intro-letter {
+  display: inline-block;
+  transform: translateY(110%);
+  animation: intro-letter-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--i) * 40ms + 0.1s) forwards;
+}
+
+.intro-line {
+  display: block;
+  width: 100%;
+  height: 2px;
+  margin-top: 1.25rem;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: intro-line-in 0.5s cubic-bezier(0.76, 0, 0.24, 1) 1s forwards;
+}
+
+.intro-subtitle {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0;
+  animation: intro-fade-in 0.4s ease-out 1.3s forwards;
+}
+
+@keyframes intro-letter-in {
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes intro-line-in {
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes intro-fade-in {
+  to {
+    opacity: 1;
+  }
+}
+@keyframes intro-exit {
+  to {
+    transform: translateY(-100%);
+    visibility: hidden;
+  }
+}

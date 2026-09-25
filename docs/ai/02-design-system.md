@@ -33,6 +33,11 @@ para que logos oscuros (Next.js) se vean en modo oscuro.
 
 Contraste: todos los pares cumplen WCAG AA; axe lo verifica en claro y oscuro.
 
+## Animaciones
+
+Única animación del sitio: la intro (`.intro*` + keyframes `intro-*` al final de `globals.css`). Usa tokens
+(`--bg`, `--fg`, `--accent`, `--muted`), así respeta el tema. Deshabilitada con `prefers-reduced-motion`.
+
 ## Tema claro/oscuro
 
 - `THEME_INIT_SCRIPT` (inline en `<head>`): `localStorage["theme"]` o `prefers-color-scheme` → `html[data-theme]`.
