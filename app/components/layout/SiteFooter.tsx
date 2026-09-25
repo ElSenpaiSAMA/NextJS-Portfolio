@@ -5,8 +5,8 @@ export function SiteFooter() {
   const build = getBuildInfo(profile.repoUrl);
 
   return (
-    <footer className="mt-24 border-t border-border">
-      <div className="mx-auto flex max-w-3xl flex-col gap-2 px-6 py-8 text-sm text-subtle sm:flex-row sm:items-center sm:justify-between">
+    <footer className="border-t border-border">
+      <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-8 text-sm text-subtle sm:flex-row sm:items-center sm:justify-between">
         <p>
           © {new Date().getFullYear()} {profile.name} · {profile.location}
         </p>

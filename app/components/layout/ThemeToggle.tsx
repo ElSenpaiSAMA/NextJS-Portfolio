@@ -15,7 +15,7 @@ export function ThemeToggle() {
       onClick={() => applyTheme(readTheme() === "dark" ? "light" : "dark")}
       aria-label="Toggle dark mode"
       data-testid="theme-toggle"
-      className="inline-flex h-8 w-8 items-center justify-center rounded-full text-muted transition-colors hover:bg-surface hover:text-fg"
+      className="ml-1 inline-flex h-9 w-9 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface hover:text-fg"
     >
       <MoonIcon className="dark:hidden" />
       <SunIcon className="hidden dark:block" />
