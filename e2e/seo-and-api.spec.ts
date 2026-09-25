@@ -26,6 +26,7 @@ test.describe("SEO & metadata", () => {
       ["/sitemap.xml", "xml"],
       ["/icon.svg", "image/svg+xml"],
       ["/opengraph-image", "image/png"],
+      ["/cv.pdf", "application/pdf"],
     ] as const) {
       const res = await request.get(path);
       expect(res.status(), path).toBe(200);

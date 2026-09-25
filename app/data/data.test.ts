@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { certifications, education, experience } from "./experience";
 import { profile } from "./profile";
 import { projects } from "./projects";
 import { stack } from "./stack";
@@ -28,6 +29,13 @@ describe("profile", () => {
       expect(isHttpsUrl(url), url).toBe(true);
     }
     expect(profile.formspreeId).toMatch(/^[a-z0-9]+$/i);
+    // tel: links need E.164 without spaces; the display number must match it digit for digit.
+    expect(profile.phoneHref).toMatch(/^\+\d{8,15}$/);
+    expect(profile.phone.replace(/\s/g, "")).toBe(profile.phoneHref);
+  });
+
+  it("serves the CV as a PDF from /public", () => {
+    expect(profile.cvUrl).toMatch(/^\/.+\.pdf$/);
   });
 
   it("references assets that exist in /public", () => {
@@ -62,6 +70,20 @@ describe("projects", () => {
   });
 });
 
+describe("experience, education and certifications", () => {
+  it("are complete", () => {
+    expect(experience.length).toBeGreaterThan(0);
+    for (const item of experience) {
+      expect(item.roles.length, item.company).toBeGreaterThan(0);
+      expect(item.highlights.length, item.company).toBeGreaterThan(0);
+      for (const role of item.roles) expect(role.period, `${item.company} ${role.title}`).toMatch(/\d{4}/);
+    }
+    for (const item of [...education, ...certifications]) {
+      expect(Object.values(item).every((v) => v.length > 0)).toBe(true);
+    }
+  });
+});
+
 describe("stack", () => {
   it("has unique groups, no duplicate items per group and existing logos", () => {
     const ids = stack.map((g) => g.id);
@@ -71,6 +93,7 @@ describe("stack", () => {
       expect(new Set(names).size, group.id).toBe(names.length);
       for (const item of group.items) {
         if (item.logo) expect(publicAssetExists(item.logo), `${item.name} logo ${item.logo}`).toBe(true);
+        if (item.level) expect(["Basic", "Intermediate", "Advanced"]).toContain(item.level);
       }
     }
   });

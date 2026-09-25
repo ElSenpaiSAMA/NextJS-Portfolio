@@ -1,6 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { profile } from "./data/profile";
+import { experience } from "./data/experience";
 import { projects } from "./data/projects";
 import { stack } from "./data/stack";
 import { NAV_ITEMS } from "./lib/site";
@@ -30,12 +31,24 @@ describe("Home page", () => {
     }
   });
 
+  it("lists every job with its roles and periods", () => {
+    render(<HomePage />);
+    const section = screen.getByRole("region", { name: "Experience" });
+    for (const item of experience) {
+      expect(within(section).getByRole("heading", { name: item.company })).toBeInTheDocument();
+      for (const role of item.roles) {
+        expect(within(section).getByText(role.title)).toBeInTheDocument();
+        expect(within(section).getByText(role.period)).toBeInTheDocument();
+      }
+    }
+  });
+
   it("shows the full stack, grouped", () => {
     render(<HomePage />);
     const section = screen.getByRole("region", { name: "What I work with" });
     for (const group of stack) {
       expect(within(section).getByRole("heading", { name: group.title })).toBeInTheDocument();
-      for (const item of group.items) expect(within(section).getByText(item.name)).toBeInTheDocument();
+      for (const item of group.items) expect(within(section).getAllByText(item.name).length).toBeGreaterThan(0);
     }
   });
 
@@ -50,6 +63,7 @@ describe("Home page", () => {
       expect(within(facts).getByText(fact.value)).toBeInTheDocument();
     }
     expect(screen.getByRole("link", { name: new RegExp(profile.email) })).toHaveAttribute("href", `mailto:${profile.email}`);
+    expect(screen.getByRole("link", { name: new RegExp(profile.phone.replace("+", "\\+")) })).toHaveAttribute("href", `tel:${profile.phoneHref}`);
   });
 
   it("opens every external link safely", () => {

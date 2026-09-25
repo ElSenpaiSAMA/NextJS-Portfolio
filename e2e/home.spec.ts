@@ -1,6 +1,6 @@
 import { expect, test } from "./fixtures";
 
-const SECTIONS = ["projects", "stack", "about", "contact"];
+const SECTIONS = ["projects", "experience", "stack", "about", "contact"];
 
 test.describe("home page", () => {
   test("loads with who I am, every section and no errors", async ({ page }) => {
@@ -72,7 +72,10 @@ test.describe("navigation", () => {
     await page.goto("/");
     const nav = page.getByRole("navigation", { name: "Sections" });
     for (const id of SECTIONS) {
-      await nav.locator(`a[href="#${id}"]`).click();
+      const link = nav.locator(`a[href="#${id}"]`);
+      // Links hidden on narrow phones are still reachable by scrolling; skip them here.
+      if (!(await link.isVisible())) continue;
+      await link.click();
       await expect(page).toHaveURL(new RegExp(`#${id}$`));
       await expect(page.locator(`section#${id}`)).toBeInViewport();
     }

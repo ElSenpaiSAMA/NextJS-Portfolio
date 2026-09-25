@@ -13,8 +13,9 @@ test.describe("contact page", () => {
     await page.goto("/#contact");
   });
 
-  test("email and LinkedIn are visible without using the form", async ({ page }) => {
+  test("email, phone and LinkedIn are visible without using the form", async ({ page }) => {
     await expect(page.getByRole("link", { name: "mnicolas03sp@gmail.com" })).toHaveAttribute("href", "mailto:mnicolas03sp@gmail.com");
+    await expect(page.getByRole("link", { name: /\+34 689 51 82 35/ })).toHaveAttribute("href", "tel:+34689518235");
     await expect(page.getByRole("link", { name: /linkedin\.com/ })).toBeVisible();
   });
 
