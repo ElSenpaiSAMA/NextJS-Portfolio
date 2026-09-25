@@ -29,7 +29,7 @@ export interface Profile {
   phoneHref: string;
   githubUrl: string;
   linkedinUrl: string;
-  /** Path under /public (e.g. "/CV_Matias_Speroni.pdf"). null hides the CV button. */
+  /** Path under /public (e.g. "/CV_Matias_Speroni_DO.pdf"). null hides the CV button. */
   cvUrl: string | null;
   /** Formspree form id used by the contact form. */
   formspreeId: string;
@@ -53,6 +53,8 @@ export interface StackItem {
   name: string;
   /** Path under /public/stack; items without a logo show their initials. */
   logo?: string;
+  /** Short secondary line, e.g. the services used on a cloud provider. */
+  detail?: string;
 }
 
 export interface StackGroup {

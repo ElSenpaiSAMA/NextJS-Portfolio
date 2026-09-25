@@ -8,10 +8,10 @@ export const experience: ExperienceItem[] = [
     roles: [{ title: "Software Developer", period: "05/2026 – 07/2026" }],
     highlights: [
       "Built CI/CD pipelines with GitHub Actions that build and publish Docker images, deployed automatically to a self-hosted Coolify hub.",
-      "Maintained isolated development and production environments per app, each with its own PostgreSQL database, on a centralized hub secured with Pomerium Zero Trust access control.",
-      "dm-tools: built the data integrations for a suite of ~20 AI marketing tools, unifying 6 data sources (Meta, TikTok and Google Ads, GA4, Shopify, Merchant Center) into automated reports — ETL, KPI modeling, SQL on PostgreSQL/Supabase.",
-      "Imagine OS: multi-org PSA platform on Supabase (PostgreSQL + RLS) with margin and utilization analytics, plus an agentic AI assistant that executes actions in the platform through tool/function calling.",
-      "AdSpark: AI creative-ideation app with brand analysis from a URL and full ES/EN/CA internationalization (Next.js 16, React 19, Supabase, OpenAI).",
+      "Kept a separate database and environment for every app, so dev and production never mixed. Access to the hub runs through Pomerium Zero Trust.",
+      "dm-tools: built the data integrations behind a suite of ~20 AI marketing tools. Pulled data from Meta, TikTok, Google Ads, GA4, Shopify and Merchant Center and turned it into automated performance reports, using SQL on PostgreSQL/Supabase.",
+      "Imagine OS: a multi-org PSA platform on Supabase (PostgreSQL + RLS) that tracks margin and utilization per client, project and person. Also built an AI assistant that can take actions inside the platform through tool/function calling, not just answer questions.",
+      "AdSpark: an AI app for creative ideation that analyzes a brand straight from its URL, fully translated into Spanish, English and Catalan (Next.js 16, React 19, Supabase, OpenAI).",
     ],
   },
   {

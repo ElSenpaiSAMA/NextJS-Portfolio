@@ -1,8 +1,10 @@
 import type { StackGroup } from "./types";
 
 /**
- * Full stack from the CV, grouped by area.
- * Logos live in public/stack; items without one show their initials.
+ * Full stack from the CV, grouped by area (same groups as the CV's
+ * "Technical skills"). Logos live in public/stack — the originals plus
+ * Simple Icons (CC0) tinted with each brand colour; items without one show
+ * their initials.
  */
 export const stack: StackGroup[] = [
   {
@@ -10,22 +12,39 @@ export const stack: StackGroup[] = [
     title: "CI/CD & Automation",
     items: [
       { name: "GitHub Actions", logo: "/stack/github-actions.svg" },
+      { name: "GitLab CI", logo: "/stack/gitlab.svg" },
       { name: "Git", logo: "/stack/git.svg" },
       { name: "Python scripting", logo: "/stack/python.svg" },
-      { name: "Bash" },
-      { name: "n8n", logo: "/stack/n8n.svg" },
+      { name: "Bash", logo: "/stack/bash.svg" },
     ],
   },
   {
-    id: "containers-cloud",
-    title: "Containers, Cloud & IaC",
+    id: "containers",
+    title: "Containers & Orchestration",
     items: [
       { name: "Docker", logo: "/stack/docker.svg" },
-      { name: "Kubernetes" },
-      { name: "AWS" },
-      { name: "Terraform" },
+      { name: "Kubernetes", logo: "/stack/kubernetes.svg", detail: "Pods, Deployments, Services, Ingress" },
+      { name: "Helm", logo: "/stack/helm.svg" },
+    ],
+  },
+  {
+    id: "cloud-iac",
+    title: "Cloud & IaC",
+    items: [
+      { name: "AWS", logo: "/stack/aws.svg", detail: "EC2, S3, EKS, Aurora (RDS)" },
+      { name: "Azure", detail: "AKS, Blob Storage, Azure SQL" },
+      { name: "Google Cloud", logo: "/stack/gcp.svg", detail: "GKE, Cloud Storage, Cloud SQL" },
+      { name: "Terraform", logo: "/stack/terraform.svg" },
+    ],
+  },
+  {
+    id: "observability-platform",
+    title: "Observability & Platform",
+    items: [
+      { name: "Prometheus", logo: "/stack/prometheus.svg" },
+      { name: "Grafana", logo: "/stack/grafana.svg" },
       { name: "Coolify (self-hosted PaaS)" },
-      { name: "Vercel" },
+      { name: "Vercel", logo: "/stack/vercel.svg" },
       { name: "Dev/prod environment isolation" },
     ],
   },
@@ -33,7 +52,7 @@ export const stack: StackGroup[] = [
     id: "systems-security",
     title: "Systems & Security",
     items: [
-      { name: "Linux" },
+      { name: "Linux", logo: "/stack/linux.svg" },
       { name: "Windows" },
       { name: "Pomerium Zero Trust" },
       { name: "Row Level Security" },
@@ -50,6 +69,7 @@ export const stack: StackGroup[] = [
       { name: "C# / .NET", logo: "/stack/dotnet.svg" },
       { name: "Python", logo: "/stack/python.svg" },
       { name: "FastAPI", logo: "/stack/fastapi.svg" },
+      { name: "SQL" },
       { name: "REST APIs" },
       { name: "EF Core" },
       { name: "Prisma" },
@@ -77,15 +97,19 @@ export const stack: StackGroup[] = [
     ],
   },
   {
-    id: "data-ai",
-    title: "Data & AI",
+    id: "ai-data",
+    title: "AI Agents & Data",
     items: [
+      { name: "AI agent management & orchestration" },
+      { name: "AI coding agents" },
+      { name: "AI agents & tool calling" },
+      { name: "Structured-output LLM calls" },
+      { name: "n8n", logo: "/stack/n8n.svg" },
+      { name: "Ollama", logo: "/stack/ollama.svg" },
       { name: "ETL & KPI modeling" },
       { name: "Pandas", logo: "/stack/pandas.svg" },
       { name: "NumPy", logo: "/stack/numpy.svg" },
       { name: "Jupyter", logo: "/stack/jupyter.svg" },
-      { name: "AI agents & tool calling" },
-      { name: "Ollama", logo: "/stack/ollama.svg" },
     ],
   },
 ];

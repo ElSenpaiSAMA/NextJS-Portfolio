@@ -7,7 +7,7 @@ export const projects: Project[] = [
     slug: "mira",
     title: "Mira.IA",
     description:
-      "Multi-tenant SaaS for AI search visibility (GEO/AEO): runs monitored prompts across ChatGPT, Claude, Perplexity and Gemini and extracts brand mentions, position and sentiment with structured-output LLM calls. JWT auth, server-side plan limits, daily scheduled runs and per-run cost tracking.",
+      "A multi-tenant SaaS for AI search visibility analytics (GEO/AEO). It runs monitored prompts across ChatGPT, Claude, Perplexity and Gemini, then uses structured-output LLM calls to pull out brand mentions, position and sentiment. Built with JWT auth, plan limits enforced server-side, daily scheduled runs and per-run cost tracking.",
     tech: ["Next.js 16", "PostgreSQL", "Supabase", "Prisma", "LLM APIs"],
     siteLink: "https://mira-ia-demo.vercel.app",
     image: "/projects/mira.png",
@@ -17,7 +17,7 @@ export const projects: Project[] = [
     slug: "spotify-pipeline",
     title: "Spotify Pipeline",
     description:
-      "Automated ETL that extracts top tracks from the Spotify API, cleans them with Pandas, loads SQLite and renders a Plotly chart. Scheduled weekly with GitHub Actions, which runs the tests and commits the refreshed data back to the repo with no manual steps.",
+      "Pulls my top tracks from the Spotify API, cleans them with Pandas and loads them into SQLite, then renders a Plotly chart. Runs weekly on GitHub Actions, which commits the updated data and chart back to the repo — no manual steps.",
     tech: ["Python", "GitHub Actions", "Pandas", "SQLite", "Plotly"],
     github: `${GITHUB}/Spotify-Track`,
     image: "/projects/spotify-pipeline.png",
