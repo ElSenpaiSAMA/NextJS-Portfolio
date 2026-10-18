@@ -8,7 +8,7 @@
 - Fuentes: `IBM_Plex_Mono` (títulos, prompts, código; `--font-plex-mono`) e `IBM_Plex_Sans` (texto; `--font-plex-sans`).
 - `metadata`: `metadataBase` = `siteUrl`, título "Matias Speroni — Backend & DevOps Engineer", description,
   canonical `/`, Open Graph (`type: profile`), Twitter `summary_large_image`, robots.
-- `<script>` inline con `INTRO_INIT_SCRIPT` ("intro ya vista en esta sesión") → `<html suppressHydrationWarning>`. Tema oscuro único: `viewport` con `themeColor` `#0a0f1a` y `colorScheme: dark`. Sin smooth scroll por JS (se quitó Lenis).
+- `<script>` inline con `INTRO_INIT_SCRIPT` ("intro ya vista en esta sesión") → `<html suppressHydrationWarning>`. Tema oscuro único: `viewport` con `themeColor` `#0a0f1a` y `colorScheme: dark`. `<ScrollChoreography />` (capa 03) va antes del header: animaciones de scroll y Lenis.
 - `<IntroScreen />` es el primer hijo de `<body>` (capa 03).
 - Estructura: `SiteHeader` (sticky) → `<main id="main">` → `SiteFooter`.
 

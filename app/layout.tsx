@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import { IntroScreen } from "./components/layout/IntroScreen";
+import { ScrollChoreography } from "./components/layout/ScrollChoreography";
 import { SiteFooter } from "./components/layout/SiteFooter";
 import { SiteHeader } from "./components/layout/SiteHeader";
 import { profile } from "./data/profile";
@@ -51,6 +52,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       </head>
       <body className="min-h-screen antialiased">
         <IntroScreen />
+        <ScrollChoreography />
         <SiteHeader />
         <main id="main">{children}</main>
         <SiteFooter />
