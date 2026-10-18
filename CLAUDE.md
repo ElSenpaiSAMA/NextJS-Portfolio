@@ -3,7 +3,8 @@
 ## Stack
 
 - **Framework:** Next.js 16 (App Router), React 19, TypeScript strict, Node 22
-- **Estilos:** Tailwind CSS v4 (tokens CSS, tema claro/oscuro)
+- **Estilos:** Tailwind CSS v4 (tokens CSS, tema oscuro único)
+- **Motion / 3D:** Three.js + React Three Fiber (hero), GSAP ScrollTrigger + Lenis (desktop, bajo demanda)
 - **Formularios:** Formspree (fetch directo)
 - **Tests:** Vitest + Testing Library, Playwright + axe, Lighthouse CI
 - **Deploy:** Vercel (preview por PR)
@@ -35,7 +36,7 @@ docs/ai/          # Contexto por capas para IA
 
 - No inventar métricas, fechas, empleadores, certificaciones ni uso de herramientas.
 - Lo que se está aprendiendo va como nota del grupo en `stack.ts`, no como tecnología usada.
-- Estructura y contenido son los originales del autor con diseño corporativo: no cambiarlos sin pedirlo.
+- Contenido del CV del autor con el diseño cinematográfico "Night Shift" (docs/ai/02): no cambiar estructura ni dirección de arte sin pedirlo.
 - Dato desconocido → `[COMPLETAR: …]` (listados por `npm run check:placeholders`).
 
 ## Contexto para IA (leer antes de tocar código)

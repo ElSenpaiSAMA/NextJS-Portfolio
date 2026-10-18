@@ -1,27 +1,26 @@
 ---
 name: design-token
-description: Agrega o modifica un design token (color del tema claro/oscuro) en app/globals.css manteniendo los tres bloques sincronizados y el contraste WCAG AA. Usar cuando se necesite un color nuevo o cambiar la paleta.
+description: Agrega o modifica un design token (color, utilidad de tipografía, easing) en app/globals.css del tema oscuro "Night Shift", manteniendo contraste WCAG AA. Usar cuando se necesite un color nuevo o cambiar la paleta.
 ---
 
 # design-token
 
-Contexto: `docs/ai/02-design-system.md`.
+Contexto: `docs/ai/02-design-system.md`. Tema **oscuro único**: no hay bloques claro/oscuro.
 
 ## Dónde va un token
 
-Cada color se define **4 veces** en `app/globals.css`:
+En `app/globals.css`:
+1. `:root` → la variable (`--<nombre>`), nombrada por rol (`haze-muted`, `dusk-line`), no por color.
+2. `@theme inline` → `--color-<nombre>: var(--<nombre>);` para tener `bg-<nombre>`, `text-<nombre>`, `border-<nombre>/40`…
 
-1. `:root` → valor claro (`--<nombre>`)
-2. `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) }` → valor oscuro
-3. `[data-theme="dark"]` → el **mismo** valor oscuro
-4. `@theme inline` → `--color-<nombre>: var(--<nombre>);` (genera `bg-<nombre>`, `text-<nombre>`, `border-<nombre>/40`…)
+## Reglas
 
-## Pasos
-
-1. ¿Existe uno equivalente? Reutilizá antes de crear. Nombrá por **rol** (`warn`, `surface`), no por color.
-2. Agregá los 4 puntos. Los bloques 2 y 3 deben ser idénticos.
-3. Contraste: texto sobre `bg` y `surface` ≥ 4.5:1 en ambos temas.
-4. Si el valor se usa donde no llegan variables CSS (`opengraph-image.tsx`, `icon.svg`, `viewport.themeColor`), actualizalo ahí también.
+1. ¿Ya existe uno equivalente? Reutilizá antes de crear.
+2. Contraste: texto sobre `night` (`#160b2e`) y `dusk` ≥ 4.5:1.
+3. No crees una utilidad propia con prefijo `text-<color>` si existe `--color-<color>`: Tailwind genera la
+   suya y la pisa (por eso el degradado se llama `ink-sunset`, no `text-sunset`).
+4. Si el color se usa en WebGL/SVG/OG (`CityScene.tsx`, `StaticSkyline.tsx`, `opengraph-image.tsx`,
+   `icon.svg`, `viewport.themeColor`), actualizalo también ahí: no leen variables CSS.
 5. Actualizá la tabla de `docs/ai/02-design-system.md`.
-6. `npm run build && npm run test:e2e` (axe verifica contraste en claro y oscuro).
-7. `git-step`, capa `design-system`. Los componentes que lo usen van en el commit de `ui`.
+6. `npm run build && npm run test:e2e` (axe verifica contraste).
+7. `git-step`, capa `design-system`; los componentes que lo usen van en el commit de `ui`.

@@ -59,7 +59,7 @@ server errors land in the same Vercel log stream. A per-page cap prevents error 
 Next.js 16 (App Router, static single page, `next/image`) · React 19 · TypeScript (strict) · Tailwind CSS 4 ·
 Formspree (contact) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel.
 
-No UI or animation libraries: the page ships almost no client JavaScript (theme toggle and contact form only). The welcome intro is pure CSS, plays once per session and respects reduced-motion.
+Cinematic "Night Shift" design: a 3D harbour of stacked containers at dusk (Three.js / React Three Fiber) that the camera flies through as you scroll, a pinned horizontal project gallery (GSAP ScrollTrigger) and Lenis smooth scrolling. The 3D scene and the animation libraries load on demand and only on desktop; phones get a painted SVG skyline. Everything respects prefers-reduced-motion.
 
 ## Local development
 
@@ -96,7 +96,8 @@ app/
   error.tsx, global-error.tsx
   api/log/route.ts          browser log ingestion
   components/
-    layout/                 header, footer, theme toggle
+    layout/                 intro, header, footer, smooth scroll
+    scene/                  3D harbour (CityScene) and painted fallback (StaticSkyline)
     sections/               Hero, Projects + ProjectCard, Experience, Stack, About, Contact + ContactForm
     ui/                     small primitives (Section, ButtonLink, ExternalLink, icons)
   data/                     all copy and content, typed — edit here, not in components

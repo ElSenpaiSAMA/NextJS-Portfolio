@@ -8,7 +8,7 @@ Portfolio de **Matias Speroni**, **Backend & DevOps Engineer** en Barcelona. Vie
 **Single-page estática** en inglés, con la estructura original del autor: Hero (quién soy) → Projects
 (con imágenes) → Experience → Stack completo (con logos, sin niveles) → About (foto, bio, datos,
 educación, certificaciones) → Contact. **El contenido sale del CV del autor** (`public/CV_Matias_Speroni_DO.pdf`). Estética **neutra
-corporativa**: blanco y grises slate, acento azul marino, una sola fuente (Inter), modo claro/oscuro.
+cinematográfica "Night Shift"** (capa 02): puerto de contenedores al atardecer en 3D (Three.js) en desktop, versión pintada en mobile, tipografía gigante con degradado atardecer, tema oscuro único.
 
 > Historial de decisiones: se probaron un rediseño "DevOps case studies" y uno multipágina cálido; el
 > autor prefirió volver a su estructura y contenido originales con un diseño más serio. No reintroducir
@@ -20,12 +20,12 @@ El sitio además es evidencia de DevOps: CI completo, tests, accesibilidad, Ligh
 
 Next.js 16 (App Router) · React 19 · TypeScript strict · Tailwind CSS 4 · `next/image` · Formspree
 (fetch directo) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel · Node 22.
-Client components: `ThemeToggle` y `ContactForm`.
+Client components: `Hero`, `ProjectsTrack`, `SmoothScroll`, `CityScene` (diferida) y `ContactForm`. GSAP y Lenis se cargan bajo demanda, solo en desktop.
 
 ## Árbol de render
 
 ```
-RootLayout (server)       layout.tsx — Inter, metadata, scripts de tema + intro, IntroScreen / SiteHeader / <main> / SiteFooter
+RootLayout (server)       layout.tsx — Big Shoulders + Instrument Sans, metadata, script de intro, IntroScreen / SmoothScroll / SiteHeader / <main> / SiteFooter
 └─ HomePage (server)      page.tsx
    ├─ Hero                #top — disponibilidad, nombre, rol, intro, highlights, CTAs
    ├─ Projects            #projects — grilla de ProjectCard (imagen, descripción, tech, links)
