@@ -1,8 +1,9 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { certifications, education, experience } from "./experience";
-import { contactFootage, heroFootage } from "./media";
+import { NAV_ITEMS } from "../lib/site";
+import { BOOT_LINES, PIPELINE, SECTION_COMMANDS } from "./console";
 import { profile } from "./profile";
 import { projects } from "./projects";
 import { stack } from "./stack";
@@ -103,12 +104,27 @@ describe("stack", () => {
   });
 });
 
-describe("media", () => {
-  it("ships every footage file it references, with credits", () => {
-    for (const clip of [heroFootage, contactFootage]) {
-      const files = [clip.poster, clip.loop.mp4, clip.loop.webm, clip.scrub?.mp4, clip.scrub?.webm].filter((f): f is string => Boolean(f));
-      for (const file of files) expect(publicAssetExists(file), file).toBe(true);
-      expect(isHttpsUrl(clip.source.url), clip.source.url).toBe(true);
+describe("console copy", () => {
+  it("has a shell command for every section", () => {
+    for (const { id } of NAV_ITEMS) expect(SECTION_COMMANDS[id], id).toMatch(/\S/);
+    expect(BOOT_LINES.length).toBeGreaterThan(0);
+  });
+
+  it("only shows pipeline stages the real CI runs", () => {
+    // The hero claims these run on every push: keep them honest against ci.yml.
+    const ci = readFileSync(join(process.cwd(), ".github/workflows/ci.yml"), "utf8").toLowerCase();
+    const evidence: Record<string, string> = {
+      lint: "npm run lint",
+      typecheck: "npm run typecheck",
+      "unit tests": "npm test",
+      build: "npm run build",
+      "e2e (playwright + axe)": "npm run test:e2e",
+      "lighthouse ci": "lighthouse",
+    };
+    for (const stage of PIPELINE.stages) {
+      if (stage === "deploy to vercel") continue; // Vercel deploys through its Git integration, not ci.yml
+      expect(evidence[stage], `unknown stage "${stage}"`).toBeDefined();
+      expect(ci, stage).toContain(evidence[stage]);
     }
   });
 });

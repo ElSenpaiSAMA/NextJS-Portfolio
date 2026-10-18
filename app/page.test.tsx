@@ -1,5 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { PIPELINE } from "./data/console";
 import { profile } from "./data/profile";
 import { experience } from "./data/experience";
 import { projects } from "./data/projects";
@@ -12,19 +13,17 @@ describe("Home page", () => {
     render(<HomePage />);
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(profile.name);
-    expect(screen.getByText(profile.role)).toBeInTheDocument();
+    // The terminal repeats the role (aria-hidden); the hero copy is the <p>.
+    expect(screen.getByText(profile.role, { selector: "p" })).toBeInTheDocument();
     expect(screen.getByText(new RegExp(profile.availability))).toBeInTheDocument();
   });
 
-  it("backs the hero and contact with muted, decorative footage", () => {
+  it("runs the real CI stages in a decorative hero terminal", () => {
     render(<HomePage />);
-    const videos = screen.getAllByTestId("ambient-video") as HTMLVideoElement[];
-    expect(videos).toHaveLength(2);
-    for (const video of videos) {
-      expect(video.muted).toBe(true);
-      expect(video).toHaveAttribute("aria-hidden", "true");
-      expect(video).toHaveAttribute("poster");
-    }
+    const terminal = screen.getByTestId("hero-terminal");
+    expect(terminal).toHaveAttribute("aria-hidden", "true");
+    expect(terminal).toHaveTextContent(PIPELINE.command);
+    for (const stage of PIPELINE.stages) expect(terminal).toHaveTextContent(stage);
   });
 
   it("renders a section for every nav item", () => {

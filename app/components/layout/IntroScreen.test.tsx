@@ -1,16 +1,18 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { profile } from "../../data/profile";
+import { BOOT_LINES } from "../../data/console";
 import { IntroScreen } from "./IntroScreen";
 
 describe("IntroScreen", () => {
-  it("spells the full name letter by letter with staggered indices", () => {
+  it("prints every boot line with a staggered index", () => {
     render(<IntroScreen />);
-    const letters = [...document.querySelectorAll<HTMLElement>(".intro-letter")];
-    const expected = profile.name.replace(/\s/g, "");
+    const lines = [...document.querySelectorAll<HTMLElement>(".intro-line")];
 
-    expect(letters.map((l) => l.textContent).join("")).toBe(expected);
-    expect(letters.map((l) => l.style.getPropertyValue("--i"))).toEqual(expected.split("").map((_, i) => String(i)));
+    expect(lines).toHaveLength(BOOT_LINES.length);
+    lines.forEach((line, i) => {
+      expect(line).toHaveTextContent(BOOT_LINES[i]);
+      expect(line.style.getPropertyValue("--i")).toBe(String(i));
+    });
   });
 
   it("is decorative: hidden from assistive tech and never adds a heading", () => {

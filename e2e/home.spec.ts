@@ -15,8 +15,7 @@ test.describe("home page", () => {
 
   test("every image loads (projects, portrait, stack logos)", async ({ page }) => {
     await page.goto("/");
-    // Lazy images only load near the viewport, and the project posters only enter it
-    // while the pinned track scrolls sideways — so walk the page in small steps.
+    // Lazy images only load near the viewport, so walk the page in small steps.
     const height = await page.evaluate(() => document.documentElement.scrollHeight);
     for (let y = 0; y <= height; y += 400) {
       await page.evaluate((top) => window.scrollTo(0, top), y);
@@ -37,21 +36,10 @@ test.describe("home page", () => {
     expect(await page.locator("#projects img").count()).toBe(6);
   });
 
-  test("hero footage plays (or scrubs with the scroll on desktop)", async ({ page }) => {
+  test("the hero terminal finishes its pipeline run", async ({ page }) => {
     await page.goto("/");
-    const scrub = page.getByTestId("hero-scrub-video");
-    if (await scrub.count()) {
-      // Desktop choreography: the playhead follows the scroll position.
-      await expect.poll(() => scrub.evaluate((v: HTMLVideoElement) => v.readyState), { timeout: 15_000 }).toBeGreaterThanOrEqual(2);
-      for (let y = 0; y <= 900; y += 150) {
-        await page.evaluate((top) => window.scrollTo(0, top), y);
-        await page.waitForTimeout(80);
-      }
-      await expect.poll(() => scrub.evaluate((v: HTMLVideoElement) => v.currentTime)).toBeGreaterThan(1);
-    } else {
-      const loop = page.getByTestId("ambient-video").first();
-      await expect.poll(() => loop.evaluate((v: HTMLVideoElement) => !v.paused && v.currentTime > 0), { timeout: 15_000 }).toBe(true);
-    }
+    // Pure CSS timeline: the last stage flips to its check mark, then the summary line shows.
+    await expect(page.getByText("all checks passed")).toBeVisible({ timeout: 10_000 });
   });
 
   test("has no horizontal overflow", async ({ page }) => {
