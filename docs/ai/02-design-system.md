@@ -16,7 +16,9 @@ Reglas (skills `frontend-design` y `awwwards`):
 - La metáfora de terminal tiene que **corresponder al contenido** (el comando de cada sección es
   el que mostraría ese contenido). No sumar decoración de "hacker" sin función.
 - El pipeline del hero lista **solo jobs reales** de `.github/workflows/ci.yml` (lo valida `data.test.ts`).
-- Sin librería de animación: todo el movimiento es CSS (un único momento orquestado: el hero).
+- Movimiento en tres capas, cada una con su herramienta: CSS (terminal del hero, boot screen), GSAP +
+  ScrollTrigger (revelados con el scroll, capa 03) y Three.js / React Three Fiber (clúster 3D del hero).
+  Una sola librería de animación JS (GSAP). Skills: `gsap-scrolltrigger`, `react-three-fiber`, `threejs-webgl`.
 
 ## Tokens (`:root` en `globals.css`)
 
@@ -36,7 +38,8 @@ Reglas (skills `frontend-design` y `awwwards`):
 Utilidades: `bg-console`, `bg-panel`, `text-fg-muted`, `border-line`, `text-amber`… (vía `@theme inline`).
 Utilidad propia: `bg-grid` (grilla técnica tenue del hero).
 
-Excepciones de color fuera de tokens: `opengraph-image.tsx` (Satori no lee variables CSS: copia la paleta
+Excepciones de color fuera de tokens: `ClusterScene.tsx` (WebGL no lee variables CSS: constante `COLORS`
+que copia la paleta), `opengraph-image.tsx` (Satori no lee variables CSS: copia la paleta
 en una constante), `icon.svg`, `viewport.themeColor` (`#0a0f1a`) y la sombra `rgba` de `Window`.
 
 ## Tipografía
@@ -55,6 +58,8 @@ IBM, coherente con el tema. `next/font` en `layout.tsx` (`--font-plex-mono`, `--
 - **Boot screen** (`.intro*`): líneas estilo systemd `[ OK ]`, luego "Welcome to my portfolio", luego
   el panel sube. Una vez por sesión.
 - `.cursor`: cursor de bloque que parpadea.
+- `.cluster-packet`: paquetes del clúster SVG de celulares, recorren su cable con `offset-path`.
 - `.code-lines` / `.code-line`: gutter con números de línea (contadores CSS), en grid de 2 columnas
   para que las líneas largas no se metan bajo el número.
-- `prefers-reduced-motion`: sin intro, terminal en su estado final, cursor quieto, transiciones casi nulas.
+- `prefers-reduced-motion`: sin intro, terminal en su estado final, cursor y paquetes quietos, transiciones casi nulas
+  (y en JS: sin GSAP/Lenis, el 3D dibuja un solo cuadro).
