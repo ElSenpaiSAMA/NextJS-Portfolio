@@ -4,7 +4,7 @@
 
 - **Framework:** Next.js 16 (App Router), React 19, TypeScript strict, Node 22
 - **Estilos:** Tailwind CSS v4 (tokens CSS, tema oscuro único)
-- **Motion / 3D:** Three.js + React Three Fiber (hero), GSAP ScrollTrigger + Lenis (desktop, bajo demanda)
+- **Motion / video:** footage real (MP4/WebM en `public/media/`) controlado por scroll con GSAP ScrollTrigger + Lenis (desktop, bajo demanda)
 - **Formularios:** Formspree (fetch directo)
 - **Tests:** Vitest + Testing Library, Playwright + axe, Lighthouse CI
 - **Deploy:** Vercel (preview por PR)
@@ -62,7 +62,7 @@ Si un cambio altera algo documentado (contratos, tokens, eventos de log), actual
 
 **Skills de diseño creativo** (terceros, ver `.claude/skills/THIRD_PARTY.md`): `frontend-design` (oficial de
 Anthropic), `awwwards` (dirección creativa), `gsap-scrolltrigger` (animaciones guiadas por scroll),
-`react-three-fiber` y `threejs-webgl` (3D). Para un rediseño creativo, empezar por `frontend-design` / `awwwards`
+`react-three-fiber` y `threejs-webgl` (3D, hoy sin uso: el hero usa video real). Para un rediseño creativo, empezar por `frontend-design` / `awwwards`
 (definir dirección de arte antes de codear) y usar una sola librería de animación (GSAP).
 
 ## Comandos
