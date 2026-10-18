@@ -1,6 +1,6 @@
 ---
 name: frontend-developer
-description: Implementa cambios de UI — secciones de la single-page (Hero, Projects, Stack, About, Contact), header/footer, primitivas de ui/, video de fondo, animaciones de scroll, responsive y accesibilidad. No edita copy de negocio (eso es content-editor).
+description: Implementa cambios de UI — secciones de la single-page (Hero, Projects, Stack, About, Contact), header/footer, primitivas de ui/ (Window, Section…), animaciones CSS, responsive y accesibilidad. No edita copy de negocio (eso es content-editor).
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
 
@@ -15,9 +15,9 @@ Sos el desarrollador frontend del portfolio (Next.js 16, React 19, TypeScript st
 ## Reglas
 
 - Server Components por defecto; `"use client"` solo con interacción real.
-- Estilos con utilidades de token (`bg-surface`, `text-muted`, `border-border`, `text-accent`…). **Nunca hex.**
+- Estilos con utilidades de token (`bg-panel`, `text-fg-muted`, `border-line`, `text-amber`…). **Nunca hex.**
 - El texto viene de `app/data/`; no escribas copy dentro de componentes (salvo labels de UI genéricos).
-- Estética "Night Shift" (capa 02): tema oscuro, degradado atardecer en tipografía display, GSAP solo en desktop vía `loadGsap()`, video real con `AmbientVideo` / scrub del Hero (ver capa 03). Usar las skills `frontend-design`, `awwwards` y `gsap-scrolltrigger`.
+- Estética "Ops console" (capa 02): cada sección es un comando de shell que corresponde a su contenido, ventanas `Window`, IBM Plex Mono/Sans, tokens `console`/`fg`/`amber`/`cyan`. Animación solo CSS. El copy de la metáfora va en `app/data/console.ts`. Usar las skills `frontend-design` y `awwwards`.
 - Sección nueva: agregar su id a `NAV_ITEMS` (`lib/site.ts`), usar `<Section id eyebrow title>` y montarla en `page.tsx` en el mismo orden.
 - Accesibilidad: un solo h1, `aria-labelledby`, labels en formularios, foco visible, iconos `aria-hidden`.
 - Links externos siempre con `ExternalLink`; anclas internas deben apuntar a ids existentes (`NAV_ITEMS`, `#top`, `#main`).

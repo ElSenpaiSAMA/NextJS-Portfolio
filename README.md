@@ -59,7 +59,7 @@ server errors land in the same Vercel log stream. A per-page cap prevents error 
 Next.js 16 (App Router, static single page, `next/image`) · React 19 · TypeScript (strict) · Tailwind CSS 4 ·
 Formspree (contact) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel.
 
-Cinematic "Night Shift" design: real night-time footage of a container terminal whose playhead is driven by the scroll (a dense-keyframe H.264 clip scrubbed with GSAP ScrollTrigger) under a dusk colour grade, a cargo ship leaving port behind the contact section, a pinned horizontal project gallery (GSAP ScrollTrigger) and Lenis smooth scrolling. The scrub clip and the animation libraries load on demand and only on desktop; phones get a light muted loop. Footage: Mixkit stock clips (see docs/ai/04-content.md). Everything respects prefers-reduced-motion.
+"Ops console" design: the site reads as a terminal session. Each section opens with the command that would print it (`ls ~/projects`, `git log --graph`, `cat stack.yml`, `cat README.md`), and the hero terminal pushes this very repo and runs its real CI stages, kept in sync with `ci.yml` by a unit test. IBM Plex Mono and Sans on a blue-slate console with amber and cyan accents. All motion is CSS (no animation library), and it respects prefers-reduced-motion.
 
 ## Local development
 
@@ -96,9 +96,9 @@ app/
   error.tsx, global-error.tsx
   api/log/route.ts          browser log ingestion
   components/
-    layout/                 intro, header, footer, smooth scroll
+    layout/                 boot screen, header, footer
     sections/               Hero, Projects + ProjectCard, Experience, Stack, About, Contact + ContactForm
-    ui/                     small primitives (Section, ButtonLink, ExternalLink, icons)
+    ui/                     small primitives (Window, Section, ButtonLink, ExternalLink, icons)
   data/                     all copy and content, typed — edit here, not in components
   lib/                      logger, client logger, log schema, contact, theme, site config
 public/
