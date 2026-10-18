@@ -35,8 +35,9 @@ Utilidades propias (`@utility`):
   Tailwind ya genera esa utilidad de color desde `--color-sunset` y la pisaría.
 - `text-outline` — texto con contorno, para momentos secundarios.
 
-Excepciones documentadas de hex fuera de tokens: la escena 3D (`CityScene.tsx`) y `StaticSkyline.tsx`
-(WebGL/SVG no leen variables CSS), `opengraph-image.tsx`, `icon.svg`, `viewport.themeColor`.
+Excepciones documentadas de hex fuera de tokens: el grade de color sobre video
+(`FootageGrade.tsx`) y los velos de legibilidad de `Hero`/`Contact` (degradados `rgba` del tono `night`
+con paradas propias), `opengraph-image.tsx`, `icon.svg`, `viewport.themeColor`.
 
 ## Tipografía
 
@@ -51,4 +52,4 @@ Excepciones documentadas de hex fuera de tokens: la escena 3D (`CityScene.tsx`) 
 
 ## Deuda técnica conocida
 
-- Colores de la escena 3D duplicados entre CSS, `CityScene.tsx` y `StaticSkyline.tsx`.
+- Colores del grade de video (`FootageGrade.tsx`) duplicados a mano de los tokens de la paleta.
