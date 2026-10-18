@@ -1,6 +1,6 @@
 ---
 name: design-token
-description: Agrega o modifica un design token (color, utilidad de tipografía, easing) en app/globals.css del tema oscuro "Night Shift", manteniendo contraste WCAG AA. Usar cuando se necesite un color nuevo o cambiar la paleta.
+description: Agrega o modifica un design token (color, utilidad de tipografía, easing) en app/globals.css del tema oscuro "Ops console", manteniendo contraste WCAG AA. Usar cuando se necesite un color nuevo o cambiar la paleta.
 ---
 
 # design-token
