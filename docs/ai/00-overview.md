@@ -10,7 +10,8 @@ Portfolio de **Matias Speroni**, **Backend & DevOps Engineer** en Barcelona. Vie
 educación, certificaciones) → Contact. **El contenido sale del CV del autor** (`public/CV_Matias_Speroni_DO.pdf`). Estética **"Ops console"**
 (capa 02): el sitio como una sesión de terminal y su propio pipeline de CI — cada sección se abre con el
 comando que la muestra, IBM Plex Mono/Sans, base azul pizarra con ámbar y cian, tema oscuro único.
-Animación 100% CSS (sin GSAP, Lenis, 3D ni video).
+Movimiento: clúster de servidores 3D (Three.js / R3F) en el hero, revelados con GSAP ScrollTrigger, Lenis
+en desktop y la terminal/boot screen en CSS.
 
 > Direcciones descartadas por el autor: "Night Shift" con puerto 3D (Three.js) y luego con video real.
 > Pidió algo más relacionado con la informática.
@@ -25,14 +26,15 @@ El sitio además es evidencia de DevOps: CI completo, tests, accesibilidad, Ligh
 
 Next.js 16 (App Router) · React 19 · TypeScript strict · Tailwind CSS 4 · `next/image` · Formspree
 (fetch directo) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel · Node 22.
-Único client component: `ContactForm` (y los error boundaries). El resto es server/estático.
+Client components: `ContactForm`, `ScrollChoreography`, `HeroScene` → `ClusterScene` (diferido) y los error
+boundaries. GSAP, Lenis y three.js se cargan bajo demanda.
 
 ## Árbol de render
 
 ```
-RootLayout (server)       layout.tsx — IBM Plex Mono + Sans, metadata, script de intro, IntroScreen / SiteHeader / <main> / SiteFooter
+RootLayout (server)       layout.tsx — IBM Plex Mono + Sans, metadata, script de intro, IntroScreen / ScrollChoreography / SiteHeader / <main> / SiteFooter
 └─ HomePage (server)      page.tsx
-   ├─ Hero                #top — disponibilidad, nombre, rol, intro, highlights, CTAs + terminal con el pipeline (CSS)
+   ├─ Hero                #top — disponibilidad, nombre, rol, intro, highlights, CTAs + terminal con el pipeline (CSS) + clúster 3D de fondo
    ├─ Projects            #projects — ventanas ProjectCard (path, imagen, descripción, tech, links)
    ├─ Experience          #experience — grafo tipo `git log`: empresas, roles y logros
    ├─ Stack               #stack — `stack.yml` con números de línea y logos
