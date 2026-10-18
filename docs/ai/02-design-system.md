@@ -1,49 +1,54 @@
 # 02 — Design system (`design-system`)
 
-**Archivos:** `app/globals.css`, `app/lib/theme.ts`
+**Archivos:** `app/globals.css`
 
-## Dirección visual
+## Dirección de arte: "Night Shift"
 
-**Neutra corporativa**, seria y formal: blanco y grises slate, un acento azul marino, una sola fuente
-(Inter). Tarjetas con borde fino y radio moderado (`rounded-lg`), secciones alternando fondo `bg`/`surface`,
-sombras solo en hover de cards. Nada de glow, grano, 3D ni colores saturados.
+Un puerto al atardecer construido con contenedores (guiño a Docker / infraestructura), con energía de
+tráiler de videojuego (referencia del autor: rockstargames.com/VI). **Un solo tema, oscuro**: toda la
+estética es un crepúsculo. Firma visual: el **degradado atardecer** (naranja → flamenco) dentro de la
+tipografía gigante.
 
-## Tokens (variables CSS)
+Reglas tomadas de las skills `frontend-design` y `awwwards` (ver `.claude/skills/`):
+- Nada de etiquetas en MAYÚSCULAS sobre cada título, separadores "·", flechas "→" en links ni monoespaciada.
+- No resaltar una sola palabra de un título en otro color: el degradado va en el bloque entero.
+- Una sola librería de animación (GSAP). Animación solo donde cuenta la historia (hero, carrusel).
 
-Definidos en `:root` (claro), `[data-theme="dark"]` y el fallback `@media (prefers-color-scheme: dark)`
-para `:root:not([data-theme="light"])`. **Los tres bloques deben tener las mismas claves.**
+## Tokens (`:root` en `globals.css`)
 
-| Token | Claro | Oscuro | Uso |
-|-------|-------|--------|-----|
-| `bg` | `#ffffff` | `#0b1120` | fondo |
-| `surface` | `#f8fafc` | `#111a2e` | secciones alternas |
-| `fg` | `#0f172a` | `#e2e8f0` | texto principal |
-| `muted` | `#475569` | `#a3b1c6` | texto secundario |
-| `subtle` | `#64748b` | `#8391a7` | labels, metadatos |
-| `border` | `#e2e8f0` | `#1e293b` | bordes |
-| `accent` / `accent-hover` | `#1e3a8a` / `#1e40af` | `#93b4f5` / `#b4cbf8` | rol, CTA, links, foco |
-| `accent-fg` | `#ffffff` | `#0b1120` | texto sobre acento |
-| `accent-soft` | `#eff4ff` | `#15213b` | chips de tecnología, iconos de contacto |
-| `ok` / `warn` | verde / ámbar | versiones claras | "Available", "In development" |
+| Token | Valor | Uso |
+|-------|-------|-----|
+| `night` | `#160b2e` | fondo (índigo, no gris-negro) |
+| `dusk` / `dusk-line` | `#22113f` / `#3d1a5b` | superficies / líneas finas |
+| `haze` | `#f5e6dd` | texto principal |
+| `haze-muted` / `haze-subtle` | `#b9a6c4` / `#9a87a8` | texto secundario / terciario (≥ 4.5:1 sobre `night`) |
+| `sunset` / `flamingo` | `#ff7849` / `#ff4f8b` | acentos y degradado firma |
+| `lagoon` | `#44d7c6` | solo foco (`:focus-visible`) |
+| `ok` / `warn` | verde / ámbar | disponibilidad, "In development" |
 
-Utilidades Tailwind vía `@theme inline`: `bg-surface`, `text-muted`, `border-border`, `bg-accent`,
-`hover:bg-accent-hover`, `bg-accent-soft`… Utilidad propia `label` (mayúsculas pequeñas).
-**Nunca hex en componentes.** Excepción documentada: los tiles de logos del stack son `bg-white` fijo
-para que logos oscuros (Next.js) se vean en modo oscuro.
+Utilidades: `bg-night`, `text-haze`, `border-dusk-line`, `text-sunset`… (vía `@theme inline`).
 
-Contraste: todos los pares cumplen WCAG AA; axe lo verifica en claro y oscuro.
+Utilidades propias (`@utility`):
+- `display` — Big Shoulders a tamaño óptico 72, 800, mayúsculas, interlineado 0.86. Títulos gigantes.
+- `ink-sunset` — degradado atardecer recortado en el texto. **Usar con `w-fit`** en bloques, si no el
+  degradado se estira al ancho del contenedor y se ve un solo color. No se llama `text-sunset` porque
+  Tailwind ya genera esa utilidad de color desde `--color-sunset` y la pisaría.
+- `text-outline` — texto con contorno, para momentos secundarios.
 
-## Animaciones
+Excepciones documentadas de hex fuera de tokens: la escena 3D (`CityScene.tsx`) y `StaticSkyline.tsx`
+(WebGL/SVG no leen variables CSS), `opengraph-image.tsx`, `icon.svg`, `viewport.themeColor`.
 
-Única animación del sitio: la intro (`.intro*` + keyframes `intro-*` al final de `globals.css`). Usa tokens
-(`--bg`, `--fg`, `--accent`, `--muted`), así respeta el tema. Deshabilitada con `prefers-reduced-motion`.
+## Tipografía
 
-## Tema claro/oscuro
+`Big_Shoulders` (variable, eje `opsz`) para display — condensada de cartelería urbana — e
+`Instrument_Sans` para texto. Cargadas con `next/font` en `layout.tsx` (`--font-shoulders`, `--font-instrument`).
 
-- `THEME_INIT_SCRIPT` (inline en `<head>`): `localStorage["theme"]` o `prefers-color-scheme` → `html[data-theme]`.
-- `applyTheme` / `readTheme` para `ThemeToggle`. Variante `dark:` = `[data-theme="dark"]`.
+## Animaciones CSS
+
+- Intro (`.intro*`, keyframes `intro-*`): letras con el degradado, línea, subtítulo, panel que sube. Una vez por sesión.
+- Marquesinas del stack (`.marquee`): CSS puro, se pausa en hover, congelada con reduced-motion.
+- `prefers-reduced-motion`: sin intro, sin marquesina, transiciones casi nulas.
 
 ## Deuda técnica conocida
 
-- Valores oscuros duplicados (media query + `[data-theme]`).
-- `opengraph-image.tsx`, `icon.svg` y `viewport.themeColor` repiten hex (no leen variables CSS).
+- Colores de la escena 3D duplicados entre CSS, `CityScene.tsx` y `StaticSkyline.tsx`.
