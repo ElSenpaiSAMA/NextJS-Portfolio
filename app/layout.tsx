@@ -1,17 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Big_Shoulders, Instrument_Sans } from "next/font/google";
+import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import { IntroScreen } from "./components/layout/IntroScreen";
 import { SiteFooter } from "./components/layout/SiteFooter";
 import { SiteHeader } from "./components/layout/SiteHeader";
-import { SmoothScroll } from "./components/layout/SmoothScroll";
 import { profile } from "./data/profile";
 import { INTRO_INIT_SCRIPT } from "./lib/intro";
 import { siteUrl } from "./lib/site";
 
-// Display: condensed signage face at its display optical size. Body: Instrument Sans.
-const shoulders = Big_Shoulders({ variable: "--font-shoulders", subsets: ["latin"], axes: ["opsz"], display: "swap" });
-const instrument = Instrument_Sans({ variable: "--font-instrument", subsets: ["latin"], display: "swap" });
+// IBM Plex: Mono for headings, prompts and code; Sans for reading text.
+const plexMono = IBM_Plex_Mono({ variable: "--font-plex-mono", subsets: ["latin"], weight: ["400", "500", "700"], display: "swap" });
+const plexSans = IBM_Plex_Sans({ variable: "--font-plex-sans", subsets: ["latin"], weight: ["400", "500", "600"], display: "swap" });
 
 const TITLE = `${profile.name} — ${profile.role}`;
 const DESCRIPTION =
@@ -38,7 +37,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#160b2e",
+  themeColor: "#0a0f1a",
   colorScheme: "dark",
 };
 
@@ -46,13 +45,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     // data-intro is set by INTRO_INIT_SCRIPT before hydration, so React must
     // not warn about the attribute differing from the server markup.
-    <html lang="en" suppressHydrationWarning className={`${shoulders.variable} ${instrument.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${plexMono.variable} ${plexSans.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: INTRO_INIT_SCRIPT }} />
       </head>
       <body className="min-h-screen antialiased">
         <IntroScreen />
-        <SmoothScroll />
         <SiteHeader />
         <main id="main">{children}</main>
         <SiteFooter />
