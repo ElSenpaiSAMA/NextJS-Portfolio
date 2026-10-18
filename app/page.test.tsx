@@ -26,6 +26,14 @@ describe("Home page", () => {
     for (const stage of PIPELINE.stages) expect(terminal).toHaveTextContent(stage);
   });
 
+  it("draws the decorative cluster behind the hero (SVG now, WebGL mounts client-side)", () => {
+    render(<HomePage />);
+    expect(screen.getByTestId("cluster-svg")).toHaveAttribute("aria-hidden", "true");
+    expect(screen.getByTestId("hero-scene")).toHaveAttribute("aria-hidden", "true");
+    // matchMedia matches nothing in jsdom: the WebGL canvas never loads here.
+    expect(screen.getByTestId("hero-scene").querySelector("canvas")).toBeNull();
+  });
+
   it("renders a section for every nav item", () => {
     const { container } = render(<HomePage />);
     for (const { id } of NAV_ITEMS) expect(container.querySelector(`section#${id}`), `#${id}`).not.toBeNull();

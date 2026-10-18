@@ -42,6 +42,24 @@ test.describe("home page", () => {
     await expect(page.getByText("all checks passed")).toBeVisible({ timeout: 10_000 });
   });
 
+  test("the hero cluster renders: WebGL on desktop, SVG on phones", async ({ page, isMobile }) => {
+    await page.goto("/");
+    if (isMobile) {
+      await expect(page.getByTestId("cluster-svg")).toBeVisible();
+      await expect(page.getByTestId("hero-scene").locator("canvas")).toHaveCount(0);
+    } else {
+      // Mounted on idle, as its own chunk.
+      await expect(page.getByTestId("hero-scene").locator("canvas")).toBeVisible({ timeout: 10_000 });
+    }
+  });
+
+  test("scroll reveals end fully visible", async ({ page }) => {
+    await page.goto("/");
+    await page.locator("section#contact").scrollIntoViewIfNeeded();
+    const card = page.locator("#contact [data-reveal]").first();
+    await expect.poll(() => card.evaluate((el) => getComputedStyle(el).opacity), { timeout: 5_000 }).toBe("1");
+  });
+
   test("has no horizontal overflow", async ({ page }) => {
     await page.goto("/");
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
