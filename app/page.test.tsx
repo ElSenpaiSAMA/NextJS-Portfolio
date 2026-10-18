@@ -16,6 +16,17 @@ describe("Home page", () => {
     expect(screen.getByText(new RegExp(profile.availability))).toBeInTheDocument();
   });
 
+  it("backs the hero and contact with muted, decorative footage", () => {
+    render(<HomePage />);
+    const videos = screen.getAllByTestId("ambient-video") as HTMLVideoElement[];
+    expect(videos).toHaveLength(2);
+    for (const video of videos) {
+      expect(video.muted).toBe(true);
+      expect(video).toHaveAttribute("aria-hidden", "true");
+      expect(video).toHaveAttribute("poster");
+    }
+  });
+
   it("renders a section for every nav item", () => {
     const { container } = render(<HomePage />);
     for (const { id } of NAV_ITEMS) expect(container.querySelector(`section#${id}`), `#${id}`).not.toBeNull();

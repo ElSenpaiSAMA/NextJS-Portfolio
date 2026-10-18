@@ -15,17 +15,20 @@ npm run verify   # todo en orden de CI (requiere que el build pase)
 
 Tests al lado del archivo (`*.test.ts(x)`). Cubren: schema de logs, logger, client logger
 (envío, límite, fallback), contacto (validación, errores de Formspree, red caída), route `/api/log`,
-integridad de datos (incluye que existan todos los assets en `public/`), `site.test`, `hero-progress.test` (ciudad 3D determinista), `ContactForm`, `IntroScreen`
+integridad de datos (incluye que existan todos los assets en `public/`), `site.test`, `ContactForm`, `IntroScreen`
 y la página completa (`page.test.tsx`: una h1, secciones de la nav, cada proyecto con imagen y links, stack completo, foto y facts, anclas, links externos, CV).
 
 ## E2E (Playwright, contra `next start`)
 
-- Proyectos `desktop` (Desktop Chrome, renderiza el 3D con SwiftShader) y `mobile` (Pixel 7, versión pintada). `workers` limitados (2 en CI, 4 local): el WebGL por software satura la CPU con más navegadores en paralelo.
+- Proyectos `desktop` (Desktop Chrome: video controlado por el scroll) y `mobile` (Pixel 7: loop). `workers` limitados (2 en CI, 4 local) para que varios navegadores decodificando video no saturen la CPU.
+- `vitest.setup.ts` reemplaza `play`/`pause`/`load` de `HTMLMediaElement` (jsdom no los implementa).
+- El fixture ignora solo `net::ERR_ABORTED` en requests de tipo `media`: el navegador corta rangos de
+  video al pausar o cerrar la página. Un clip faltante sigue fallando como 404.
 - `a11y` corre axe con y sin `prefers-reduced-motion`, después de que termina la intro.
 - **`e2e/fixtures.ts`**: fixture automático que falla cualquier test si hay error de consola, excepción
   no capturada, respuesta 4xx/5xx del propio origen o un log enviado a `/api/log`. Un test que provoca
   errores a propósito llama `errors.allowErrors()`. **Importar siempre `test`/`expect` desde `./fixtures`.**
-- Specs: `home` (secciones, **todas las imágenes cargan**, overflow mobile, anclas, links externos, 404, nav por anclas, CTA, skip link), `intro`,
+- Specs: `home` (secciones, **todas las imágenes cargan**, el video del hero avanza con el scroll en desktop / se reproduce en mobile, overflow mobile, anclas, links externos, 404, nav por anclas, CTA, skip link), `intro`,
   `contact` (Formspree mockeado con `page.route`), `a11y` (axe WCAG 2.1 AA, claro y oscuro),
   `seo-and-api` (meta/OG, canonical, sitemap, robots/icon/OG image, headers de seguridad, `/api/log`).
 - `E2E_BASE_URL=<url>` corre contra un deploy (preview) sin levantar servidor.

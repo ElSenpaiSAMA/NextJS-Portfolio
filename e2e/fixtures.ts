@@ -41,7 +41,11 @@ export const test = base.extend<{ errors: ErrorMonitor }>({
         }
       });
       page.on("requestfailed", (req: Request) => {
-        if (req.url().startsWith(origin)) monitor.failedRequests.push(`FAILED ${req.url()} ${req.failure()?.errorText}`);
+        const errorText = req.failure()?.errorText;
+        // Browsers routinely abort video range requests (pause, seek, page close);
+        // a missing clip still surfaces above as a 404.
+        if (req.resourceType() === "media" && errorText === "net::ERR_ABORTED") return;
+        if (req.url().startsWith(origin)) monitor.failedRequests.push(`FAILED ${req.url()} ${errorText}`);
       });
       page.on("request", (req) => {
         if (req.url() === `${origin}/api/log` && req.method() === "POST") {

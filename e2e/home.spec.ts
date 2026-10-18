@@ -37,6 +37,23 @@ test.describe("home page", () => {
     expect(await page.locator("#projects img").count()).toBe(6);
   });
 
+  test("hero footage plays (or scrubs with the scroll on desktop)", async ({ page }) => {
+    await page.goto("/");
+    const scrub = page.getByTestId("hero-scrub-video");
+    if (await scrub.count()) {
+      // Desktop choreography: the playhead follows the scroll position.
+      await expect.poll(() => scrub.evaluate((v: HTMLVideoElement) => v.readyState), { timeout: 15_000 }).toBeGreaterThanOrEqual(2);
+      for (let y = 0; y <= 900; y += 150) {
+        await page.evaluate((top) => window.scrollTo(0, top), y);
+        await page.waitForTimeout(80);
+      }
+      await expect.poll(() => scrub.evaluate((v: HTMLVideoElement) => v.currentTime)).toBeGreaterThan(1);
+    } else {
+      const loop = page.getByTestId("ambient-video").first();
+      await expect.poll(() => loop.evaluate((v: HTMLVideoElement) => !v.paused && v.currentTime > 0), { timeout: 15_000 }).toBe(true);
+    }
+  });
+
   test("has no horizontal overflow", async ({ page }) => {
     await page.goto("/");
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);

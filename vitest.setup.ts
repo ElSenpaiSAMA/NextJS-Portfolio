@@ -8,8 +8,8 @@ afterEach(() => {
 
 /*
  * jsdom lacks the browser APIs the animated sections rely on. Minimal,
- * inert stand-ins: no motion, nothing intersects, no WebGL (so the 3D scene
- * is never mounted in unit tests — it's covered by E2E in a real browser).
+ * inert stand-ins: no motion, nothing intersects, media never plays (video
+ * playback and scroll-scrubbing are covered by E2E in a real browser).
  */
 Object.defineProperty(window, "matchMedia", {
   writable: true,
@@ -35,4 +35,6 @@ class InertIntersectionObserver {
 }
 Object.defineProperty(window, "IntersectionObserver", { writable: true, value: InertIntersectionObserver });
 
-HTMLCanvasElement.prototype.getContext = (() => null) as typeof HTMLCanvasElement.prototype.getContext;
+HTMLMediaElement.prototype.play = vi.fn(() => Promise.resolve());
+HTMLMediaElement.prototype.pause = vi.fn();
+HTMLMediaElement.prototype.load = vi.fn();
