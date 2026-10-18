@@ -10,6 +10,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Claude Code skills ship third-party example code; it isn't part of the app
+    ".claude/**",
     // Generated test / audit artifacts
     "coverage/**",
     "playwright-report/**",
