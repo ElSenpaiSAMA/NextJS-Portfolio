@@ -1,130 +1,135 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-import { heroFootage } from "../../data/media";
+import type { CSSProperties, ReactNode } from "react";
+import { PIPELINE } from "../../data/console";
 import { profile } from "../../data/profile";
-import { CHOREOGRAPHY_QUERY, loadGsap } from "../../lib/load-gsap";
-import { useMediaQuery } from "../../lib/use-media-query";
-import { AmbientVideo } from "../ui/AmbientVideo";
 import { ButtonLink } from "../ui/ButtonLink";
 import { DownloadIcon, GitHubIcon, LinkedInIcon } from "../ui/icons";
-import { FootageGrade } from "../ui/FootageGrade";
+import { Window } from "../ui/Window";
+
+/** Seconds: when the pipeline starts, the gap between stages and how long each one "runs". */
+const START = 0.9;
+const STAGE_GAP = 0.32;
+const STAGE_RUN = 0.4;
+const PIPELINE_END = START + PIPELINE.stages.length * STAGE_GAP + STAGE_RUN;
+
+const at = (seconds: number, extra: Record<string, string | number> = {}) =>
+  ({ "--at": `calc(var(--hero-offset, 0s) + ${seconds}s)`, ...extra }) as CSSProperties;
+
+function Prompt({ command, start }: { command: string; start: number }) {
+  return (
+    <p className="term-line" style={at(start)}>
+      <span className="text-cyan">~/portfolio</span> <span className="text-amber">$</span>{" "}
+      <span className="term-typed text-fg" style={at(start, { "--chars": command.length, "--type-for": `${command.length * 0.035}s` })}>
+        {command}
+      </span>
+    </p>
+  );
+}
+
+function YamlLine({ k, children, start }: { k: string; children: ReactNode; start: number }) {
+  return (
+    <p className="term-line" style={at(start)}>
+      <span className="text-cyan">{k}</span>
+      <span className="text-fg-subtle">:</span> <span className="text-violet">{children}</span>
+    </p>
+  );
+}
 
 /**
- * Opening shot: real night-time footage of a container terminal.
- * Desktop (motion allowed): the section pins and the scroll drives the clip's
- * playhead, so the light trails flow as you scroll while the name dissolves.
- * Phones: the same footage as a light muted loop. Reduced motion: poster frame.
+ * The terminal: pushes this very site and runs its real CI stages, then
+ * prints the profile. Pure CSS timing (see `.term-*` in globals.css); with
+ * reduced motion it shows the finished run. Decorative — the same facts are
+ * in the hero copy — so it is hidden from assistive tech.
  */
-export function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const scrubRef = useRef<HTMLVideoElement>(null);
-  const choreography = useMediaQuery(CHOREOGRAPHY_QUERY);
-
-  useEffect(() => {
-    const video = scrubRef.current;
-    if (!choreography || !video) return;
-    let revert: (() => void) | undefined;
-    let cancelled = false;
-    let frame = 0;
-
-    // Fetch the 4 MB scrub clip only once the page is idle.
-    const startLoading = () => {
-      video.preload = "auto";
-      video.load();
-    };
-    let cancelIdle: () => void;
-    if (typeof window.requestIdleCallback === "function") {
-      const id = window.requestIdleCallback(startLoading, { timeout: 2000 });
-      cancelIdle = () => window.cancelIdleCallback(id);
-    } else {
-      const id = setTimeout(startLoading, 800);
-      cancelIdle = () => clearTimeout(id);
-    }
-
-    loadGsap().then(({ gsap }) => {
-      const section = sectionRef.current;
-      if (cancelled || !section) return;
-      const ctx = gsap.context(() => {
-        const timeline = gsap.timeline({
-          scrollTrigger: {
-            trigger: section,
-            start: "top top",
-            end: "+=180%",
-            pin: true,
-            scrub: 0.5,
-            onUpdate: ({ progress }) => {
-              // One seek per animation frame at most; seeking is the expensive part.
-              cancelAnimationFrame(frame);
-              frame = requestAnimationFrame(() => {
-                if (!Number.isFinite(video.duration)) return;
-                const time = progress * (video.duration - 0.05);
-                if (Math.abs(video.currentTime - time) > 0.02) video.currentTime = time;
-              });
-            },
-          },
-        });
-        timeline
-          .fromTo(video, { scale: 1.15 }, { scale: 1, ease: "none" }, 0)
-          .to("[data-hero-name]", { scale: 1.9, yPercent: -20, opacity: 0, ease: "power2.in", duration: 0.45 }, 0)
-          .to("[data-hero-details]", { y: -40, opacity: 0, ease: "power2.in", duration: 0.35 }, 0)
-          .fromTo("[data-hero-tagline]", { opacity: 0, y: 40 }, { opacity: 1, y: 0, ease: "power2.out", duration: 0.3 }, 0.5)
-          .to("[data-hero-tagline]", { opacity: 0, y: -30, ease: "power2.in", duration: 0.2 }, 0.85);
-      }, section);
-      revert = () => ctx.revert();
-    });
-
-    return () => {
-      cancelled = true;
-      cancelAnimationFrame(frame);
-      cancelIdle();
-      revert?.();
-    };
-  }, [choreography]);
+function PipelineTerminal() {
+  const profileStart = PIPELINE_END + 0.3;
+  const profileCommand = "cat profile.yml";
+  const yamlStart = profileStart + profileCommand.length * 0.035 + 0.2;
 
   return (
-    <section id="top" ref={sectionRef} aria-labelledby="hero-heading" className="relative isolate h-[100svh] overflow-hidden bg-night">
-      <div className="absolute inset-0 -z-20">
-        {choreography && heroFootage.scrub ? (
-          <video
-            ref={scrubRef}
-            className="h-full w-full object-cover"
-            poster={heroFootage.poster}
-            muted
-            playsInline
-            preload="none"
-            aria-hidden="true"
-            tabIndex={-1}
-            data-testid="hero-scrub-video"
-          >
-            <source src={heroFootage.scrub.mp4} type="video/mp4" />
-            <source src={heroFootage.scrub.webm} type="video/webm" />
-          </video>
-        ) : (
-          <AmbientVideo sources={heroFootage.loop} poster={heroFootage.poster} className="h-full w-full object-cover" />
-        )}
-      </div>
-      <FootageGrade className="-z-10" />
-      {/* Legibility veil: darker at the top (header) and bottom (copy) */}
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(22,11,46,0.75)_0%,rgba(22,11,46,0)_22%,rgba(22,11,46,0)_45%,rgba(22,11,46,0.85)_85%,#160b2e_100%)]" />
-
-      <div className="mx-auto flex h-full max-w-7xl flex-col justify-end px-5 pb-16 pt-28 sm:px-8 sm:pb-20">
-        <p className="mb-6 inline-flex w-fit items-center gap-2 rounded-full bg-night/60 px-3 py-1.5 text-sm text-haze backdrop-blur" data-hero-details>
-          <span className="h-2 w-2 rounded-full bg-ok" aria-hidden="true" />
-          {profile.availability} in {profile.location}
+    <Window title="~/portfolio  (zsh)" className="hero-term w-full" bodyClassName="p-5 font-mono text-[13px] leading-relaxed sm:p-6 sm:text-sm">
+      <div aria-hidden="true" data-testid="hero-terminal">
+        <Prompt command={PIPELINE.command} start={0} />
+        <p className="term-line mt-1 text-fg-subtle" style={at(START - 0.2)}>
+          → ci.yml triggered
+        </p>
+        <ol>
+          {PIPELINE.stages.map((stage, i) => {
+            const shown = START + i * STAGE_GAP;
+            return (
+              <li key={stage} className="term-line pl-3" style={at(shown)}>
+                <span className="term-status mr-3" style={{ "--done": `calc(var(--hero-offset, 0s) + ${shown + STAGE_RUN}s)` } as CSSProperties}>
+                  <span className="term-pending text-amber">•</span>
+                  <span className="term-done text-green">✓</span>
+                </span>
+                <span className="text-fg-muted">{stage}</span>
+              </li>
+            );
+          })}
+        </ol>
+        <p className="term-line mt-1 text-green" style={at(PIPELINE_END)}>
+          ✓ all checks passed
         </p>
 
-        <h1 id="hero-heading" className="display ink-sunset w-fit origin-bottom-left text-[clamp(4.5rem,17vw,15rem)]" data-hero-name>
-          {/* The space keeps the accessible name "Matias Speroni", not "MatiasSperoni" */}
-          <span className="block">Matias</span> <span className="block">Speroni</span>
-        </h1>
+        <div className="mt-4">
+          <Prompt command={profileCommand} start={profileStart} />
+          <YamlLine k="name" start={yamlStart}>
+            {profile.name}
+          </YamlLine>
+          <YamlLine k="role" start={yamlStart + 0.1}>
+            {profile.role}
+          </YamlLine>
+          <YamlLine k="location" start={yamlStart + 0.2}>
+            {profile.location}
+          </YamlLine>
+          <YamlLine k="status" start={yamlStart + 0.3}>
+            {profile.availability.toLowerCase()}
+          </YamlLine>
+          <p className="term-line mt-1" style={at(yamlStart + 0.45)}>
+            <span className="text-cyan">~/portfolio</span> <span className="text-amber">$</span>
+            <span className="cursor" />
+          </p>
+        </div>
+      </div>
+    </Window>
+  );
+}
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end" data-hero-details>
-          <div className="max-w-xl">
-            <p className="text-xl font-semibold text-haze sm:text-2xl">{profile.role}</p>
-            <p className="mt-3 text-base leading-relaxed text-haze-muted sm:text-lg">{profile.intro}</p>
-          </div>
-          <div className="flex flex-wrap gap-3">
+/** Opening screen: who I am on the left, the site shipping itself on the right. */
+export function Hero() {
+  return (
+    <section id="top" aria-labelledby="hero-heading" className="relative isolate overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="bg-grid absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_70%_40%,black_20%,transparent_75%)]"
+      />
+      <div className="mx-auto grid min-h-[100svh] max-w-6xl items-center gap-12 px-5 pb-16 pt-28 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] lg:gap-12">
+        <div>
+          <p className="inline-flex items-center gap-2 rounded border border-line bg-panel px-3 py-1.5 font-mono text-xs text-fg-muted">
+            <span className="h-2 w-2 rounded-full bg-green" aria-hidden="true" />
+            {profile.availability} in {profile.location}
+          </p>
+
+          <p aria-hidden="true" className="mt-8 font-mono text-sm text-fg-subtle">
+            <span className="text-amber">$</span> whoami
+          </p>
+          <h1 id="hero-heading" className="mt-2 font-mono text-[clamp(2.75rem,8vw,5.75rem)] font-bold leading-[0.95] tracking-tight text-fg">
+            Matias Speroni
+          </h1>
+          <p className="mt-5 font-mono text-lg font-medium text-amber sm:text-xl">{profile.role}</p>
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-fg-muted sm:text-lg">{profile.intro}</p>
+
+          <ul className="mt-6 space-y-1.5 font-mono text-sm text-fg-muted">
+            {profile.highlights.map((highlight) => (
+              <li key={highlight}>
+                <span aria-hidden="true" className="mr-2 text-fg-subtle">
+                  #
+                </span>
+                {highlight}
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-9 flex flex-wrap gap-2.5">
             <ButtonLink href="#projects" variant="primary">
               View work
             </ButtonLink>
@@ -142,16 +147,9 @@ export function Hero() {
             )}
           </div>
         </div>
-      </div>
 
-      {/* Revealed mid-scroll, once the name has dissolved into the terminal */}
-      <p
-        data-hero-tagline
-        className="display pointer-events-none absolute inset-x-5 top-1/2 mx-auto hidden max-w-5xl -translate-y-1/2 text-center text-[clamp(2.5rem,7vw,6.5rem)] opacity-0 md:block motion-reduce:hidden"
-        aria-hidden="true"
-      >
-        I ship the software and the pipelines behind it
-      </p>
+        <PipelineTerminal />
+      </div>
     </section>
   );
 }

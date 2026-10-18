@@ -1,8 +1,7 @@
-import { contactFootage } from "../../data/media";
 import { profile } from "../../data/profile";
-import { AmbientVideo } from "../ui/AmbientVideo";
-import { FootageGrade } from "../ui/FootageGrade";
 import { GitHubIcon, LinkedInIcon, MailIcon, PhoneIcon } from "../ui/icons";
+import { Section } from "../ui/Section";
+import { Window } from "../ui/Window";
 import { ContactForm } from "./ContactForm";
 
 const CHANNELS = [
@@ -13,53 +12,43 @@ const CHANNELS = [
   { label: "GitHub", value: profile.githubUrl.replace(/^https:\/\//, ""), href: profile.githubUrl, Icon: GitHubIcon, external: true },
 ] as const;
 
-/** Closing scene: a cargo ship leaving port at dusk, a big sign, and the ways to reach me. */
+/** Closing section: the direct channels, and a message form in its own window. */
 export function Contact() {
   return (
-    <section id="contact" aria-labelledby="contact-heading" className="relative isolate overflow-hidden pb-24 pt-28 sm:pt-40">
-      <div className="absolute inset-0 -z-20">
-        <AmbientVideo sources={contactFootage.loop} poster={contactFootage.poster} className="h-full w-full object-cover" />
-      </div>
-      <FootageGrade className="-z-10" />
-      {/* Fades in from the page above and keeps the form readable */}
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,#160b2e_0%,rgba(22,11,46,0.35)_25%,rgba(22,11,46,0.55)_70%,rgba(22,11,46,0.9)_100%)]" />
-      <div className="mx-auto max-w-7xl px-5 sm:px-8">
-        <h2 id="contact-heading" className="display ink-sunset w-fit text-[clamp(3.5rem,13vw,12rem)]">
-          Let&apos;s ship something
-        </h2>
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-haze-muted">
-          Open to Platform / DevOps and backend roles. Email is the quickest way to reach me.
-        </p>
-
-        <div className="mt-16 grid gap-12 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-20">
-          <ul className="border-t border-dusk-line">
-            {CHANNELS.map(({ label, value, href, Icon, external }) => (
-              <li key={label} className="border-b border-dusk-line">
-                <a
-                  href={href}
-                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  className="group flex items-center gap-5 py-5 transition-colors"
-                >
-                  <Icon width={22} height={22} className="shrink-0 text-haze-subtle transition-colors group-hover:text-sunset" />
-                  <span className="min-w-0">
-                    <span className="block text-sm text-haze-subtle">{label}</span>
-                    <span className="block truncate text-xl font-semibold text-haze transition-colors group-hover:text-sunset sm:text-2xl">
-                      {value}
-                    </span>
+    <Section
+      id="contact"
+      title="Let's ship something"
+      intro="Open to Platform / DevOps and backend roles. Email is the quickest way to reach me."
+      className="pb-24 pt-24 sm:pb-32 sm:pt-32"
+    >
+      <div className="mx-auto mt-12 grid max-w-6xl gap-8 px-5 sm:px-8 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-12">
+        <ul className="space-y-3">
+          {CHANNELS.map(({ label, value, href, Icon, external }) => (
+            <li key={label}>
+              <a
+                href={href}
+                {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                className="group flex items-center gap-4 rounded-lg border border-line bg-panel px-5 py-4 transition-colors hover:border-amber"
+              >
+                <Icon width={20} height={20} className="shrink-0 text-fg-subtle transition-colors group-hover:text-amber" />
+                <span className="min-w-0">
+                  <span className="block font-mono text-xs text-fg-subtle">{label}</span>
+                  <span className="block truncate font-mono text-base font-medium text-fg transition-colors group-hover:text-amber sm:text-lg">
+                    {value}
                   </span>
-                </a>
-              </li>
-            ))}
-          </ul>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
 
-          <div className="rounded-[2rem] border border-dusk-line bg-dusk/70 p-6 backdrop-blur sm:p-8">
-            <h3 className="text-lg font-semibold text-haze">Send a message</h3>
-            <div className="mt-6">
-              <ContactForm formId={profile.formspreeId} />
-            </div>
+        <Window title={<span aria-hidden="true">~/portfolio/message.txt</span>} bodyClassName="p-6 sm:p-8">
+          <h3 className="font-mono text-lg font-bold text-fg">Send a message</h3>
+          <div className="mt-6">
+            <ContactForm formId={profile.formspreeId} />
           </div>
-        </div>
+        </Window>
       </div>
-    </section>
+    </Section>
   );
 }

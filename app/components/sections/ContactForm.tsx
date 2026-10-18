@@ -19,7 +19,7 @@ const FIELDS: { name: ContactField; label: string; type: "text" | "email" | "tex
 ];
 
 const INPUT_CLASS =
-  "mt-1.5 w-full rounded-xl border border-dusk-line bg-night/70 px-3.5 py-2.5 text-haze placeholder:text-haze-subtle focus:border-lagoon aria-[invalid=true]:border-warn";
+  "mt-1.5 w-full rounded-md border border-line bg-console px-3.5 py-2.5 font-mono text-sm text-fg placeholder:text-fg-subtle focus:border-cyan aria-[invalid=true]:border-red";
 
 function readValues(form: HTMLFormElement): ContactValues {
   const data = new FormData(form);
@@ -66,10 +66,10 @@ export function ContactForm({ formId }: { formId: string }) {
 
   if (status === "success") {
     return (
-      <div role="status" className="rounded-2xl border border-ok/40 bg-night/60 p-5">
-        <p className="font-semibold">Message sent.</p>
-        <p className="mt-1 text-sm text-haze-muted">Thanks — I will get back to you soon.</p>
-        <button type="button" onClick={() => setStatus("idle")} className="mt-4 text-sm font-semibold text-sunset hover:underline">
+      <div role="status" className="rounded-md border border-green/40 bg-console p-5">
+        <p className="font-mono font-medium text-green">Message sent.</p>
+        <p className="mt-1 text-sm text-fg-muted">Thanks — I will get back to you soon.</p>
+        <button type="button" onClick={() => setStatus("idle")} className="mt-4 font-mono text-sm font-medium text-amber hover:underline">
           Send another message
         </button>
       </div>
@@ -95,12 +95,12 @@ export function ContactForm({ formId }: { formId: string }) {
         };
         return (
           <div key={name}>
-            <label htmlFor={common.id} className="text-sm font-medium text-haze">
+            <label htmlFor={common.id} className="font-mono text-sm text-fg-muted">
               {label}
             </label>
             {type === "textarea" ? <textarea {...common} rows={5} /> : <input {...common} type={type} />}
             {error && (
-              <p id={errorId} className="mt-1 text-sm text-warn">
+              <p id={errorId} className="mt-1 text-sm text-red">
                 {error}
               </p>
             )}
@@ -112,7 +112,7 @@ export function ContactForm({ formId }: { formId: string }) {
       <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
 
       {formError && (
-        <p id="contact-form-error" role="alert" className="text-sm text-warn">
+        <p id="contact-form-error" role="alert" className="text-sm text-red">
           {formError}
         </p>
       )}
@@ -120,7 +120,7 @@ export function ContactForm({ formId }: { formId: string }) {
       <button
         type="submit"
         disabled={submitting}
-        className="rounded-full bg-haze px-6 py-2.5 text-sm font-semibold text-night transition-colors hover:bg-sunset disabled:opacity-60"
+        className="rounded-md bg-amber px-5 py-2.5 font-mono text-sm font-medium text-console transition-colors hover:bg-fg disabled:opacity-60"
       >
         {submitting ? "Sending…" : "Send message"}
       </button>

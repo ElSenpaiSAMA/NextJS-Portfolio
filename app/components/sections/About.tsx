@@ -2,71 +2,82 @@ import Image from "next/image";
 import { certifications, education } from "../../data/experience";
 import { profile } from "../../data/profile";
 import { Section } from "../ui/Section";
+import { Window } from "../ui/Window";
 
+function ListBlock({ title, items }: { title: string; items: { key: string; primary: string; secondary: string }[] }) {
+  return (
+    <div>
+      <h3 className="font-mono text-sm font-medium text-cyan">
+        <span aria-hidden="true" className="text-fg-subtle">
+          ##{" "}
+        </span>
+        {title}
+      </h3>
+      <ul className="mt-4 space-y-4">
+        {items.map((item) => (
+          <li key={item.key}>
+            <p className="font-medium text-fg">{item.primary}</p>
+            <p className="mt-0.5 text-sm text-fg-muted">{item.secondary}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/** About as the repository's README: portrait, bio, key facts, education and certifications. */
 export function About() {
   return (
-    <Section id="about" title="Who I am" className="pt-24 sm:pt-36">
-      <div className="mx-auto mt-14 grid max-w-7xl gap-12 px-5 sm:px-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-20">
-        {/* Portrait in sunset duotone: greyscale photo multiplied over the gradient */}
-        <figure className="relative aspect-[4/5] w-full max-w-md overflow-hidden rounded-[2rem] bg-[image:var(--gradient-sunset)]">
-          <Image
-            src={profile.avatar}
-            alt={`Portrait of ${profile.name}`}
-            fill
-            sizes="(min-width: 1024px) 28rem, 90vw"
-            className="object-cover mix-blend-multiply grayscale contrast-125"
-          />
-          <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-night/90 to-transparent p-6 pt-16">
-            <span className="display block text-4xl text-haze">{profile.name}</span>
-            <span className="mt-1 block text-sm text-haze-muted">{profile.location}</span>
-          </figcaption>
-        </figure>
+    <Section id="about" title="Who I am" className="pt-24 sm:pt-32">
+      <div className="mx-auto mt-12 max-w-6xl px-5 sm:px-8">
+        <Window title={<span aria-hidden="true">~/portfolio/README.md</span>} bodyClassName="grid gap-10 p-6 sm:p-10 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-14">
+          <figure className="relative aspect-[4/5] w-full max-w-sm overflow-hidden rounded-md border border-line bg-console">
+            <Image
+              src={profile.avatar}
+              alt={`Portrait of ${profile.name}`}
+              fill
+              sizes="(min-width: 1024px) 22rem, 90vw"
+              className="object-cover grayscale-[35%] contrast-110"
+            />
+            <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-console via-console/80 to-transparent p-5 pt-14 font-mono">
+              <span className="block text-lg font-bold text-fg">{profile.name}</span>
+              <span className="mt-0.5 block text-xs text-fg-muted">{profile.location}</span>
+            </figcaption>
+          </figure>
 
-        <div>
-          <div className="max-w-2xl space-y-5 text-lg leading-relaxed text-haze-muted">
-            {profile.about.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-          </div>
-
-          <dl className="mt-12 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-dusk-line pt-10 lg:grid-cols-4">
-            {profile.facts.map(({ label, value }) => (
-              <div key={label}>
-                <dt className="text-sm text-haze-subtle">{label}</dt>
-                <dd className="mt-1 font-semibold text-haze">{value}</dd>
-              </div>
-            ))}
-          </dl>
-
-          <div className="mt-12 grid gap-10 border-t border-dusk-line pt-10 sm:grid-cols-2">
-            <div>
-              <h3 className="text-sm font-medium text-haze-subtle">Education</h3>
-              <ul className="mt-4 space-y-5">
-                {education.map((item) => (
-                  <li key={item.title}>
-                    <p className="font-semibold text-haze">{item.title}</p>
-                    <p className="mt-0.5 text-sm text-haze-muted">
-                      {item.institution}, <span className="tabular-nums">{item.period}</span>
-                    </p>
-                  </li>
-                ))}
-              </ul>
+          <div>
+            <div className="max-w-2xl space-y-5 text-lg leading-relaxed text-fg-muted">
+              {profile.about.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
             </div>
-            <div>
-              <h3 className="text-sm font-medium text-haze-subtle">Certifications</h3>
-              <ul className="mt-4 space-y-5">
-                {certifications.map((item) => (
-                  <li key={item.name}>
-                    <p className="font-semibold text-haze">{item.name}</p>
-                    <p className="mt-0.5 text-sm text-haze-muted">
-                      {item.issuer}, <span className="tabular-nums">{item.date}</span>
-                    </p>
-                  </li>
-                ))}
-              </ul>
+
+            <dl className="mt-10 grid gap-x-6 gap-y-3 border-t border-line pt-8 font-mono text-sm sm:grid-cols-2">
+              {profile.facts.map(({ label, value }) => (
+                <div key={label} className="flex flex-wrap gap-x-2">
+                  <dt className="text-cyan">
+                    {label}
+                    <span aria-hidden="true" className="text-fg-subtle">
+                      :
+                    </span>
+                  </dt>
+                  <dd className="text-fg">{value}</dd>
+                </div>
+              ))}
+            </dl>
+
+            <div className="mt-10 grid gap-10 border-t border-line pt-8 sm:grid-cols-2">
+              <ListBlock
+                title="Education"
+                items={education.map((item) => ({ key: item.title, primary: item.title, secondary: `${item.institution}, ${item.period}` }))}
+              />
+              <ListBlock
+                title="Certifications"
+                items={certifications.map((item) => ({ key: item.name, primary: item.name, secondary: `${item.issuer}, ${item.date}` }))}
+              />
             </div>
           </div>
-        </div>
+        </Window>
       </div>
     </Section>
   );

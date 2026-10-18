@@ -12,11 +12,11 @@ interface ButtonLinkProps {
 }
 
 const BASE =
-  "inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-[background-color,color,border-color] duration-200";
+  "inline-flex items-center gap-2 rounded-md px-3.5 py-2.5 font-mono text-sm font-medium transition-[background-color,color,border-color] duration-200";
 
 const VARIANTS: Record<Variant, string> = {
-  primary: "bg-haze text-night hover:bg-sunset",
-  secondary: "border border-haze/30 bg-night/40 text-haze backdrop-blur hover:border-sunset hover:text-sunset",
+  primary: "bg-amber text-console hover:bg-fg",
+  secondary: "border border-line bg-panel text-fg hover:border-amber hover:text-amber",
 };
 
 export function ButtonLink({ href, children, variant = "secondary", external = false, download = false }: ButtonLinkProps) {
