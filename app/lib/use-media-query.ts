@@ -19,13 +19,3 @@ export function useMediaQuery(query: string, serverDefault = false): boolean {
 }
 
 export const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
-
-/** True when the browser can create a WebGL context (false on the server). */
-export function supportsWebGL(): boolean {
-  try {
-    const canvas = document.createElement("canvas");
-    return Boolean(canvas.getContext("webgl2") ?? canvas.getContext("webgl"));
-  } catch {
-    return false;
-  }
-}

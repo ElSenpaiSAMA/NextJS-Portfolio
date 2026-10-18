@@ -1,4 +1,7 @@
+import { contactFootage } from "../../data/media";
 import { profile } from "../../data/profile";
+import { AmbientVideo } from "../ui/AmbientVideo";
+import { FootageGrade } from "../ui/FootageGrade";
 import { GitHubIcon, LinkedInIcon, MailIcon, PhoneIcon } from "../ui/icons";
 import { ContactForm } from "./ContactForm";
 
@@ -10,14 +13,16 @@ const CHANNELS = [
   { label: "GitHub", value: profile.githubUrl.replace(/^https:\/\//, ""), href: profile.githubUrl, Icon: GitHubIcon, external: true },
 ] as const;
 
-/** Closing scene: a sunset-lit sign and the ways to reach me. */
+/** Closing scene: a cargo ship leaving port at dusk, a big sign, and the ways to reach me. */
 export function Contact() {
   return (
-    <section id="contact" aria-labelledby="contact-heading" className="relative overflow-hidden pb-24 pt-28 sm:pt-40">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-2/3 bg-[radial-gradient(ellipse_at_50%_120%,rgba(255,79,139,0.35),transparent_65%)]"
-      />
+    <section id="contact" aria-labelledby="contact-heading" className="relative isolate overflow-hidden pb-24 pt-28 sm:pt-40">
+      <div className="absolute inset-0 -z-20">
+        <AmbientVideo sources={contactFootage.loop} poster={contactFootage.poster} className="h-full w-full object-cover" />
+      </div>
+      <FootageGrade className="-z-10" />
+      {/* Fades in from the page above and keeps the form readable */}
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,#160b2e_0%,rgba(22,11,46,0.35)_25%,rgba(22,11,46,0.55)_70%,rgba(22,11,46,0.9)_100%)]" />
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <h2 id="contact-heading" className="display ink-sunset w-fit text-[clamp(3.5rem,13vw,12rem)]">
           Let&apos;s ship something
