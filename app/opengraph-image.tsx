@@ -5,7 +5,7 @@ export const alt = `${profile.name} — ${profile.role}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-/** Generated at build time: the social preview card for links on LinkedIn, Slack, etc. */
+/** Generated at build time: the social preview card, in the site's dusk palette. */
 export default function OpengraphImage() {
   return new ImageResponse(
     (
@@ -15,35 +15,27 @@ export default function OpengraphImage() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
-          padding: "80px",
-          background: "#ffffff",
-          color: "#0f172a",
-          borderTop: "16px solid #1e3a8a",
+          justifyContent: "flex-end",
+          padding: "72px 80px",
+          background: "linear-gradient(180deg, #160b2e 0%, #3d1a5b 55%, #ff4f8b 88%, #ff7849 100%)",
+          color: "#f5e6dd",
         }}
       >
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 72,
-            height: 72,
-            borderRadius: 12,
-            background: "#1e3a8a",
-            color: "#ffffff",
-            fontSize: 28,
-            fontWeight: 700,
+            fontSize: 150,
+            fontWeight: 800,
+            letterSpacing: "-0.02em",
+            lineHeight: 0.9,
+            textTransform: "uppercase",
           }}
         >
-          MS
+          {profile.name}
         </div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ fontSize: 84, fontWeight: 700, letterSpacing: "-0.03em" }}>{profile.name}</div>
-          <div style={{ fontSize: 42, color: "#1e3a8a", marginTop: 12 }}>{profile.role}</div>
-        </div>
-        <div style={{ display: "flex", fontSize: 26, color: "#475569" }}>
-          CI/CD · Docker · Linux · .NET · Python — {profile.location}
+        <div style={{ display: "flex", fontSize: 44, marginTop: 24 }}>{profile.role}</div>
+        <div style={{ display: "flex", fontSize: 26, marginTop: 16, color: "#160b2e" }}>
+          CI/CD, Docker, Linux, .NET and Python, {profile.location}
         </div>
       </div>
     ),

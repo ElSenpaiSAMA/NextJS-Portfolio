@@ -1,16 +1,17 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Big_Shoulders, Instrument_Sans } from "next/font/google";
 import "./globals.css";
 import { IntroScreen } from "./components/layout/IntroScreen";
 import { SiteFooter } from "./components/layout/SiteFooter";
 import { SiteHeader } from "./components/layout/SiteHeader";
+import { SmoothScroll } from "./components/layout/SmoothScroll";
 import { profile } from "./data/profile";
-import { siteUrl } from "./lib/site";
 import { INTRO_INIT_SCRIPT } from "./lib/intro";
-import { THEME_INIT_SCRIPT } from "./lib/theme";
+import { siteUrl } from "./lib/site";
 
-// One font family for everything keeps the look formal and the critical path short.
-const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
+// Display: condensed signage face at its display optical size. Body: Instrument Sans.
+const shoulders = Big_Shoulders({ variable: "--font-shoulders", subsets: ["latin"], axes: ["opsz"], display: "swap" });
+const instrument = Instrument_Sans({ variable: "--font-instrument", subsets: ["latin"], display: "swap" });
 
 const TITLE = `${profile.name} — ${profile.role}`;
 const DESCRIPTION =
@@ -37,26 +38,23 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b1120" },
-  ],
+  themeColor: "#160b2e",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    // data-theme is set by THEME_INIT_SCRIPT before hydration, so React must
+    // data-intro is set by INTRO_INIT_SCRIPT before hydration, so React must
     // not warn about the attribute differing from the server markup.
-    <html lang="en" suppressHydrationWarning className={inter.variable}>
+    <html lang="en" suppressHydrationWarning className={`${shoulders.variable} ${instrument.variable}`}>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT + INTRO_INIT_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: INTRO_INIT_SCRIPT }} />
       </head>
-      <body className="flex min-h-screen flex-col antialiased">
+      <body className="min-h-screen antialiased">
         <IntroScreen />
+        <SmoothScroll />
         <SiteHeader />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
+        <main id="main">{children}</main>
         <SiteFooter />
       </body>
     </html>

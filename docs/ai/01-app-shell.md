@@ -5,11 +5,11 @@
 
 ## layout.tsx
 
-- Fuente única `Inter` (`--font-inter`), `display: swap`.
+- Fuentes: `Big_Shoulders` (display, eje `opsz`, `--font-shoulders`) e `Instrument_Sans` (texto, `--font-instrument`).
 - `metadata`: `metadataBase` = `siteUrl`, título "Matias Speroni — Backend & DevOps Engineer", description,
   canonical `/`, Open Graph (`type: profile`), Twitter `summary_large_image`, robots.
 - `viewport.themeColor`: `#ffffff` / `#0b1120`.
-- `<script>` inline con `THEME_INIT_SCRIPT + INTRO_INIT_SCRIPT` (tema y "intro ya vista en esta sesión") → `<html suppressHydrationWarning>`.
+- `<script>` inline con `INTRO_INIT_SCRIPT` ("intro ya vista en esta sesión") → `<html suppressHydrationWarning>`. Tema oscuro único: `viewport` con `themeColor` `#160b2e` y `colorScheme: dark`.
 - `<IntroScreen />` es el primer hijo de `<body>` (capa 03).
 - Estructura: `SiteHeader` (sticky) → `<main id="main">` → `SiteFooter`.
 
@@ -22,8 +22,8 @@ Compone las secciones en orden y el JSON-LD `Person` (incluye la foto). **El ord
 
 | Archivo | Genera |
 |---------|--------|
-| `opengraph-image.tsx` | PNG 1200×630 blanco con franja y badge azul marino, nombre, rol y stack |
-| `icon.svg` | favicon "MS" azul marino |
+| `opengraph-image.tsx` | PNG 1200×630 con el degradado atardecer, nombre gigante, rol y stack |
+| `icon.svg` | favicon "MS" con el degradado atardecer sobre índigo |
 | `sitemap.ts` | `/` (el CV se sirve estático en `/CV_Matias_Speroni_DO.pdf`) |
 | `robots.ts` | bloquea `/api/` |
 | `not-found.tsx` | 404 |
