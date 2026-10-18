@@ -10,7 +10,7 @@ export function ProjectCard({ project, featured = false }: { project: Project; f
   ) : null;
 
   return (
-    <article id={project.slug} aria-labelledby={`${project.slug}-title`} className={featured ? "md:col-span-2" : undefined}>
+    <article data-reveal id={project.slug} aria-labelledby={`${project.slug}-title`} className={featured ? "md:col-span-2" : undefined}>
       <Window
         title={<span aria-hidden="true">~/projects/{project.slug}</span>}
         aside={status}

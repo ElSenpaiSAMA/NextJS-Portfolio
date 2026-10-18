@@ -24,7 +24,7 @@ export function Contact() {
       <div className="mx-auto mt-12 grid max-w-6xl gap-8 px-5 sm:px-8 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-12">
         <ul className="space-y-3">
           {CHANNELS.map(({ label, value, href, Icon, external }) => (
-            <li key={label}>
+            <li key={label} data-reveal>
               <a
                 href={href}
                 {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
@@ -42,7 +42,7 @@ export function Contact() {
           ))}
         </ul>
 
-        <Window title={<span aria-hidden="true">~/portfolio/message.txt</span>} bodyClassName="p-6 sm:p-8">
+        <Window title={<span aria-hidden="true">~/portfolio/message.txt</span>} className="self-start" bodyClassName="p-6 sm:p-8">
           <h3 className="font-mono text-lg font-bold text-fg">Send a message</h3>
           <div className="mt-6">
             <ContactForm formId={profile.formspreeId} />

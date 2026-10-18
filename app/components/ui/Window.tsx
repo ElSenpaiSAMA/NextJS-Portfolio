@@ -7,13 +7,15 @@ interface WindowProps {
   aside?: ReactNode;
   className?: string;
   bodyClassName?: string;
+  /** See-through body (blurred), for windows floating over the 3D scene. */
+  translucent?: boolean;
   children: ReactNode;
 }
 
 /** A terminal / editor window: title bar with a path, then the body. */
-export function Window({ title, aside, className = "", bodyClassName = "", children }: WindowProps) {
+export function Window({ title, aside, className = "", bodyClassName = "", translucent = false, children }: WindowProps) {
   return (
-    <div className={`overflow-hidden rounded-lg border border-line bg-panel shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8)] ${className}`}>
+    <div className={`overflow-hidden rounded-lg border border-line ${translucent ? "bg-panel/75 backdrop-blur-md" : "bg-panel"} shadow-[0_24px_60px_-30px_rgba(0,0,0,0.8)] ${className}`}>
       <div className="flex items-center justify-between gap-3 border-b border-line bg-panel-bar px-4 py-2.5 font-mono text-xs text-fg-subtle">
         <span className="flex min-w-0 items-center gap-3">
           <span aria-hidden="true" className="flex shrink-0 gap-1.5">

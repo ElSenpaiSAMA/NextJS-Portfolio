@@ -29,7 +29,7 @@ function ListBlock({ title, items }: { title: string; items: { key: string; prim
 export function About() {
   return (
     <Section id="about" title="Who I am" className="pt-24 sm:pt-32">
-      <div className="mx-auto mt-12 max-w-6xl px-5 sm:px-8">
+      <div data-reveal className="mx-auto mt-12 max-w-6xl px-5 sm:px-8">
         <Window title={<span aria-hidden="true">~/portfolio/README.md</span>} bodyClassName="grid gap-10 p-6 sm:p-10 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:gap-14">
           <figure className="relative aspect-[4/5] w-full max-w-sm overflow-hidden rounded-md border border-line bg-console">
             <Image

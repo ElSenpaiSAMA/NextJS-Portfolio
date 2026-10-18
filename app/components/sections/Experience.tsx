@@ -8,12 +8,14 @@ import { Section } from "../ui/Section";
 export function Experience() {
   return (
     <Section id="experience" title="Experience" className="pt-24 sm:pt-32">
-      <ol className="mx-auto mt-12 max-w-6xl px-5 sm:px-8">
-        {experience.map((item, i) => (
+      <div className="relative mx-auto mt-12 max-w-6xl px-5 sm:px-8">
+        {/* The branch: one line down the whole log, drawn with the scroll */}
+        <span aria-hidden="true" data-branch className="absolute bottom-6 left-[27px] top-3 w-px bg-gradient-to-b from-amber via-cyan/50 to-cyan/10 sm:left-[39px]" />
+        <ol>
+        {experience.map((item) => (
           <li key={item.company} className="relative grid gap-6 pb-14 pl-9 last:pb-0 md:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] md:gap-12 md:pl-12">
-            {/* Branch line + node */}
-            <span aria-hidden="true" className={`absolute left-[7px] top-2 w-px bg-line ${i === experience.length - 1 ? "h-4" : "bottom-0"}`} />
-            <span aria-hidden="true" className="absolute left-0 top-1 h-[15px] w-[15px] rounded-full border-2 border-amber bg-console" />
+            {/* Commit node on the branch */}
+            <span aria-hidden="true" data-node className="absolute left-0 top-1 h-[15px] w-[15px] rounded-full border-2 border-amber bg-console" />
 
             <div className="md:sticky md:top-24 md:self-start">
               <h3 className="font-mono text-2xl font-bold tracking-tight text-fg sm:text-3xl">{item.company}</h3>
@@ -42,7 +44,8 @@ export function Experience() {
             </div>
           </li>
         ))}
-      </ol>
+        </ol>
+      </div>
     </Section>
   );
 }

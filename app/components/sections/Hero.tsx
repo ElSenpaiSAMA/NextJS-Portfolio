@@ -1,6 +1,8 @@
 import type { CSSProperties, ReactNode } from "react";
 import { PIPELINE } from "../../data/console";
 import { profile } from "../../data/profile";
+import { ClusterSvg } from "../scene/ClusterSvg";
+import { HeroScene } from "../scene/HeroScene";
 import { ButtonLink } from "../ui/ButtonLink";
 import { DownloadIcon, GitHubIcon, LinkedInIcon } from "../ui/icons";
 import { Window } from "../ui/Window";
@@ -46,7 +48,7 @@ function PipelineTerminal() {
   const yamlStart = profileStart + profileCommand.length * 0.035 + 0.2;
 
   return (
-    <Window title="~/portfolio  (zsh)" className="hero-term w-full" bodyClassName="p-5 font-mono text-[13px] leading-relaxed sm:p-6 sm:text-sm">
+    <Window title="~/portfolio  (zsh)" translucent className="hero-term w-full" bodyClassName="p-5 font-mono text-[13px] leading-relaxed sm:p-6 sm:text-sm">
       <div aria-hidden="true" data-testid="hero-terminal">
         <Prompt command={PIPELINE.command} start={0} />
         <p className="term-line mt-1 text-fg-subtle" style={at(START - 0.2)}>
@@ -100,10 +102,20 @@ export function Hero() {
     <section id="top" aria-labelledby="hero-heading" className="relative isolate overflow-hidden">
       <div
         aria-hidden="true"
-        className="bg-grid absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_70%_40%,black_20%,transparent_75%)]"
+        className="bg-grid absolute inset-0 -z-20 [mask-image:radial-gradient(ellipse_at_70%_40%,black_20%,transparent_75%)]"
       />
+      {/* The cluster: WebGL on tablets/desktops, SVG on phones */}
+      <div className="absolute inset-0 -z-10">
+        <HeroScene />
+        <ClusterSvg />
+        {/* Keeps the copy readable over the scene */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-[linear-gradient(180deg,transparent_25%,var(--console)_70%)] md:bg-[linear-gradient(90deg,var(--console)_15%,transparent_60%),linear-gradient(180deg,transparent_70%,var(--console)_100%)]"
+        />
+      </div>
       <div className="mx-auto grid min-h-[100svh] max-w-6xl items-center gap-12 px-5 pb-16 pt-28 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] lg:gap-12">
-        <div>
+        <div data-hero-copy>
           <p className="inline-flex items-center gap-2 rounded border border-line bg-panel px-3 py-1.5 font-mono text-xs text-fg-muted">
             <span className="h-2 w-2 rounded-full bg-green" aria-hidden="true" />
             {profile.availability} in {profile.location}
@@ -148,7 +160,9 @@ export function Hero() {
           </div>
         </div>
 
-        <PipelineTerminal />
+        <div data-hero-term>
+          <PipelineTerminal />
+        </div>
       </div>
     </section>
   );
