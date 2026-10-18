@@ -2,54 +2,59 @@
 
 **Archivos:** `app/globals.css`
 
-## Dirección de arte: "Night Shift"
+## Dirección de arte: "Ops console"
 
-Un puerto al atardecer construido con contenedores (guiño a Docker / infraestructura), con energía de
-tráiler de videojuego (referencia del autor: rockstargames.com/VI). **Un solo tema, oscuro**: toda la
-estética es un crepúsculo. Firma visual: el **degradado atardecer** (naranja → flamenco) dentro de la
-tipografía gigante.
+El portfolio como **una sesión de terminal y su propio pipeline de CI**. Cada sección se abre con el
+comando que la "imprime" (`ls ~/projects`, `git log --graph`, `cat stack.yml`, `cat README.md`,
+`./contact.sh`) y el contenido toma la forma de ese mundo: ventanas de terminal/editor, YAML con
+números de línea, un grafo de git. Pedido del autor: que se vea relacionado con la informática.
 
-Reglas tomadas de las skills `frontend-design` y `awwwards` (ver `.claude/skills/`):
-- Nada de etiquetas en MAYÚSCULAS sobre cada título, separadores "·", flechas "→" en links ni monoespaciada.
-- No resaltar una sola palabra de un título en otro color: el degradado va en el bloque entero.
-- Una sola librería de animación (GSAP). Animación solo donde cuenta la historia (hero, carrusel).
+**Un solo tema, oscuro.** Base azul pizarra (no negro puro, y **no** el cliché negro + verde neón):
+el verde se reserva para estados reales ("passed", disponible).
+
+Reglas (skills `frontend-design` y `awwwards`):
+- La metáfora de terminal tiene que **corresponder al contenido** (el comando de cada sección es
+  el que mostraría ese contenido). No sumar decoración de "hacker" sin función.
+- El pipeline del hero lista **solo jobs reales** de `.github/workflows/ci.yml` (lo valida `data.test.ts`).
+- Sin librería de animación: todo el movimiento es CSS (un único momento orquestado: el hero).
 
 ## Tokens (`:root` en `globals.css`)
 
 | Token | Valor | Uso |
 |-------|-------|-----|
-| `night` | `#160b2e` | fondo (índigo, no gris-negro) |
-| `dusk` / `dusk-line` | `#22113f` / `#3d1a5b` | superficies / líneas finas |
-| `haze` | `#f5e6dd` | texto principal |
-| `haze-muted` / `haze-subtle` | `#b9a6c4` / `#9a87a8` | texto secundario / terciario (≥ 4.5:1 sobre `night`) |
-| `sunset` / `flamingo` | `#ff7849` / `#ff4f8b` | acentos y degradado firma |
-| `lagoon` | `#44d7c6` | solo foco (`:focus-visible`) |
-| `ok` / `warn` | verde / ámbar | disponibilidad, "In development" |
+| `console` | `#0a0f1a` | fondo de la página |
+| `panel` / `panel-bar` | `#0f1726` / `#141e31` | ventanas / barras de título y gutters |
+| `line` | `#1f2b40` | bordes, líneas finas |
+| `fg` | `#dbe4f0` | texto principal |
+| `fg-muted` / `fg-subtle` | `#93a3ba` / `#7d8fa9` | secundario / terciario (≥ 4.5:1 incluso sobre `panel-bar`) |
+| `amber` | `#ffb547` | prompt `$`, cursor, botón primario, roles |
+| `cyan` | `#5cc8ff` | claves YAML, links, foco (`:focus-visible`) |
+| `green` | `#4ade80` | ✓ passed, disponible, `+` de highlights |
+| `red` | `#ff7b72` | errores de formulario / páginas de error |
+| `violet` | `#c4a7ff` | valores en el YAML del hero |
 
-Utilidades: `bg-night`, `text-haze`, `border-dusk-line`, `text-sunset`… (vía `@theme inline`).
+Utilidades: `bg-console`, `bg-panel`, `text-fg-muted`, `border-line`, `text-amber`… (vía `@theme inline`).
+Utilidad propia: `bg-grid` (grilla técnica tenue del hero).
 
-Utilidades propias (`@utility`):
-- `display` — Big Shoulders a tamaño óptico 72, 800, mayúsculas, interlineado 0.86. Títulos gigantes.
-- `ink-sunset` — degradado atardecer recortado en el texto. **Usar con `w-fit`** en bloques, si no el
-  degradado se estira al ancho del contenedor y se ve un solo color. No se llama `text-sunset` porque
-  Tailwind ya genera esa utilidad de color desde `--color-sunset` y la pisaría.
-- `text-outline` — texto con contorno, para momentos secundarios.
-
-Excepciones documentadas de hex fuera de tokens: el grade de color sobre video
-(`FootageGrade.tsx`) y los velos de legibilidad de `Hero`/`Contact` (degradados `rgba` del tono `night`
-con paradas propias), `opengraph-image.tsx`, `icon.svg`, `viewport.themeColor`.
+Excepciones de color fuera de tokens: `opengraph-image.tsx` (Satori no lee variables CSS: copia la paleta
+en una constante), `icon.svg`, `viewport.themeColor` (`#0a0f1a`) y la sombra `rgba` de `Window`.
 
 ## Tipografía
 
-`Big_Shoulders` (variable, eje `opsz`) para display — condensada de cartelería urbana — e
-`Instrument_Sans` para texto. Cargadas con `next/font` en `layout.tsx` (`--font-shoulders`, `--font-instrument`).
+**IBM Plex Mono** (títulos, prompts, código, etiquetas) + **IBM Plex Sans** (texto de lectura). Familia de
+IBM, coherente con el tema. `next/font` en `layout.tsx` (`--font-plex-mono`, `--font-plex-sans`) →
+`font-mono` / `font-sans`. Párrafos largos siempre en Sans.
 
 ## Animaciones CSS
 
-- Intro (`.intro*`, keyframes `intro-*`): letras con el degradado, línea, subtítulo, panel que sube. Una vez por sesión.
-- Marquesinas del stack (`.marquee`): CSS puro, se pausa en hover, congelada con reduced-motion.
-- `prefers-reduced-motion`: sin intro, sin marquesina, transiciones casi nulas.
-
-## Deuda técnica conocida
-
-- Colores del grade de video (`FootageGrade.tsx`) duplicados a mano de los tokens de la paleta.
+- **Terminal del hero** (`.term-line`, `.term-typed`, `.term-status`, `.term-pending`/`.term-done`):
+  cada línea aparece en su `--at`; los comandos se "tipean" con `steps(--chars)` en `ch`; cada etapa
+  muestra `•` y cambia a `✓` en `--done` (cruce de opacidad en una celda de grid, no `display`).
+  En la primera visita `html:not([data-intro="seen"]) .hero-term` suma `--hero-offset: 2.3s` para
+  arrancar después del boot screen.
+- **Boot screen** (`.intro*`): líneas estilo systemd `[ OK ]`, luego "Welcome to my portfolio", luego
+  el panel sube. Una vez por sesión.
+- `.cursor`: cursor de bloque que parpadea.
+- `.code-lines` / `.code-line`: gutter con números de línea (contadores CSS), en grid de 2 columnas
+  para que las líneas largas no se metan bajo el número.
+- `prefers-reduced-motion`: sin intro, terminal en su estado final, cursor quieto, transiciones casi nulas.
