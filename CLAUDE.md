@@ -59,6 +59,11 @@ Si un cambio altera algo documentado (contratos, tokens, eventos de log), actual
 
 **Skills** (`.claude/skills/`): `git-step`, `verify`, `layer-context`, `add-project`, `design-token`.
 
+**Skills de diseño creativo** (terceros, ver `.claude/skills/THIRD_PARTY.md`): `frontend-design` (oficial de
+Anthropic), `awwwards` (dirección creativa), `gsap-scrolltrigger` (animaciones guiadas por scroll),
+`react-three-fiber` y `threejs-webgl` (3D). Para un rediseño creativo, empezar por `frontend-design` / `awwwards`
+(definir dirección de arte antes de codear) y usar una sola librería de animación (GSAP).
+
 ## Comandos
 
 ```bash
