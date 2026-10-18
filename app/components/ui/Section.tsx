@@ -3,31 +3,25 @@ import type { SectionId } from "../../lib/site";
 
 interface SectionProps {
   id: SectionId;
-  /** Small label above the title, e.g. "Selected work". */
-  eyebrow: string;
   title: string;
+  /** One plain sentence under the title; no eyebrow labels. */
   intro?: ReactNode;
-  /** Alternates the background to separate consecutive sections. */
-  tinted?: boolean;
+  className?: string;
   children: ReactNode;
 }
 
-export function Section({ id, eyebrow, title, intro, tinted = false, children }: SectionProps) {
+/** A page section with a big signage-style title. Spacing is set per section on purpose. */
+export function Section({ id, title, intro, className = "", children }: SectionProps) {
   const headingId = `${id}-heading`;
   return (
-    <section
-      id={id}
-      aria-labelledby={headingId}
-      className={`border-t border-border py-20 sm:py-24 ${tinted ? "bg-surface" : ""}`}
-    >
-      <div className="mx-auto max-w-6xl px-6">
-        <p className="label">{eyebrow}</p>
-        <h2 id={headingId} className="mt-2 text-3xl font-semibold tracking-tight">
+    <section id={id} aria-labelledby={headingId} className={`relative ${className}`}>
+      <div className="mx-auto max-w-7xl px-5 sm:px-8">
+        <h2 id={headingId} className="display text-[clamp(3.25rem,10vw,9rem)] text-haze">
           {title}
         </h2>
-        {intro && <div className="mt-3 max-w-2xl text-muted">{intro}</div>}
-        <div className="mt-12">{children}</div>
+        {intro && <p className="mt-5 max-w-xl text-lg leading-relaxed text-haze-muted">{intro}</p>}
       </div>
+      {children}
     </section>
   );
 }

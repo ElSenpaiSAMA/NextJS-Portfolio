@@ -1,15 +1,16 @@
 import { projects } from "../../data/projects";
 import { Section } from "../ui/Section";
-import { ProjectCard } from "./ProjectCard";
+import { ProjectPoster } from "./ProjectPoster";
+import { ProjectsTrack } from "./ProjectsTrack";
 
 export function Projects() {
   return (
-    <Section id="projects" eyebrow="Selected work" title="Projects" tinted>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {projects.map((project) => (
-          <ProjectCard key={project.slug} project={project} />
+    <Section id="projects" title="Selected work" className="pt-28 sm:pt-40">
+      <ProjectsTrack>
+        {projects.map((project, i) => (
+          <ProjectPoster key={project.slug} project={project} priority={i === 0} />
         ))}
-      </div>
+      </ProjectsTrack>
     </Section>
   );
 }

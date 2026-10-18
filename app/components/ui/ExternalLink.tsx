@@ -8,7 +8,7 @@ export function ExternalLink({ href, children }: { href: string; children: React
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-1 font-medium text-accent underline-offset-4 hover:underline"
+      className="inline-flex items-center gap-1 font-semibold text-haze underline decoration-haze/30 underline-offset-4 transition-colors hover:text-sunset hover:decoration-sunset"
     >
       {children}
       <ArrowUpRightIcon width={13} height={13} />

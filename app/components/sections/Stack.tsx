@@ -13,40 +13,56 @@ function initials(name: string): string {
     .toUpperCase();
 }
 
-function StackTile({ item }: { item: StackItem }) {
+function Item({ item }: { item: StackItem }) {
   return (
-    // Fixed white tile in both themes: some brand logos are black (Next.js) and vanish on dark.
-    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-border bg-white">
-      {item.logo ? (
-        // SVG logos: nothing to optimize, so skip the image optimizer.
-        <Image src={item.logo} alt="" width={16} height={16} unoptimized />
-      ) : (
-        <span aria-hidden="true" className="text-[10px] font-bold text-slate-600">
-          {initials(item.name)}
-        </span>
-      )}
-    </span>
+    <li className="flex shrink-0 items-center gap-3 pr-10">
+      {/* Light tile: several brand logos are black and would vanish on the night background. */}
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-haze">
+        {item.logo ? (
+          // Tiny SVGs that slide in from off-screen: load eagerly or they never intersect in time.
+          <Image src={item.logo} alt="" width={20} height={20} unoptimized loading="eager" />
+        ) : (
+          <span aria-hidden="true" className="text-[11px] font-bold text-night">
+            {initials(item.name)}
+          </span>
+        )}
+      </span>
+      <span className="whitespace-nowrap text-xl font-semibold text-haze sm:text-2xl">
+        {item.name}
+        {item.detail && <span className="ml-2 text-base font-normal text-haze-subtle">{item.detail}</span>}
+      </span>
+    </li>
   );
 }
 
+/**
+ * One slow marquee per group, alternating direction (CSS only, pauses on
+ * hover, frozen with reduced motion). The second copy is aria-hidden so
+ * screen readers hear each technology once.
+ */
 export function Stack() {
   return (
-    <Section id="stack" eyebrow="Tech stack" title="What I work with" tinted>
-      <div className="grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-        {stack.map((group) => (
-          <div key={group.id}>
-            <h3 className="border-b border-border pb-3 text-sm font-semibold">{group.title}</h3>
-            <ul className="mt-4 space-y-3">
-              {group.items.map((item) => (
-                <li key={item.name} className="flex items-center gap-2.5 text-sm">
-                  <StackTile item={item} />
-                  <span>
-                    {item.name}
-                    {item.detail && <span className="block text-xs text-subtle">{item.detail}</span>}
-                  </span>
-                </li>
-              ))}
-            </ul>
+    <Section id="stack" title="Toolbox" intro="What I build, ship and run software with." className="pt-24 sm:pt-36">
+      <div className="mt-14 space-y-2 overflow-hidden">
+        {stack.map((group, row) => (
+          <div key={group.id} className="marquee-row border-t border-dusk-line py-5 last:border-b">
+            <h3 className="mx-auto mb-4 max-w-7xl px-5 text-sm font-medium text-haze-subtle sm:px-8">{group.title}</h3>
+            <div
+              className="marquee"
+              data-direction={row % 2 ? "reverse" : "normal"}
+              style={{ "--marquee-duration": `${30 + group.items.length * 6}s` } as React.CSSProperties}
+            >
+              <ul className="flex pl-5 sm:pl-8">
+                {group.items.map((item) => (
+                  <Item key={item.name} item={item} />
+                ))}
+              </ul>
+              <ul className="flex" aria-hidden="true">
+                {group.items.map((item) => (
+                  <Item key={item.name} item={item} />
+                ))}
+              </ul>
+            </div>
           </div>
         ))}
       </div>
