@@ -45,7 +45,7 @@ describe("Home page", () => {
 
   it("shows the full stack, grouped", () => {
     render(<HomePage />);
-    const section = screen.getByRole("region", { name: "What I work with" });
+    const section = screen.getByRole("region", { name: "Toolbox" });
     for (const group of stack) {
       expect(within(section).getByRole("heading", { name: group.title })).toBeInTheDocument();
       for (const item of group.items) expect(within(section).getAllByText(item.name).length).toBeGreaterThan(0);

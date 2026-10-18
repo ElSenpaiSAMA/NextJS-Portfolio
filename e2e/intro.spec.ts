@@ -2,7 +2,8 @@ import { expect, test } from "./fixtures";
 
 test.describe("welcome intro", () => {
   test("plays on the first visit, then slides away", async ({ page }) => {
-    await page.goto("/");
+    // From the first byte: on a slow machine the intro can finish before the load event.
+    await page.goto("/", { waitUntil: "commit" });
     const intro = page.getByTestId("intro");
 
     await expect(intro).toBeVisible();

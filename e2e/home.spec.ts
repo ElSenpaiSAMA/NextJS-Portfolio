@@ -15,8 +15,13 @@ test.describe("home page", () => {
 
   test("every image loads (projects, portrait, stack logos)", async ({ page }) => {
     await page.goto("/");
-    // Lazy images only load near the viewport: scroll through the whole page first.
-    for (const id of SECTIONS) await page.locator(`section#${id}`).scrollIntoViewIfNeeded();
+    // Lazy images only load near the viewport, and the project posters only enter it
+    // while the pinned track scrolls sideways — so walk the page in small steps.
+    const height = await page.evaluate(() => document.documentElement.scrollHeight);
+    for (let y = 0; y <= height; y += 400) {
+      await page.evaluate((top) => window.scrollTo(0, top), y);
+      await page.waitForTimeout(60);
+    }
 
     // Poll instead of networkidle: the first request for a large image waits on the
     // optimizer, which can outlast "idle". A truly broken image never completes.
