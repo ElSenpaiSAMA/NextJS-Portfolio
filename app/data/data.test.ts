@@ -104,11 +104,16 @@ describe("stack", () => {
   });
 });
 
-describe("pipeline stages", () => {
+describe("session commands (pipeline stages)", () => {
   it("covers every header section once, starting with checkout", () => {
     expect(STAGES[0]).toMatchObject({ id: "top", step: "checkout" });
     const ids = STAGES.map((s) => s.id);
     expect(new Set(ids).size).toBe(ids.length);
     for (const { id } of NAV_ITEMS) expect(ids).toContain(id);
+  });
+
+  it("gives every stage a command and a unique tmux window", () => {
+    for (const stage of STAGES) expect(stage.command.trim(), stage.id).not.toBe("");
+    expect(new Set(STAGES.map((s) => s.window)).size).toBe(STAGES.length);
   });
 });

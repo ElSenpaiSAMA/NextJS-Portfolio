@@ -37,21 +37,50 @@ test.describe("home page", () => {
     expect(await page.locator(`#projects img[alt^="Screenshot"]`).count()).toBe(6);
   });
 
-  test("the pipeline runs as you read: stages go running → passed and logs print", async ({ page }) => {
+  test("the session runs as you read: commands type out and the status bar follows", async ({ page }) => {
     await page.goto("/");
-    const badge = page.getByTestId("pipeline-badge");
-    await expect(badge).toContainText("running 1/6 · checkout");
+    const status = page.getByTestId("pipeline-status");
+    const nav = page.getByRole("navigation", { name: "Sections" });
+    await expect(status).toContainText("running 1/6 · checkout");
 
     await page.locator("section#projects").scrollIntoViewIfNeeded();
     await page.evaluate(() => window.scrollBy(0, 150));
-    await expect(page.getByTestId("node-projects")).toHaveAttribute("data-state", "running");
-    await expect(page.getByTestId("node-stack")).toHaveAttribute("data-state", "passed");
-    await expect(badge).toContainText("running 3/6 · build");
-    await expect(page.getByTestId("log-projects")).toContainText("build succeeded", { timeout: 5_000 });
+    await expect(status).toContainText("running 3/6 · build");
+    await expect(nav.locator('a[href="#projects"]')).toHaveAttribute("aria-current", "location");
+    // The command finishes typing: full width, nothing clipped.
+    const typed = page.getByTestId("prompt-projects").locator(".typed");
+    await expect.poll(() => typed.evaluate((el) => el.scrollWidth - el.clientWidth), { timeout: 5_000 }).toBeLessThanOrEqual(0);
 
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-    await expect(badge).toContainText("passed 6/6");
-    await expect(page.getByTestId("node-contact")).toHaveAttribute("data-state", "passed");
+    await expect(status).toContainText("passed 6/6");
+    await expect(page.getByTestId("deploy-run").locator('li[data-state="passed"]')).toHaveCount(5);
+  });
+
+  test("the shell runs commands, completes with Tab and jumps to sections", async ({ page }) => {
+    await page.goto("/");
+    const input = page.getByRole("textbox", { name: /Type a command/ });
+    const output = page.getByRole("log", { name: "Shell output" });
+
+    await input.fill("help");
+    await input.press("Enter");
+    await expect(output).toContainText("Commands:");
+
+    await input.fill("cat ab");
+    await input.press("Tab");
+    await expect(input).toHaveValue("cat about.md ");
+    await input.press("Enter");
+    await expect(output).toContainText("# Matias Speroni");
+
+    await input.fill("nope");
+    await input.press("Enter");
+    await expect(output).toContainText("nope: command not found");
+
+    await input.press("ArrowUp");
+    await expect(input).toHaveValue("nope");
+
+    await input.fill("cd experience");
+    await input.press("Enter");
+    await expect(page.locator("section#experience")).toBeInViewport();
   });
 
   test("the stack drops into the physics box", async ({ page }) => {
@@ -105,7 +134,7 @@ test.describe("home page", () => {
 });
 
 test.describe("navigation", () => {
-  test("header links scroll to each section", async ({ page }) => {
+  test("status bar links scroll to each section", async ({ page }) => {
     await page.goto("/");
     const nav = page.getByRole("navigation", { name: "Sections" });
     for (const id of SECTIONS) {

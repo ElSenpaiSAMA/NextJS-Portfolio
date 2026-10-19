@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { STAGES } from "./data/pipeline";
 import { profile } from "./data/profile";
@@ -17,15 +17,22 @@ describe("Home page", () => {
     expect(screen.getAllByText(new RegExp(profile.availability)).length).toBeGreaterThan(0);
   });
 
-  it("lays the page out as a pipeline: one stage per section, in order, each with its log", () => {
+  it("lays the page out as a terminal session: one command per section, in order", () => {
     const { container } = render(<HomePage />);
     const stages = [...container.querySelectorAll<HTMLElement>("[data-stage]")].map((el) => el.dataset.stage);
     expect(stages).toEqual(STAGES.map((s) => s.id));
-    for (const stage of STAGES) {
-      expect(screen.getByTestId(`node-${stage.id}`)).toHaveTextContent(`Stage ${stage.step}`);
-      // Without motion (jsdom) the whole log is printed.
-      expect(screen.getByTestId(`log-${stage.id}`).querySelectorAll("li").length).toBeGreaterThanOrEqual(3);
-    }
+    // Without motion (jsdom) every command is already typed out.
+    for (const stage of STAGES) expect(screen.getByTestId(`prompt-${stage.id}`)).toHaveTextContent(`matias@speroni:~$ ${stage.command}`);
+    expect(screen.getByTestId("deploy-run").querySelectorAll("li")).toHaveLength(STAGES.length);
+  });
+
+  it("has a shell you can type into", async () => {
+    render(<HomePage />);
+    const input = screen.getByRole("textbox", { name: /Type a command/ });
+    fireEvent.change(input, { target: { value: "whoami" } });
+    fireEvent.submit(input.closest("form")!);
+    expect(within(screen.getByRole("log", { name: "Shell output" })).getByText(new RegExp(`${profile.name} — ${profile.role}`))).toBeInTheDocument();
+    expect(input).toHaveValue("");
   });
 
   it("renders a section for every nav item", () => {

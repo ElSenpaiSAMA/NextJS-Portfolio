@@ -1,11 +1,14 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { BOOT_LINES } from "../../data/shell";
 import { IntroScreen } from "./IntroScreen";
 
 describe("IntroScreen", () => {
-  it("types hello, world and then the welcome line", () => {
+  it("boots: every [ OK ] line, the login, then the welcome line", () => {
     render(<IntroScreen />);
-    expect(document.querySelector(".intro-hello")).toHaveTextContent("hello, world");
+    const boot = [...document.querySelectorAll(".intro-boot")].map((el) => el.textContent);
+    expect(boot).toEqual(BOOT_LINES.map((text) => `[  OK  ] ${text}`));
+    expect(screen.getByTestId("intro")).toHaveTextContent("speroni login: matias");
     expect(document.querySelector(".intro-welcome")).toHaveTextContent("Welcome to my portfolio");
   });
 
