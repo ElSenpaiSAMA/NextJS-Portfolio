@@ -19,7 +19,7 @@ const FIELDS: { name: ContactField; label: string; type: "text" | "email" | "tex
 ];
 
 const INPUT_CLASS =
-  "mt-1.5 w-full rounded-xl border border-hairline-dark bg-black px-4 py-3 text-[17px] text-white placeholder:text-mute-dark focus:border-link-dark aria-[invalid=true]:border-error";
+  "mt-1.5 w-full rounded-lg border border-line bg-ink px-4 py-3 font-mono text-sm text-fg placeholder:text-fg-subtle focus:border-accent aria-[invalid=true]:border-error";
 
 function readValues(form: HTMLFormElement): ContactValues {
   const data = new FormData(form);
@@ -66,10 +66,10 @@ export function ContactForm({ formId }: { formId: string }) {
 
   if (status === "success") {
     return (
-      <div role="status" className="rounded-2xl border border-ok/40 bg-black p-6">
-        <p className="text-[19px] font-semibold text-ok">Message sent.</p>
-        <p className="mt-1 text-[15px] text-mute-dark">Thanks — I will get back to you soon.</p>
-        <button type="button" onClick={() => setStatus("idle")} className="mt-4 text-[15px] text-link-dark hover:underline">
+      <div role="status" className="rounded-lg border border-mint/40 bg-ink p-6">
+        <p className="font-mono text-mint">Message sent.</p>
+        <p className="mt-1 text-sm text-fg-muted">Thanks — I will get back to you soon.</p>
+        <button type="button" onClick={() => setStatus("idle")} className="mt-4 font-mono text-sm text-accent hover:underline">
           Send another message
         </button>
       </div>
@@ -95,7 +95,7 @@ export function ContactForm({ formId }: { formId: string }) {
         };
         return (
           <div key={name}>
-            <label htmlFor={common.id} className="text-[15px] text-mute-dark">
+            <label htmlFor={common.id} className="font-mono text-xs text-fg-muted">
               {label}
             </label>
             {type === "textarea" ? <textarea {...common} rows={5} /> : <input {...common} type={type} />}
@@ -120,7 +120,7 @@ export function ContactForm({ formId }: { formId: string }) {
       <button
         type="submit"
         disabled={submitting}
-        className="rounded-full bg-blue px-6 py-2.5 text-[17px] text-white transition-colors hover:bg-[#0077ed] disabled:opacity-60"
+        className="rounded-full bg-accent px-6 py-3 font-mono text-sm text-ink transition-colors hover:bg-fg disabled:opacity-60"
       >
         {submitting ? "Sending…" : "Send message"}
       </button>

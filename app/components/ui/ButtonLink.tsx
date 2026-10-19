@@ -1,42 +1,35 @@
 import type { ReactNode } from "react";
-import { ChevronRightIcon } from "./icons";
 
-type Variant = "pill" | "link";
-type Tone = "dark" | "light";
+type Variant = "primary" | "ghost";
 
 interface ButtonLinkProps {
   href: string;
   children: ReactNode;
-  /** pill: blue filled button. link: text link with a chevron (Apple's "Learn more >"). */
   variant?: Variant;
-  /** Background the link sits on, for its colour. */
-  tone?: Tone;
   /** Opens in a new tab with rel="noopener noreferrer". */
   external?: boolean;
   download?: boolean;
+  /** Label the custom cursor shows over this link. */
+  cursor?: string;
 }
 
-const STYLES: Record<Variant, Record<Tone, string>> = {
-  pill: {
-    dark: "rounded-full bg-blue px-5 py-2.5 text-white hover:bg-[#0077ed]",
-    light: "rounded-full bg-blue px-5 py-2.5 text-white hover:bg-[#0077ed]",
-  },
-  link: {
-    dark: "text-link-dark hover:underline",
-    light: "text-link-light hover:underline",
-  },
+const STYLES: Record<Variant, string> = {
+  primary: "bg-accent text-ink hover:bg-fg",
+  ghost: "border border-line bg-ink-2/60 text-fg backdrop-blur hover:border-accent hover:text-accent",
 };
 
-export function ButtonLink({ href, children, variant = "pill", tone = "dark", external = false, download = false }: ButtonLinkProps) {
+/** Mono pill link. `data-magnetic`: it leans towards the pointer (ScrollChoreography). */
+export function ButtonLink({ href, children, variant = "ghost", external = false, download = false, cursor }: ButtonLinkProps) {
   return (
     <a
       href={href}
-      className={`inline-flex items-center gap-1.5 text-[17px] font-normal transition-colors ${STYLES[variant][tone]}`}
+      data-magnetic
+      data-cursor={cursor}
+      className={`inline-flex items-center gap-2 rounded-full px-5 py-3 font-mono text-sm transition-colors ${STYLES[variant]}`}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       {...(download ? { download: true } : {})}
     >
       {children}
-      {variant === "link" && <ChevronRightIcon width={12} height={12} />}
     </a>
   );
 }
