@@ -15,16 +15,13 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="mx-auto max-w-6xl px-5 pb-28 pt-40 font-mono sm:px-8">
-      <p aria-hidden="true" className="text-sm text-red">
-        error: render failed (logged)
-      </p>
-      <h1 className="mt-4 text-3xl font-bold tracking-tight text-fg sm:text-5xl">Something went wrong.</h1>
-      <p className="mt-3 font-sans text-fg-muted">The error has been logged. You can retry or reload the page.</p>
+    <div className="mx-auto flex min-h-[80svh] max-w-[980px] flex-col items-center justify-center px-5 pt-24 text-center sm:px-8">
+      <h1 className="headline text-[clamp(2.5rem,7vw,4.5rem)]">Something went wrong.</h1>
+      <p className="mt-4 text-xl text-mute-dark">The error has been logged. You can retry or reload the page.</p>
       <button
         type="button"
         onClick={() => unstable_retry()}
-        className="mt-6 rounded-md bg-amber px-5 py-2.5 text-sm font-medium text-console hover:bg-fg"
+        className="mt-8 rounded-full bg-blue px-6 py-2.5 text-[17px] text-white hover:bg-[#0077ed]"
       >
         Try again
       </button>
