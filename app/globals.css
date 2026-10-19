@@ -141,26 +141,6 @@ html:not([data-intro="seen"]) .hero-term {
   }
 }
 
-/* Phone cluster (ClusterSvg): packets ride their cable, fading at both ends. */
-.cluster-packet {
-  offset-rotate: 0deg;
-  animation: packet-travel 2s linear infinite;
-}
-@keyframes packet-travel {
-  0% {
-    offset-distance: 0%;
-    opacity: 0;
-  }
-  15%,
-  85% {
-    opacity: 1;
-  }
-  100% {
-    offset-distance: 100%;
-    opacity: 0;
-  }
-}
-
 /* Editor gutter: line numbers via CSS counters (Stack's stack.yml panel). */
 .code-lines {
   counter-reset: line;
@@ -184,10 +164,6 @@ html:not([data-intro="seen"]) .hero-term {
 @media (prefers-reduced-motion: reduce) {
   .cursor {
     animation: none;
-  }
-  .cluster-packet {
-    animation: none;
-    offset-distance: 50%;
   }
   /* The terminal shows its final state at once. */
   .term-line,
