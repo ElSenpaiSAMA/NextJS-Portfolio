@@ -1,6 +1,6 @@
 # 04 — Contenido (`content`)
 
-**Archivos:** `app/data/{types,profile,projects,stack,experience,ship}.ts`, `public/`
+**Archivos:** `app/data/{types,profile,projects,stack,experience,pipeline}.ts`, `public/`
 
 Todo el texto del sitio vive acá. Idioma: **inglés**. **Fuente de verdad: el CV del autor**
 (`public/CV_Matias_Speroni_DO.pdf`). Rol en el sitio: **Backend & DevOps Engineer**. Imagine Group:
@@ -12,7 +12,7 @@ Todo el texto del sitio vive acá. Idioma: **inglés**. **Fuente de verdad: el C
 | `projects.ts` | `projects: Project[]` | slug, título, descripción, tech, imagen, github/siteLink, `inDevelopment` |
 | `experience.ts` | `experience`, `education`, `certifications` | empresas (varios roles por empresa, más reciente primero) con highlights del CV; formación y certificaciones |
 | `stack.ts` | `stack: StackGroup[]` | 9 grupos que siguen los "Technical skills" del CV; nombre + logo opcional + `detail` opcional (ej. servicios de AWS/Azure/GCP); sin niveles |
-| `ship.ts` | `PIPELINE` | pipeline de la pestaña Deploy del compañero (**solo jobs de `ci.yml`**). La narración y las respuestas del compañero **no son copy**: se generan de estos datos en `lib/companion.ts` |
+| `pipeline.ts` | `STAGES` | las etapas del pipeline en orden de página: id de sección, `step` (checkout, install, build, test, release, deploy), título y qué significa. Los logs de cada etapa **no son copy**: se calculan de los datos en `lib/stage-logs.ts` |
 
 ## `public/`
 
@@ -32,7 +32,7 @@ Todo el texto del sitio vive acá. Idioma: **inglés**. **Fuente de verdad: el C
 
 ## Integridad
 
-`app/data/data.test.ts` valida: URLs https, **que cada imagen/logo/avatar/CV exista en `public/`**, y que **cada etapa del pipeline exista en `ci.yml`**,
+`app/data/data.test.ts` valida: URLs https, **que cada imagen/logo/avatar/CV exista en `public/`**, que las etapas cubran cada sección del header una vez,
 teléfono en E.164 y coherente con el formato visible, slugs únicos, descripciones y tech presentes,
 experiencia con roles y períodos, grupos del stack sin duplicados, about y facts cortos.
 
