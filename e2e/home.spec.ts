@@ -1,6 +1,6 @@
 import { expect, test } from "./fixtures";
 
-const SECTIONS = ["projects", "experience", "stack", "about", "contact"];
+const SECTIONS = ["experience", "projects", "stack", "certifications", "about"];
 
 test.describe("home page", () => {
   test("loads with who I am, every section and no errors", async ({ page }) => {
@@ -9,7 +9,7 @@ test.describe("home page", () => {
 
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Matias Speroni");
     await expect(page.getByText("Backend & DevOps Engineer").first()).toBeVisible();
-    for (const id of SECTIONS) await expect(page.locator(`section#${id}`)).toBeAttached();
+    for (const id of [...SECTIONS, "contact"]) await expect(page.locator(`section#${id}`)).toBeAttached();
     await expect(page.getByTestId("build-info")).toBeVisible();
   });
 
@@ -34,35 +34,34 @@ test.describe("home page", () => {
         { timeout: 15_000 },
       )
       .toEqual([]);
-    expect(await page.locator("#projects img").count()).toBe(6);
+    expect(await page.locator(`#projects img[alt^="Screenshot"]`).count()).toBe(6);
   });
 
-  test("the deploy button ships the site through every stage", async ({ page }) => {
+  test("the companion narrates the section in view (desktop)", async ({ page, isMobile }) => {
+    test.skip(isMobile, "The companion is a sheet on phones");
     await page.goto("/");
-    const deploy = page.getByTestId("deploy");
-    // It runs once on its own; wait for it, then deploy again by hand.
-    await expect(deploy.getByRole("status")).toContainText("Deployed to production", { timeout: 15_000 });
+    const companion = page.getByTestId("companion");
+    await page.locator("section#projects").scrollIntoViewIfNeeded();
+    await page.evaluate(() => window.scrollBy(0, 200));
+    await expect(companion.getByText(/viewing:/)).toContainText("02 Projects");
+    await expect(companion.locator("[aria-live]").first()).toContainText("projects here");
+  });
+
+  test("ask the companion and deploy from it", async ({ page, isMobile }) => {
+    await page.goto("/");
+    // Phones open the companion as a sheet; desktop has it beside the content.
+    const companion = isMobile ? page.getByRole("dialog") : page.getByTestId("companion");
+    if (isMobile) await page.getByRole("button", { name: /Ask Matias/ }).click();
+
+    await companion.getByRole("tab", { name: "Ask" }).click();
+    await companion.getByRole("button", { name: "Where have you worked?" }).click();
+    await expect(companion.getByTestId("companion-answer")).toContainText("Imagine Group", { timeout: 10_000 });
+
+    await companion.getByRole("tab", { name: "Deploy" }).click();
+    const deploy = companion.getByTestId("deploy");
+    await expect(deploy.getByRole("status")).toContainText(/Deployed to production in \d+\.\d s/, { timeout: 15_000 });
     await deploy.getByRole("button", { name: "Redeploy" }).click();
     await expect(deploy.getByRole("button", { name: "Deploying…" })).toBeDisabled();
-    await expect(deploy.getByRole("status")).toContainText(/Deployed to production in \d+\.\d s/, { timeout: 15_000 });
-  });
-
-  test("editing portfolio.config restyles the page and reports problems", async ({ page }) => {
-    await page.goto("/");
-    const editor = page.getByRole("textbox", { name: /portfolio\.config\.ts/ });
-    await editor.scrollIntoViewIfNeeded();
-    const text = await editor.inputValue();
-    await editor.fill(text.replace('theme: "light"', 'theme: "dark"').replace("radius: 12", "radius: 0"));
-    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-    await expect.poll(() => page.evaluate(() => document.documentElement.style.getPropertyValue("--r"))).toBe("0px");
-
-    await editor.fill(text.replace('theme: "light"', 'theme: "neon"'));
-    await expect(page.getByText(/theme must be "light" or "dark"/)).toBeVisible();
-
-    // Saved for this visitor: a reload keeps the last valid config.
-    await editor.fill(text.replace('theme: "light"', 'theme: "dark"'));
-    await page.reload();
-    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   });
 
   test("the stack drops into the physics box", async ({ page }) => {

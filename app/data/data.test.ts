@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { certifications, education, experience } from "./experience";
 import { profile } from "./profile";
 import { projects } from "./projects";
-import { PIPELINE, SECTION_LABELS } from "./ship";
+import { PIPELINE } from "./ship";
 import { stack } from "./stack";
 
 /** Content integrity: catches broken data and missing assets before they reach the page. */
@@ -103,10 +103,7 @@ describe("stack", () => {
   });
 });
 
-describe("ship copy", () => {
-  it("labels every section", () => {
-    for (const [section, label] of Object.entries(SECTION_LABELS)) expect(label, section).toMatch(/\S/);
-  });
+describe("pipeline", () => {
 
   it("only shows pipeline stages the real CI runs", () => {
     // The hero claims these run on every push: keep them honest against ci.yml.

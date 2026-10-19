@@ -1,6 +1,6 @@
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { PIPELINE } from "./data/ship";
+import { experience as jobs } from "./data/experience";
 import { profile } from "./data/profile";
 import { experience } from "./data/experience";
 import { projects } from "./data/projects";
@@ -13,23 +13,22 @@ describe("Home page", () => {
     render(<HomePage />);
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(profile.name);
-    expect(screen.getByText(profile.role, { selector: "p" })).toBeInTheDocument();
-    expect(screen.getByText(new RegExp(profile.availability))).toBeInTheDocument();
+    expect(screen.getByText(profile.role, { selector: "strong" })).toBeInTheDocument();
+    expect(screen.getAllByText(new RegExp(profile.availability)).length).toBeGreaterThan(0);
   });
 
-  it("lists the real CI stages in the deploy widget", () => {
+  it("has a companion that narrates, answers from the CV and can deploy", () => {
     render(<HomePage />);
-    const deploy = screen.getByTestId("deploy");
-    for (const stage of PIPELINE.stages) expect(within(deploy).getByText(stage)).toBeInTheDocument();
-    expect(within(deploy).getByRole("button", { name: /deploy/i })).toBeInTheDocument();
-  });
-
-  it("ships an editable portfolio.config with the defaults and no problems", () => {
-    render(<HomePage />);
-    const editor = screen.getByRole("textbox", { name: /portfolio\.config\.ts/ }) as HTMLTextAreaElement;
-    expect(editor.value).toContain("export default {");
-    expect(editor.value).toContain('theme: "light"');
-    expect(screen.getByText(/No problems/)).toBeInTheDocument();
+    const companion = screen.getByTestId("companion");
+    // Guide: the intro narration (live region holds the full text).
+    expect(within(companion).getAllByText(new RegExp(`I'm ${profile.name.split(" ")[0]}`)).length).toBeGreaterThan(0);
+    // Ask: a question answered with the real companies.
+    fireEvent.click(within(companion).getByRole("tab", { name: "Ask" }));
+    fireEvent.click(within(companion).getByRole("button", { name: "Where have you worked?" }));
+    for (const job of jobs) expect(within(companion).getAllByText(new RegExp(job.company)).length).toBeGreaterThan(0);
+    // Deploy: the real pipeline.
+    fireEvent.click(within(companion).getByRole("tab", { name: "Deploy" }));
+    expect(within(companion).getByTestId("deploy")).toBeInTheDocument();
   });
 
   it("renders a section for every nav item", () => {
@@ -61,7 +60,7 @@ describe("Home page", () => {
 
   it("shows the full stack, grouped", () => {
     render(<HomePage />);
-    const section = screen.getByRole("region", { name: "Stack" });
+    const section = screen.getByRole("region", { name: "Tech stack" });
     for (const group of stack) {
       expect(within(section).getByRole("heading", { name: group.title })).toBeInTheDocument();
       for (const item of group.items) expect(within(section).getAllByText(item.name).length).toBeGreaterThan(0);
@@ -70,7 +69,7 @@ describe("Home page", () => {
 
   it("shows the portrait, bio facts and direct contact channels", () => {
     render(<HomePage />);
-    const about = screen.getByRole("region", { name: "Who I am" });
+    const about = screen.getByRole("region", { name: "About me" });
     expect(within(about).getByRole("img", { name: `Portrait of ${profile.name}` })).toBeInTheDocument();
     // jsdom doesn't map <dt> wrapped in <div> to role "term", so query the list directly.
     const facts = about.querySelector("dl")!;
