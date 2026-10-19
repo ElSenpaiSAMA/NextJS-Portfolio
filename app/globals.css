@@ -1,29 +1,31 @@
 @import "tailwindcss";
 
 /*
- * "Pipeline" — the page is a CI/CD run. A glowing spine runs down the left;
- * each section is a stage that goes pending → running → passed as you read,
- * printing its log. Ink-black base, electric blue for the job and actions,
- * amber while a stage runs, green once it passes. Every text/background pair
- * meets WCAG AA (axe in CI).
+ * "Shell" — the page is a terminal session on matias@speroni. It boots like
+ * Linux, every section is the output of a command typed at the prompt (and a
+ * stage of `make deploy`), a tmux status bar is the navigation, and there is a
+ * real shell to type into. Ink-black, one monospace face, the ANSI palette as
+ * the accents. Every text/background pair meets WCAG AA (axe in CI).
  */
 
 :root {
   --bg: #060708; /* page */
-  --surface: #0d0f12; /* cards */
-  --surface-2: #15181d; /* chips, logs, insets */
+  --surface: #0b0d10; /* the terminal pane, cards */
+  --surface-2: #14171c; /* chips, insets, status bar */
   --line: #23272e; /* hairlines */
-  --fg: #eef0f2;
+  --fg: #e8eaed;
   --fg-muted: #a6abb6;
   --fg-subtle: #878c98; /* ≥ 4.5:1 even on surface-2 */
-  --accent: #5b8cff; /* glow, outlines, accents on black */
+  --accent: #5b8cff; /* blue: paths, links, glow */
   --accent-strong: #3366ff; /* filled buttons with white text (4.7:1) */
-  --accent-text: #8aa9ff; /* accent used as text on black */
-  --ok: #4ade80; /* live / available / passed */
-  --warn: #fbbf24; /* building / in development */
-  --error: #f87171;
-  --r: 18px; /* card radius */
-  --glow: 0 0 0 1px rgb(91 140 255 / 0.35), 0 0 40px -6px rgb(91 140 255 / 0.45);
+  --accent-text: #8aa9ff; /* blue used as text */
+  --ok: #4ade80; /* green: user@host, passed, available */
+  --warn: #fbbf24; /* yellow: running, in development */
+  --error: #f87171; /* red: errors */
+  --magenta: #d8a4ff; /* keys, hashes */
+  --cyan: #67e8f9; /* strings, dates */
+  --r: 10px; /* window radius */
+  --glow: 0 0 0 1px rgb(74 222 128 / 0.35), 0 0 36px -8px rgb(74 222 128 / 0.4);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   color-scheme: dark;
 }
@@ -42,46 +44,60 @@
   --color-ok: var(--ok);
   --color-warn: var(--warn);
   --color-error: var(--error);
+  --color-magenta: var(--magenta);
+  --color-cyan: var(--cyan);
   --radius-ui: var(--r);
 
-  /* Injected by next/font in app/layout.tsx */
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  /* Injected by next/font in app/layout.tsx. One face: it's a terminal. */
+  --font-sans: var(--font-geist-mono), ui-monospace, Menlo, monospace;
   --font-mono: var(--font-geist-mono), ui-monospace, Menlo, monospace;
 }
 
 body {
   background-color: var(--bg);
-  /* A faint blue glow from the top-left, like light on a dark desk. */
-  background-image:
-    radial-gradient(60rem 40rem at 10% -10%, rgb(91 140 255 / 0.09), transparent 60%),
-    radial-gradient(50rem 30rem at 100% 0%, rgb(94 234 212 / 0.04), transparent 60%);
+  /* A faint green phosphor glow from the top. */
+  background-image: radial-gradient(70rem 36rem at 50% -12%, rgb(74 222 128 / 0.06), transparent 60%);
   background-attachment: fixed;
   color: var(--fg);
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
+  font-size: 15px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-  border-radius: 6px;
+/* Barely-there scanlines over everything: texture, not an effect. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgb(255 255 255 / 0.018) 0 1px, transparent 1px 3px);
+}
+
+/* In the base layer so utilities (e.g. the shell's input) can override it. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--ok);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
 }
 
 ::selection {
-  background: var(--accent);
-  color: #fff;
+  background: var(--ok);
+  color: var(--bg);
 }
 
-/* Big tight display type. */
+/* Section titles: big, tight, monospace. */
 @utility display {
-  font-weight: 650;
-  letter-spacing: -0.045em;
-  line-height: 0.95;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
   text-wrap: balance;
 }
 
-/* Cards that light up their edge on hover. */
+/* Terminal windows / cards that light their edge on hover. */
 @utility card {
   border: 1px solid var(--line);
   background: var(--surface);
@@ -90,20 +106,20 @@ body {
     border-color 0.3s ease,
     box-shadow 0.3s ease;
   &:hover {
-    border-color: rgb(91 140 255 / 0.45);
+    border-color: rgb(74 222 128 / 0.4);
     box-shadow: var(--glow);
   }
 }
 
-/* Typing caret (welcome screen). */
+/* Block caret: the prompt that's waiting, the welcome screen. */
 .caret {
   display: inline-block;
-  width: 0.5em;
-  height: 1.05em;
+  width: 0.6em;
+  height: 1.15em;
   margin-left: 0.1em;
-  vertical-align: -0.15em;
-  background: var(--accent);
-  animation: caret-blink 0.9s steps(1) infinite;
+  vertical-align: -0.2em;
+  background: var(--ok);
+  animation: caret-blink 1s steps(1) infinite;
 }
 @keyframes caret-blink {
   50% {
@@ -111,13 +127,40 @@ body {
   }
 }
 
-/* Pulsing status dot (available / building). */
+/* Pulsing status dot (available / running). */
 .pulse-dot {
   animation: pulse-dot 1.6s ease-in-out infinite;
 }
 @keyframes pulse-dot {
   50% {
     opacity: 0.35;
+  }
+}
+
+/*
+ * A command typing itself at the prompt (components/terminal/TypedCommand).
+ * Without the attribute (server, no JS, reduced motion) it's simply there;
+ * "wait" hides it until its section is reached, "go" types it out.
+ */
+.typed {
+  display: inline-block;
+  overflow: hidden;
+  white-space: pre;
+  vertical-align: bottom;
+  width: calc(var(--chars) * 1ch);
+}
+.typed[data-run="wait"] {
+  width: 0;
+}
+.typed[data-run="go"] {
+  animation: type calc(var(--chars) * 55ms) steps(var(--chars)) forwards;
+}
+@keyframes type {
+  from {
+    width: 0;
+  }
+  to {
+    width: calc(var(--chars) * 1ch);
   }
 }
 
@@ -134,27 +177,27 @@ body {
 }
 
 /*
- * Welcome screen (components/layout/IntroScreen): "hello, world" types itself,
- * is erased, "Welcome to my portfolio" types in, then the screen fades.
- * CSS only (width in ch with steps()); once per session; skipped with reduced
- * motion; pointer-events: none so it never blocks the page.
+ * Boot screen (components/layout/IntroScreen): systemd-style lines print one
+ * by one, the login line appears, "Welcome to my portfolio" types itself, then
+ * the screen fades. CSS only; once per session; skipped with reduced motion;
+ * pointer-events: none so it never blocks the page.
  */
 .intro {
   position: fixed;
   inset: 0;
   z-index: 100;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  padding: 1.5rem;
+  gap: 0.15rem;
+  padding: 1.5rem max(1.5rem, calc(50vw - 30rem));
   background: var(--bg);
-  color: var(--fg);
+  color: var(--fg-muted);
   font-family: var(--font-mono);
-  font-size: clamp(1.5rem, 5vw, 3.5rem);
-  font-weight: 500;
-  letter-spacing: -0.03em;
+  font-size: clamp(0.8rem, 2.6vw, 1rem);
+  overflow: hidden;
   pointer-events: none;
-  animation: intro-exit 0.6s var(--ease-out) 3s forwards;
+  animation: intro-exit 0.5s var(--ease-out) 3s forwards;
 }
 html[data-intro="seen"] .intro {
   display: none;
@@ -164,40 +207,27 @@ html[data-intro="seen"] .intro {
     display: none;
   }
 }
-.intro-stage {
-  display: grid;
+.intro-line {
+  opacity: 0;
+  white-space: pre-wrap;
+  animation: intro-show 0s linear calc(0.15s + var(--i) * 0.2s) forwards;
 }
-.intro-hello,
 .intro-welcome {
-  grid-area: 1 / 1;
-  overflow: hidden;
+  margin-top: 1.25rem;
+  color: var(--fg);
+  font-size: clamp(1.15rem, 4.6vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
   white-space: nowrap;
+  max-width: 100%;
+}
+.intro-welcome .typed {
   width: 0;
+  animation: type 1s steps(23) 1.55s forwards;
 }
-.intro-hello {
-  animation:
-    intro-type-hello 0.7s steps(12) 0.2s forwards,
-    intro-erase 0.35s steps(12) 1.25s forwards;
-}
-.intro-welcome {
-  animation: intro-type-welcome 1s steps(23) 1.65s forwards;
-}
-@keyframes intro-type-hello {
+@keyframes intro-show {
   to {
-    width: 13ch;
-  }
-}
-@keyframes intro-erase {
-  from {
-    width: 13ch;
-  }
-  to {
-    width: 0;
-  }
-}
-@keyframes intro-type-welcome {
-  to {
-    width: 24ch;
+    opacity: 1;
   }
 }
 @keyframes intro-exit {
