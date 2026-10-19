@@ -25,16 +25,15 @@ export function getBuildInfo(repoUrl: string): BuildInfo {
 }
 
 /**
- * Numbered page sections, in order (the header shows them as 01–05 pills and
- * highlights the one in view). Contact is the separate "Let's talk" call to
- * action. The tests read this list.
+ * Page sections linked from the header, in page order (they are the pipeline
+ * stages after "checkout"; see app/data/pipeline.ts). The tests read this list.
  */
 export const NAV_ITEMS = [
-  { id: "experience", label: "Experience" },
-  { id: "projects", label: "Projects" },
   { id: "stack", label: "Stack" },
-  { id: "certifications", label: "Certifications" },
+  { id: "projects", label: "Projects" },
+  { id: "experience", label: "Experience" },
   { id: "about", label: "About" },
+  { id: "contact", label: "Contact" },
 ] as const;
 
-export type SectionId = (typeof NAV_ITEMS)[number]["id"] | "top" | "contact";
+export type SectionId = (typeof NAV_ITEMS)[number]["id"] | "top";

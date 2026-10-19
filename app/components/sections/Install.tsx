@@ -1,16 +1,16 @@
 import { stack } from "../../data/stack";
-import { StackPlayground } from "../ship/StackPlayground";
-import { Section } from "../ui/Section";
+import { StackPlayground } from "../pipeline/StackPlayground";
 import { TechTag } from "../ui/TechTag";
 
-/** The toolbox grouped like the CV, as logo chips — then all of it in a physics box to play with. */
-export function Stack() {
+/** Stage 02 · install — the dependencies: every tool with its logo, grouped like the CV, then the physics box. */
+export function Install() {
   return (
-    <Section id="stack" index={3} title="Tech stack" tagline="every tool with its logo, grouped by what it's for" intro="What I build, ship and run software with.">
-      <div className="mt-10 space-y-7">
+    <>
+      <p className="mt-6 max-w-2xl text-lg leading-relaxed text-fg-muted">What I build, ship and run software with.</p>
+      <div className="mt-10 space-y-6">
         {stack.map((group) => (
           <div key={group.id} data-reveal>
-            <h3 className="font-semibold">{group.title}</h3>
+            <h3 className="font-mono text-xs uppercase tracking-[0.14em] text-fg-subtle">{group.title}</h3>
             <ul className="mt-3 flex flex-wrap gap-2">
               {group.items.map((item) => (
                 <li key={item.name} title={item.detail}>
@@ -23,9 +23,8 @@ export function Stack() {
         ))}
       </div>
       <div className="mt-12">
-        <p className="hand mb-3 text-2xl text-fg-muted">or throw it all around ↓</p>
         <StackPlayground items={stack.flatMap((g) => g.items)} />
       </div>
-    </Section>
+    </>
   );
 }
