@@ -4,7 +4,7 @@
 
 - **Framework:** Next.js 16 (App Router), React 19, TypeScript strict, Node 22
 - **Estilos:** Tailwind CSS v4 (tokens CSS, tema oscuro único)
-- **Interacción / motion:** la página es un pipeline (etapas que pasan pending → running → passed al hacer scroll, logs de los datos), stack con física (matter-js); GSAP + Lenis para revelados (bajo demanda)
+- **Interacción / motion:** la página es una sesión de terminal (boot, un comando tipeado por sección, barra tmux con el estado de `make deploy`, shell interactiva en `lib/shell.ts`), stack con física (matter-js); GSAP + Lenis para revelados (bajo demanda)
 - **Formularios:** Formspree (fetch directo)
 - **Tests:** Vitest + Testing Library, Playwright + axe, Lighthouse CI
 - **Deploy:** Vercel (preview por PR)
@@ -36,7 +36,7 @@ docs/ai/          # Contexto por capas para IA
 
 - No inventar métricas, fechas, empleadores, certificaciones ni uso de herramientas.
 - Lo que se está aprendiendo va como nota del grupo en `stack.ts`, no como tecnología usada.
-- Contenido del CV del autor con el diseño "Pipeline" (la página es un CI/CD run, docs/ai/02): no cambiar estructura ni dirección de arte sin pedirlo. Las referencias externas son inspiración, nunca calco.
+- Contenido del CV del autor con el diseño "Shell" (la página es una sesión de terminal, docs/ai/02): no cambiar estructura ni dirección de arte sin pedirlo. Las referencias externas son inspiración, nunca calco.
 - Dato desconocido → `[COMPLETAR: …]` (listados por `npm run check:placeholders`).
 
 ## Contexto para IA (leer antes de tocar código)
@@ -58,8 +58,8 @@ Si un cambio altera algo documentado (contratos, tokens, eventos de log), actual
 **Agentes** (`.claude/agents/`): `architect`, `frontend-developer`, `backend-developer`,
 `devops-engineer`, `content-editor`, `test-engineer`, `code-reviewer`.
 
-**Skills** (`.claude/skills/`): `git-step`, `verify`, `layer-context`, `add-project`, `design-token`, `pipeline-page`
-(etapas, línea, nodos, logs, badge, física — leerla antes de tocar el concepto).
+**Skills** (`.claude/skills/`): `git-step`, `verify`, `layer-context`, `add-project`, `design-token`, `terminal-session`
+(comandos, prompt, barra tmux, shell, boot, física — leerla antes de tocar el concepto).
 
 **Skills de diseño creativo** (terceros, ver `.claude/skills/THIRD_PARTY.md`): `frontend-design` (oficial de
 Anthropic), `awwwards` (dirección creativa), `gsap-scrolltrigger` (animaciones guiadas por scroll),

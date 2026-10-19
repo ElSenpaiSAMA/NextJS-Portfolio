@@ -59,7 +59,7 @@ server errors land in the same Vercel log stream. A per-page cap prevents error 
 Next.js 16 (App Router, static single page, `next/image`) · React 19 · TypeScript (strict) · Tailwind CSS 4 ·
 Formspree (contact) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel.
 
-"Pipeline" design: the page is a CI/CD run. A glowing line runs down the left and every section is a stage: checkout (who I am), install (stack), build (projects), test (experience and certifications), release (about) and deploy (contact). As you read, a job rides the line, each stage goes pending, then running (amber), then passed (green), and prints a log computed from the real content (technologies, projects, companies, roles). The header shows the live status, from "running 3/6 · build" to "passed 6/6". The stack also comes as a physics toy (matter-js). Everything respects prefers-reduced-motion, and the concept is documented for AI agents in `.claude/skills/pipeline-page`.
+"Shell" design: the page is a terminal session on `matias@speroni`. It boots like Linux, then every section is the output of a command that types itself as you reach it: `neofetch` (who I am, every value computed from the content), `cat stack.yaml`, `ls -l ~/projects`, `git log` (experience), `cat about.md` and `make deploy` (contact). Each command is also a stage of the pipeline: a tmux-style status bar at the bottom is the navigation and shows `make deploy` going from "running 3/6 · build" to "passed 6/6". And there is a real shell to type into: `help`, `ls`, `cat about.md`, `cd projects`, `open mira`, `cv`, with Tab completion and history (press `/` anywhere). The stack also comes as a physics toy (matter-js). Everything respects prefers-reduced-motion, and the concept is documented for AI agents in `.claude/skills/terminal-session`.
 
 ## Local development
 
@@ -89,16 +89,16 @@ E2E_BASE_URL=https://<preview-url> npm run test:e2e
 
 ```
 app/
-  layout.tsx                shell (sticky header, main, footer), font, metadata
+  layout.tsx                shell (title bar, main, footer, status bar), font, metadata
   page.tsx                  single page: Hero · Projects · Experience · Stack · About · Contact + JSON-LD
   opengraph-image.tsx       generated social card
   sitemap.ts, robots.ts, icon.svg, not-found.tsx
   error.tsx, global-error.tsx
   api/log/route.ts          browser log ingestion
   components/
-    layout/                 welcome screen, scroll choreography, header, footer
-    pipeline/               Stage, StageNode, StageLog, Spine, PipelineBadge, StackPlayground (matter-js)
-    sections/               Checkout, Install, Build, Test, Release, Deploy + ContactForm
+    layout/                 boot screen, scroll choreography, title bar, footer
+    terminal/               Command, Prompt, TypedCommand, StatusBar (nav), Shell, DeployRun, StackPlayground (matter-js)
+    sections/               Whoami, Stack, Projects, Experience, About, Contact + ContactForm
     ui/                     small primitives (Section, ButtonLink, TechTag, icons)
   data/                     all copy and content, typed — edit here, not in components
   lib/                      logger, client logger, log schema, contact, theme, site config
