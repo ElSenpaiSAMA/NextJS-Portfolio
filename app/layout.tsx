@@ -1,18 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Caveat, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { IntroScreen } from "./components/layout/IntroScreen";
 import { ScrollChoreography } from "./components/layout/ScrollChoreography";
 import { SiteFooter } from "./components/layout/SiteFooter";
 import { SiteHeader } from "./components/layout/SiteHeader";
 import { profile } from "./data/profile";
-import { CONFIG_INIT_SCRIPT, DEFAULT_HTML_ATTRS } from "./lib/config-init";
 import { INTRO_INIT_SCRIPT } from "./lib/intro";
 import { siteUrl } from "./lib/site";
 
-// Geist + Geist Mono: the type family of Vercel/Next.js. portfolio.config.ts can switch the UI to mono.
+// Geist + Geist Mono for the UI and code; Caveat for the handwritten asides ("hello, I'm").
 const geist = Geist({ variable: "--font-geist", subsets: ["latin"], display: "swap" });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" });
+const caveat = Caveat({ variable: "--font-caveat", subsets: ["latin"], weight: ["600"], display: "swap" });
 
 const TITLE = `${profile.name} — ${profile.role}`;
 const DESCRIPTION =
@@ -39,25 +39,25 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#fbfbfa",
-  colorScheme: "light dark",
+  themeColor: "#060708",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     // data-intro is set by INTRO_INIT_SCRIPT before hydration, so React must
     // not warn about the attribute differing from the server markup.
-    <html lang="en" suppressHydrationWarning {...DEFAULT_HTML_ATTRS} className={`${geist.variable} ${geistMono.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${geist.variable} ${geistMono.variable} ${caveat.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: INTRO_INIT_SCRIPT }} />
-        {/* Re-applies the visitor's saved portfolio.config before first paint */}
-        <script dangerouslySetInnerHTML={{ __html: CONFIG_INIT_SCRIPT }} />
       </head>
       <body className="min-h-screen antialiased">
         <IntroScreen />
         <ScrollChoreography />
         <SiteHeader />
-        <main id="main">{children}</main>
+        <main id="main" className="pt-28 lg:pt-20">
+          {children}
+        </main>
         <SiteFooter />
       </body>
     </html>

@@ -5,10 +5,10 @@
 
 ## layout.tsx
 
-- Fuentes: `Geist` (`--font-geist`) y `Geist_Mono` (`--font-geist-mono`); `data-font="mono"` pasa toda la UI a mono.
+- Fuentes: `Geist` (`--font-geist`), `Geist_Mono` (`--font-geist-mono`) y `Caveat` 600 (`--font-caveat`, voz manuscrita).
 - `metadata`: `metadataBase` = `siteUrl`, título "Matias Speroni — Backend & DevOps Engineer", description,
   canonical `/`, Open Graph (`type: profile`), Twitter `summary_large_image`, robots.
-- `<script>` inline con `INTRO_INIT_SCRIPT` ("intro ya vista en esta sesión") → `<html suppressHydrationWarning>`. Tema oscuro único: `viewport` con `themeColor` `#fbfbfa` y `colorScheme: dark`. `<ScrollChoreography />` (capa 03) va antes del header. `<html>` arranca con `data-theme="light" data-font="sans"` y un segundo script inline (`CONFIG_INIT_SCRIPT`, `lib/config-init.ts`) reaplica la config guardada por el visitante antes de pintar, revalidando cada valor.
+- `<script>` inline con `INTRO_INIT_SCRIPT` ("intro ya vista en esta sesión") → `<html suppressHydrationWarning>`. Tema oscuro único: `viewport` con `themeColor` `#060708` y `colorScheme: dark`. `<ScrollChoreography />` (capa 03) va antes del header. `<main>` deja lugar al header fijo (`pt-28`, `lg:pt-20`); `page.tsx` arma la grilla de dos columnas con el compañero.
 - `<IntroScreen />` es el primer hijo de `<body>` (capa 03).
 - Estructura: `SiteHeader` (sticky) → `<main id="main">` → `SiteFooter`.
 
@@ -21,7 +21,7 @@ Compone las secciones en orden y el JSON-LD `Person` (incluye la foto). **El ord
 
 | Archivo | Genera |
 |---------|--------|
-| `opengraph-image.tsx` | PNG 1200×630 (tema claro): nombre y rol junto a un deploy terminado con las etapas reales (`PIPELINE`) |
+| `opengraph-image.tsx` | PNG 1200×630 negro con brillo azul: estado, nombre, subrayado azul y rol |
 | `icon.svg` | favicon: triángulo de deploy sobre negro con punto verde de "Ready" |
 | `sitemap.ts` | `/` (el CV se sirve estático en `/CV_Matias_Speroni_DO.pdf`) |
 | `robots.ts` | bloquea `/api/` |
