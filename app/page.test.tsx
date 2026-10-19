@@ -1,6 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { PIPELINE } from "./data/console";
+import { PIPELINE } from "./data/highlights";
 import { profile } from "./data/profile";
 import { experience } from "./data/experience";
 import { projects } from "./data/projects";
@@ -18,12 +18,11 @@ describe("Home page", () => {
     expect(screen.getByText(new RegExp(profile.availability))).toBeInTheDocument();
   });
 
-  it("runs the real CI stages in a decorative hero terminal", () => {
+  it("shows the real CI stages in the pipeline tile", () => {
     render(<HomePage />);
-    const terminal = screen.getByTestId("hero-terminal");
-    expect(terminal).toHaveAttribute("aria-hidden", "true");
-    expect(terminal).toHaveTextContent(PIPELINE.command);
-    for (const stage of PIPELINE.stages) expect(terminal).toHaveTextContent(stage);
+    const tile = screen.getByTestId("pipeline-tile");
+    expect(tile).toHaveTextContent(PIPELINE.command);
+    for (const stage of PIPELINE.stages) expect(within(tile).getByText(stage)).toBeInTheDocument();
   });
 
   it("backs the hero and contact with muted, decorative footage", () => {
@@ -56,7 +55,7 @@ describe("Home page", () => {
 
   it("lists every job with its roles and periods", () => {
     render(<HomePage />);
-    const section = screen.getByRole("region", { name: "Experience" });
+    const section = screen.getByRole("region", { name: "Experience." });
     for (const item of experience) {
       expect(within(section).getByRole("heading", { name: item.company })).toBeInTheDocument();
       for (const role of item.roles) {
@@ -68,7 +67,7 @@ describe("Home page", () => {
 
   it("shows the full stack, grouped", () => {
     render(<HomePage />);
-    const section = screen.getByRole("region", { name: "Toolbox" });
+    const section = screen.getByRole("region", { name: "Tech specs." });
     for (const group of stack) {
       expect(within(section).getByRole("heading", { name: group.title })).toBeInTheDocument();
       for (const item of group.items) expect(within(section).getAllByText(item.name).length).toBeGreaterThan(0);
@@ -77,7 +76,7 @@ describe("Home page", () => {
 
   it("shows the portrait, bio facts and direct contact channels", () => {
     render(<HomePage />);
-    const about = screen.getByRole("region", { name: "Who I am" });
+    const about = screen.getByRole("region", { name: "Who I am." });
     expect(within(about).getByRole("img", { name: `Portrait of ${profile.name}` })).toBeInTheDocument();
     // jsdom doesn't map <dt> wrapped in <div> to role "term", so query the list directly.
     const facts = about.querySelector("dl")!;

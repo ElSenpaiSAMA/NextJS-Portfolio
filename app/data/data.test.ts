@@ -2,9 +2,8 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { certifications, education, experience } from "./experience";
-import { NAV_ITEMS } from "../lib/site";
-import { BOOT_LINES, PIPELINE, SECTION_COMMANDS } from "./console";
-import { contactFootage, heroFootage } from "./media";
+import { HIGHLIGHTS, PIPELINE, STORY } from "./highlights";
+import { heroFootage, storyFootage } from "./media";
 import { profile } from "./profile";
 import { projects } from "./projects";
 import { stack } from "./stack";
@@ -107,7 +106,7 @@ describe("stack", () => {
 
 describe("media", () => {
   it("ships every footage file it references, with credits", () => {
-    for (const clip of [heroFootage, contactFootage]) {
+    for (const clip of [heroFootage, storyFootage]) {
       const files = [clip.poster, clip.loop.mp4, clip.loop.webm, clip.scrub?.mp4, clip.scrub?.webm].filter((f): f is string => Boolean(f));
       for (const file of files) expect(publicAssetExists(file), file).toBe(true);
       expect(isHttpsUrl(clip.source.url), clip.source.url).toBe(true);
@@ -115,10 +114,14 @@ describe("media", () => {
   });
 });
 
-describe("console copy", () => {
-  it("has a shell command for every section", () => {
-    for (const { id } of NAV_ITEMS) expect(SECTION_COMMANDS[id], id).toMatch(/\S/);
-    expect(BOOT_LINES.length).toBeGreaterThan(0);
+describe("product-page copy", () => {
+  it("has a figure, title and body on every highlight, and three story chapters", () => {
+    for (const tile of HIGHLIGHTS) {
+      expect(tile.figure, tile.title).toMatch(/\S/);
+      expect(tile.title).toMatch(/\S/);
+      expect(tile.body.length, tile.title).toBeGreaterThan(20);
+    }
+    expect(STORY.map((chapter) => chapter.title)).toEqual(["Build.", "Ship.", "Run."]);
   });
 
   it("only shows pipeline stages the real CI runs", () => {

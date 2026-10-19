@@ -15,10 +15,18 @@ test.describe("home page", () => {
 
   test("every image loads (projects, portrait, stack logos)", async ({ page }) => {
     await page.goto("/");
-    // Lazy images only load near the viewport, so walk the page in small steps.
+    // Lazy images only load near the viewport, so walk the page in small steps —
+    // and slide the projects gallery sideways, as its cards sit off to the right.
     const height = await page.evaluate(() => document.documentElement.scrollHeight);
     for (let y = 0; y <= height; y += 400) {
       await page.evaluate((top) => window.scrollTo(0, top), y);
+      await page.waitForTimeout(60);
+    }
+    const gallery = page.getByTestId("projects-gallery");
+    await gallery.scrollIntoViewIfNeeded();
+    const width = await gallery.evaluate((el) => el.scrollWidth);
+    for (let x = 0; x <= width; x += 300) {
+      await gallery.evaluate((el, left) => el.scrollTo({ left }), x);
       await page.waitForTimeout(60);
     }
 
@@ -36,10 +44,11 @@ test.describe("home page", () => {
     expect(await page.locator("#projects img").count()).toBe(6);
   });
 
-  test("the hero terminal finishes its pipeline run", async ({ page }) => {
+  test("the pipeline tile lists every CI stage", async ({ page }) => {
     await page.goto("/");
-    // Pure CSS timeline: the last stage flips to its check mark, then the summary line shows.
-    await expect(page.getByText("all checks passed")).toBeVisible({ timeout: 10_000 });
+    // The checks pop in one by one as the tile scrolls into view.
+    await page.getByTestId("pipeline-tile").scrollIntoViewIfNeeded();
+    await expect(page.getByTestId("pipeline-tile").getByText("deploy to vercel")).toBeVisible({ timeout: 10_000 });
   });
 
   test("hero footage scrubs with the scroll on desktop and loops on phones", async ({ page }) => {
