@@ -1,10 +1,11 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { certifications, education, experience } from "./experience";
+import { NAV_ITEMS } from "../lib/site";
+import { STAGES } from "./pipeline";
 import { profile } from "./profile";
 import { projects } from "./projects";
-import { PIPELINE } from "./ship";
 import { stack } from "./stack";
 
 /** Content integrity: catches broken data and missing assets before they reach the page. */
@@ -103,23 +104,11 @@ describe("stack", () => {
   });
 });
 
-describe("pipeline", () => {
-
-  it("only shows pipeline stages the real CI runs", () => {
-    // The hero claims these run on every push: keep them honest against ci.yml.
-    const ci = readFileSync(join(process.cwd(), ".github/workflows/ci.yml"), "utf8").toLowerCase();
-    const evidence: Record<string, string> = {
-      lint: "npm run lint",
-      typecheck: "npm run typecheck",
-      "unit tests": "npm test",
-      build: "npm run build",
-      "e2e (playwright + axe)": "npm run test:e2e",
-      "lighthouse ci": "lighthouse",
-    };
-    for (const stage of PIPELINE.stages) {
-      if (stage === "deploy to vercel") continue; // Vercel deploys through its Git integration, not ci.yml
-      expect(evidence[stage], `unknown stage "${stage}"`).toBeDefined();
-      expect(ci, stage).toContain(evidence[stage]);
-    }
+describe("pipeline stages", () => {
+  it("covers every header section once, starting with checkout", () => {
+    expect(STAGES[0]).toMatchObject({ id: "top", step: "checkout" });
+    const ids = STAGES.map((s) => s.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    for (const { id } of NAV_ITEMS) expect(ids).toContain(id);
   });
 });

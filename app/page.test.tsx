@@ -1,6 +1,6 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { experience as jobs } from "./data/experience";
+import { STAGES } from "./data/pipeline";
 import { profile } from "./data/profile";
 import { experience } from "./data/experience";
 import { projects } from "./data/projects";
@@ -13,22 +13,19 @@ describe("Home page", () => {
     render(<HomePage />);
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(profile.name);
-    expect(screen.getByText(profile.role, { selector: "strong" })).toBeInTheDocument();
+    expect(screen.getByText(profile.role, { selector: "p" })).toBeInTheDocument();
     expect(screen.getAllByText(new RegExp(profile.availability)).length).toBeGreaterThan(0);
   });
 
-  it("has a companion that narrates, answers from the CV and can deploy", () => {
-    render(<HomePage />);
-    const companion = screen.getByTestId("companion");
-    // Guide: the intro narration (live region holds the full text).
-    expect(within(companion).getAllByText(new RegExp(`I'm ${profile.name.split(" ")[0]}`)).length).toBeGreaterThan(0);
-    // Ask: a question answered with the real companies.
-    fireEvent.click(within(companion).getByRole("tab", { name: "Ask" }));
-    fireEvent.click(within(companion).getByRole("button", { name: "Where have you worked?" }));
-    for (const job of jobs) expect(within(companion).getAllByText(new RegExp(job.company)).length).toBeGreaterThan(0);
-    // Deploy: the real pipeline.
-    fireEvent.click(within(companion).getByRole("tab", { name: "Deploy" }));
-    expect(within(companion).getByTestId("deploy")).toBeInTheDocument();
+  it("lays the page out as a pipeline: one stage per section, in order, each with its log", () => {
+    const { container } = render(<HomePage />);
+    const stages = [...container.querySelectorAll<HTMLElement>("[data-stage]")].map((el) => el.dataset.stage);
+    expect(stages).toEqual(STAGES.map((s) => s.id));
+    for (const stage of STAGES) {
+      expect(screen.getByTestId(`node-${stage.id}`)).toHaveTextContent(`Stage ${stage.step}`);
+      // Without motion (jsdom) the whole log is printed.
+      expect(screen.getByTestId(`log-${stage.id}`).querySelectorAll("li").length).toBeGreaterThanOrEqual(3);
+    }
   });
 
   it("renders a section for every nav item", () => {
@@ -60,7 +57,7 @@ describe("Home page", () => {
 
   it("shows the full stack, grouped", () => {
     render(<HomePage />);
-    const section = screen.getByRole("region", { name: "Tech stack" });
+    const section = screen.getByRole("region", { name: "Stack" });
     for (const group of stack) {
       expect(within(section).getByRole("heading", { name: group.title })).toBeInTheDocument();
       for (const item of group.items) expect(within(section).getAllByText(item.name).length).toBeGreaterThan(0);
@@ -69,7 +66,7 @@ describe("Home page", () => {
 
   it("shows the portrait, bio facts and direct contact channels", () => {
     render(<HomePage />);
-    const about = screen.getByRole("region", { name: "About me" });
+    const about = screen.getByRole("region", { name: "About" });
     expect(within(about).getByRole("img", { name: `Portrait of ${profile.name}` })).toBeInTheDocument();
     // jsdom doesn't map <dt> wrapped in <div> to role "term", so query the list directly.
     const facts = about.querySelector("dl")!;

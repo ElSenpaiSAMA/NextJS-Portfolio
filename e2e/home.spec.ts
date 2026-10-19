@@ -1,6 +1,6 @@
 import { expect, test } from "./fixtures";
 
-const SECTIONS = ["experience", "projects", "stack", "certifications", "about"];
+const SECTIONS = ["stack", "projects", "experience", "about", "contact"];
 
 test.describe("home page", () => {
   test("loads with who I am, every section and no errors", async ({ page }) => {
@@ -9,7 +9,7 @@ test.describe("home page", () => {
 
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Matias Speroni");
     await expect(page.getByText("Backend & DevOps Engineer").first()).toBeVisible();
-    for (const id of [...SECTIONS, "contact"]) await expect(page.locator(`section#${id}`)).toBeAttached();
+    for (const id of SECTIONS) await expect(page.locator(`section#${id}`)).toBeAttached();
     await expect(page.getByTestId("build-info")).toBeVisible();
   });
 
@@ -37,31 +37,21 @@ test.describe("home page", () => {
     expect(await page.locator(`#projects img[alt^="Screenshot"]`).count()).toBe(6);
   });
 
-  test("the companion narrates the section in view (desktop)", async ({ page, isMobile }) => {
-    test.skip(isMobile, "The companion is a sheet on phones");
+  test("the pipeline runs as you read: stages go running → passed and logs print", async ({ page }) => {
     await page.goto("/");
-    const companion = page.getByTestId("companion");
+    const badge = page.getByTestId("pipeline-badge");
+    await expect(badge).toContainText("running 1/6 · checkout");
+
     await page.locator("section#projects").scrollIntoViewIfNeeded();
-    await page.evaluate(() => window.scrollBy(0, 200));
-    await expect(companion.getByText(/viewing:/)).toContainText("02 Projects");
-    await expect(companion.locator("[aria-live]").first()).toContainText("projects here");
-  });
+    await page.evaluate(() => window.scrollBy(0, 150));
+    await expect(page.getByTestId("node-projects")).toHaveAttribute("data-state", "running");
+    await expect(page.getByTestId("node-stack")).toHaveAttribute("data-state", "passed");
+    await expect(badge).toContainText("running 3/6 · build");
+    await expect(page.getByTestId("log-projects")).toContainText("build succeeded", { timeout: 5_000 });
 
-  test("ask the companion and deploy from it", async ({ page, isMobile }) => {
-    await page.goto("/");
-    // Phones open the companion as a sheet; desktop has it beside the content.
-    const companion = isMobile ? page.getByRole("dialog") : page.getByTestId("companion");
-    if (isMobile) await page.getByRole("button", { name: /Ask Matias/ }).click();
-
-    await companion.getByRole("tab", { name: "Ask" }).click();
-    await companion.getByRole("button", { name: "Where have you worked?" }).click();
-    await expect(companion.getByTestId("companion-answer")).toContainText("Imagine Group", { timeout: 10_000 });
-
-    await companion.getByRole("tab", { name: "Deploy" }).click();
-    const deploy = companion.getByTestId("deploy");
-    await expect(deploy.getByRole("status")).toContainText(/Deployed to production in \d+\.\d s/, { timeout: 15_000 });
-    await deploy.getByRole("button", { name: "Redeploy" }).click();
-    await expect(deploy.getByRole("button", { name: "Deploying…" })).toBeDisabled();
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await expect(badge).toContainText("passed 6/6");
+    await expect(page.getByTestId("node-contact")).toHaveAttribute("data-state", "passed");
   });
 
   test("the stack drops into the physics box", async ({ page }) => {
