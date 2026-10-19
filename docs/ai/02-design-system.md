@@ -2,67 +2,58 @@
 
 **Archivos:** `app/globals.css`
 
-## Dirección de arte: "Source → Build"
+## Dirección de arte: "Ship it."
 
-El portfolio es **código que se compila delante del visitante**. Pedido del autor: algo "enfocado a
-programación a nivel diseño", con efectos y animaciones, que reúna todo lo pedido antes:
-- contenido del CV;
-- stack completo sin niveles;
-- pantalla de bienvenida;
-- video real de informática con scroll;
-- animaciones.
+El visitante **opera** el portfolio como un DevOps:
+- aprieta **Deploy** y ve correr el pipeline real del sitio;
+- edita `portfolio.config.ts` y el sitio entero cambia (acento, tema claro/oscuro, radio, fuente);
+- juega con el stack como bloques con física.
 
-Le dio libertad creativa.
+Pedido del autor: "sorprendeme", sin video, enfocado a programación.
 
-La pieza firma: el **video del data center renderizado en ASCII en tiempo real**. Al bajar se avanza por
-el pasillo hecho de caracteres y, a mitad del scroll, el ASCII "compila" y se vuelve el video real.
+Estética de **herramienta de desarrollo moderna** (Vercel, Linear, GitHub):
+- tema **claro** por defecto sobre una grilla técnica tenue, con el oscuro a una línea de config;
+- Geist + Geist Mono;
+- un acento configurable;
+- verde, ámbar y rojo solo para estados (Ready, Building, error).
 
-Historial de direcciones descartadas:
-- "Night Shift" (puerto 3D, video de puerto);
-- "Ops console" (terminal, clúster 3D, video);
-- "Product page" (estilo Apple).
+Historial: se descartaron "Night Shift", "Ops console", "Product page" (Apple) y "Source → Build" (ASCII
+sobre video).
 
-Reglas (skills `frontend-design`, `awwwards`, `gsap-scrolltrigger` y la propia **`code-effects`**):
-- Cada efecto significa algo del mundo del código: compilar, tipear, decodificar, renderizar.
-- Geist para titulares y texto, Geist Mono para todo lo "de código" (rutas, etiquetas, botones, código).
-- Un azul (`accent`) para acciones; los colores de sintaxis solo dentro de código.
-- Detalle de efectos, reglas y depuración: `.claude/skills/code-effects/SKILL.md`.
+Interacciones: skill **`ship-interactions`** (`.claude/skills/ship-interactions/SKILL.md`).
 
-## Tokens (`:root` en `globals.css`)
+## Tokens (`:root`, y `:root[data-theme="dark"]`)
 
-| Token | Valor | Uso |
-|-------|-------|-----|
-| `ink` / `ink-2` / `ink-3` | `#07080b` / `#0e1015` / `#161922` | página / paneles y editor / chips e inputs |
-| `line` | `#252a36` | líneas finas, bordes |
-| `fg` | `#ecebe6` | texto principal |
-| `fg-muted` / `fg-subtle` | `#a2a5b3` / `#858998` | secundario / terciario, comentarios, gutters (≥ 4.5:1 incluso sobre `ink-3`) |
-| `accent` | `#5b8cff` | botones, links, foco, rutas, glifos medios del ASCII |
-| `violet` / `pink` / `mint` / `amber` | `#b69cff` / `#ff8cc3` / `#5eead4` / `#fbbf24` | sintaxis: keywords / strings / funciones y ✓ / tipos y "in development" |
-| `error` | `#ff6b6b` | errores |
+| Token | Claro | Oscuro | Uso |
+|-------|-------|--------|-----|
+| `bg` | `#fbfbfa` | `#0b0b0c` | página (con grilla `--grid`) |
+| `surface` / `surface-2` | `#ffffff` / `#f2f2ef` | `#141416` / `#1c1c1f` | tarjetas / logs, chips, paneles |
+| `line` | `#e2e2dd` | `#2a2a2e` | bordes |
+| `fg` / `fg-muted` / `fg-subtle` | `#111113` / `#56565c` / `#6b6b71` | `#f2f2f0` / `#a9a9ae` / `#8c8c92` | texto (≥ 4.5:1 sobre `surface-2`) |
+| `ok` / `warn` / `error` | `#166534` / `#b45309` / `#dc2626` | `#4ade80` / `#fbbf24` / `#f87171` | Ready y checks / Building / errores |
+| `accent` | `#2f5bff` (config) | igual | botones (texto blanco), barra del deploy |
+| `accent-text` | `= accent` | `color-mix(accent 60%, white)` | acento usado como texto, legible en ambos temas |
+| `--r` | `12px` (config) | igual | radio de todo (`rounded-ui`) |
 
-Clases de sintaxis `.tok-<kind>` para los tokens de `lib/source-code.ts`. Utilidad `display`
-(600, tracking -0.045em, interlineado 0.92).
+`data-font="mono"` en `<html>` cambia la fuente de toda la UI a Geist Mono.
+
+Clases de sintaxis del editor: `.tok-key|string|number|keyword|comment|punct`, con variantes oscuras.
 
 Excepciones de color fuera de tokens:
-- `AsciiCanvas.tsx` (`MID`/`HIGH`): el canvas no lee variables CSS por cuadro;
-- velos `rgb(7 8 11 / α)` sobre el video;
+- colores de sintaxis (`.tok-*`);
+- hover de bordes (`hover:border-fg-subtle`);
 - `opengraph-image.tsx` e `icon.svg`;
-- `viewport.themeColor` (`#07080b`).
+- `viewport.themeColor`.
 
 ## Tipografía
 
-`Geist` + `Geist_Mono` (`next/font`, `--font-geist` / `--font-geist-mono` → `font-sans` / `font-mono`):
-la familia de Vercel/Next.js, las herramientas con las que el sitio se construye y despliega.
+`Geist` + `Geist_Mono` (`next/font`). Titulares con la utilidad `display` (600, tracking -0.045em).
+Etiquetas de sección en mono, mayúsculas espaciadas y pequeñas.
 
 ## CSS
 
-- **Pantalla de build** (`.intro*`):
-  - `$ next build`, los módulos reales "compilando" uno por uno;
-  - un contador 0→100 % (`@property --build` entero + `counter()`), la barra y "Welcome to my portfolio";
-  - después el panel se recorta hacia arriba.
-  - Una vez por sesión; `pointer-events: none`.
-- `.glitch`: split RGB de los screenshots al hover (dos copias con filtros rojo/azul que tiemblan).
-- `.tape`: cintas infinitas del stack.
-- `html[data-custom-cursor]` oculta el cursor nativo solo donde está montado el caret (desktop con movimiento).
-- `prefers-reduced-motion`: sin intro, cintas y glitch quietos, transiciones casi nulas. En JS: sin GSAP,
-  Lenis ni cursor; el ASCII dibuja un cuadro del poster.
+- **Bienvenida** (`.intro*`): `hello, world` se tipea (ancho en `ch` con `steps`), se borra y se tipea
+  "Welcome to my portfolio"; después la pantalla se desvanece. Una vez por sesión; `pointer-events: none`.
+- `.pulse-dot`: estado "Building".
+- `prefers-reduced-motion`: sin intro ni pulso, transiciones casi nulas. En JS: el deploy aparece
+  terminado, la física no carga y no hay revelados.

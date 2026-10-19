@@ -1,153 +1,131 @@
 @import "tailwindcss";
 
 /*
- * "Source → Build" — the portfolio as code that compiles in front of you.
- * Ink background, Geist + Geist Mono, one electric blue for actions, and the
- * syntax-highlighting colours (violet keywords, pink strings, mint functions)
- * as the only other accents. Every text/background pair meets WCAG AA.
+ * "Ship it." — the portfolio as a developer tool you operate: a deploy
+ * button, an editable config, a physics playground. Light by default (a
+ * clean dev-tool surface over a faint blueprint grid), dark one config line
+ * away. --accent and --r are set live by portfolio.config.ts (lib/site-config).
+ * Every default text/background pair meets WCAG AA in both themes.
  */
 
 :root {
-  --ink: #07080b; /* page */
-  --ink-2: #0e1015; /* panels, editor */
-  --ink-3: #161922; /* raised: chips, inputs */
-  --line: #252a36; /* hairlines */
-  --fg: #ecebe6; /* primary text */
-  --fg-muted: #a2a5b3; /* secondary text */
-  --fg-subtle: #858998; /* tertiary, comments, gutters (≥ 4.5:1 on ink-2) */
-  --accent: #5b8cff; /* actions, links, focus, cursor */
-  --violet: #b69cff; /* syntax: keywords */
-  --pink: #ff8cc3; /* syntax: strings */
-  --mint: #5eead4; /* syntax: functions · passed checks */
-  --amber: #fbbf24; /* syntax: types · "in development" */
-  --error: #ff6b6b;
+  --accent: #2f5bff;
+  --r: 12px;
+  --bg: #fbfbfa;
+  --surface: #ffffff;
+  --surface-2: #f2f2ef;
+  --line: #e2e2dd;
+  --fg: #111113;
+  --fg-muted: #56565c;
+  --fg-subtle: #6b6b71;
+  --ok: #166534;
+  --warn: #b45309;
+  --error: #dc2626;
+  --grid: rgb(17 17 19 / 0.045);
+  /* Accent as text: the raw accent in light mode, lifted towards white in dark mode. */
+  --accent-text: var(--accent);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0b0b0c;
+  --surface: #141416;
+  --surface-2: #1c1c1f;
+  --line: #2a2a2e;
+  --fg: #f2f2f0;
+  --fg-muted: #a9a9ae;
+  --fg-subtle: #8c8c92;
+  --ok: #4ade80;
+  --warn: #fbbf24;
+  --error: #f87171;
+  --grid: rgb(255 255 255 / 0.04);
+  --accent-text: color-mix(in oklab, var(--accent) 60%, white);
   color-scheme: dark;
 }
 
 @theme inline {
-  --color-ink: var(--ink);
-  --color-ink-2: var(--ink-2);
-  --color-ink-3: var(--ink-3);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
   --color-line: var(--line);
   --color-fg: var(--fg);
   --color-fg-muted: var(--fg-muted);
   --color-fg-subtle: var(--fg-subtle);
   --color-accent: var(--accent);
-  --color-violet: var(--violet);
-  --color-pink: var(--pink);
-  --color-mint: var(--mint);
-  --color-amber: var(--amber);
+  --color-accent-text: var(--accent-text);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
   --color-error: var(--error);
+  --radius-ui: var(--r);
 
-  /* Injected by next/font in app/layout.tsx */
+  /* Injected by next/font in app/layout.tsx; data-font="mono" swaps the whole UI to mono. */
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, "Cascadia Code", Menlo, monospace;
+  --font-mono: var(--font-geist-mono), ui-monospace, Menlo, monospace;
+}
+
+:root[data-font="mono"] {
+  --font-sans: var(--font-geist-mono), ui-monospace, Menlo, monospace;
 }
 
 body {
-  background-color: var(--ink);
+  background-color: var(--bg);
+  /* Faint blueprint grid: the canvas of a dev tool. */
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: 56px 56px;
   color: var(--fg);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease;
 }
 
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 ::selection {
   background: var(--accent);
-  color: var(--ink);
+  color: #fff;
 }
 
 /* Big tight display type. */
 @utility display {
   font-weight: 600;
   letter-spacing: -0.045em;
-  line-height: 0.92;
+  line-height: 0.95;
+  text-wrap: balance;
 }
 
-/* Syntax colours for generated code (lib/source-code.ts TokenKind). */
-.tok-keyword { color: var(--violet); }
-.tok-type { color: var(--amber); }
-.tok-prop { color: var(--accent); }
-.tok-string { color: var(--pink); }
-.tok-number { color: var(--amber); }
-.tok-fn { color: var(--mint); }
+/* Syntax colours for the config editor (works on both themes). */
+.tok-key { color: var(--accent-text); }
+.tok-string { color: #c2410c; }
+:root[data-theme="dark"] .tok-string { color: #fdba74; }
+.tok-number { color: #7c3aed; }
+:root[data-theme="dark"] .tok-number { color: #c4b5fd; }
+.tok-keyword { color: #be185d; }
+:root[data-theme="dark"] .tok-keyword { color: #f9a8d4; }
 .tok-comment { color: var(--fg-subtle); font-style: italic; }
 .tok-punct { color: var(--fg-muted); }
-.tok-plain { color: var(--fg); }
 
-/* Custom caret cursor (components/fx/Cursor): only where it's mounted. */
-html[data-custom-cursor] body,
-html[data-custom-cursor] a,
-html[data-custom-cursor] button,
-html[data-custom-cursor] input,
-html[data-custom-cursor] textarea {
-  cursor: none;
+/* Pulsing status dot ("Building"). */
+.pulse-dot {
+  animation: pulse-dot 1.4s ease-in-out infinite;
 }
-
-/*
- * RGB-split glitch on project screenshots: two tinted copies of the image
- * (::before/::after, CSS-filtered red and blue) jitter apart on hover.
- */
-.glitch {
-  position: relative;
-}
-.glitch::before,
-.glitch::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--glitch-image) center top / cover no-repeat;
-  opacity: 0;
-  mix-blend-mode: screen;
-  pointer-events: none;
-}
-.glitch::before {
-  filter: sepia(1) saturate(6) hue-rotate(-45deg);
-}
-.glitch::after {
-  filter: sepia(1) saturate(6) hue-rotate(175deg);
-}
-.group:hover .glitch::before {
-  opacity: 0.8;
-  animation: glitch-x 0.35s steps(2) 3;
-}
-.group:hover .glitch::after {
-  opacity: 0.8;
-  animation: glitch-x 0.35s steps(2) 3 reverse;
-}
-@keyframes glitch-x {
-  0% { transform: translate(-6px, 0); clip-path: inset(10% 0 60% 0); }
-  50% { transform: translate(6px, 2px); clip-path: inset(55% 0 15% 0); }
-  100% { transform: translate(0, 0); clip-path: inset(0 0 0 0); opacity: 0; }
-}
-
-/* Infinite tape of stack names. */
-.tape {
-  display: flex;
-  width: max-content;
-  animation: tape var(--tape-duration, 50s) linear infinite;
-}
-.tape[data-direction="reverse"] {
-  animation-direction: reverse;
-}
-@keyframes tape {
-  to {
-    transform: translateX(-50%);
+@keyframes pulse-dot {
+  50% {
+    opacity: 0.35;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tape,
-  .group:hover .glitch::before,
-  .group:hover .glitch::after {
+  .pulse-dot {
     animation: none;
   }
   *,
@@ -158,37 +136,28 @@ html[data-custom-cursor] textarea {
 }
 
 /*
- * Build screen (components/layout/IntroScreen): "compiling portfolio…" with
- * a 0→100 counter (@property integer), the site's real modules resolving one
- * by one, "Welcome to my portfolio", then the panel wipes up. CSS only; once
- * per session; skipped with reduced motion; never blocks clicks.
+ * Welcome screen (components/layout/IntroScreen): "hello, world" types itself,
+ * is erased, "Welcome to my portfolio" types in, then the screen fades.
+ * CSS only (width in ch with steps()); once per session; skipped with reduced
+ * motion; pointer-events: none so it never blocks the page.
  */
-@property --build {
-  syntax: "<integer>";
-  inherits: false;
-  initial-value: 0;
-}
-
 .intro {
   position: fixed;
   inset: 0;
   z-index: 100;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 2rem 1.5rem;
-  background: var(--ink);
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: var(--bg);
   color: var(--fg);
   font-family: var(--font-mono);
+  font-size: clamp(1.5rem, 5vw, 3.5rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
   pointer-events: none;
-  animation: intro-exit 0.7s var(--ease-in-out) 2.3s forwards;
+  animation: intro-exit 0.6s var(--ease-out) 3s forwards;
 }
-@media (min-width: 640px) {
-  .intro {
-    padding: 3rem;
-  }
-}
-
 html[data-intro="seen"] .intro {
   display: none;
 }
@@ -197,68 +166,59 @@ html[data-intro="seen"] .intro {
     display: none;
   }
 }
-
-.intro-line {
-  font-size: 0.875rem;
-  line-height: 1.8;
-  color: var(--fg-muted);
-  opacity: 0;
-  animation: intro-show 0.01s linear calc(var(--i) * 170ms + 0.15s) forwards;
+.intro-stage {
+  display: grid;
 }
-
-.intro-counter {
-  margin-top: 1.25rem;
-  font-size: clamp(3.5rem, 14vw, 10rem);
-  font-weight: 600;
-  letter-spacing: -0.05em;
-  line-height: 0.9;
-  counter-reset: build var(--build);
-  animation: intro-count 1.6s var(--ease-out) 0.1s forwards;
-}
-.intro-counter::before {
-  content: counter(build);
-}
-.intro-counter::after {
-  content: "%";
-  color: var(--accent);
-}
-
-.intro-bar {
-  margin-top: 1rem;
-  height: 2px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left center;
-  animation: intro-bar 1.6s var(--ease-out) 0.1s forwards;
-}
-
+.intro-hello,
 .intro-welcome {
-  margin-top: 1rem;
-  font-family: var(--font-sans);
-  font-size: clamp(1.25rem, 3vw, 2rem);
-  font-weight: 500;
-  opacity: 0;
-  animation: intro-show 0.01s linear 1.7s forwards;
+  grid-area: 1 / 1;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 0;
 }
-
-@keyframes intro-show {
+.intro-hello {
+  animation:
+    intro-type-hello 0.7s steps(12) 0.2s forwards,
+    intro-erase 0.35s steps(12) 1.25s forwards;
+}
+.intro-welcome {
+  animation: intro-type-welcome 1s steps(23) 1.65s forwards;
+}
+.intro-caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1em;
+  margin-left: 0.1em;
+  vertical-align: -0.1em;
+  background: var(--accent);
+  animation: intro-blink 0.9s steps(1) infinite;
+}
+@keyframes intro-type-hello {
   to {
-    opacity: 1;
+    width: 13ch;
   }
 }
-@keyframes intro-count {
+@keyframes intro-erase {
+  from {
+    width: 13ch;
+  }
   to {
-    --build: 100;
+    width: 0;
   }
 }
-@keyframes intro-bar {
+@keyframes intro-type-welcome {
   to {
-    transform: scaleX(1);
+    width: 24ch;
+  }
+}
+@keyframes intro-blink {
+  50% {
+    opacity: 0;
   }
 }
 @keyframes intro-exit {
   to {
-    clip-path: inset(0 0 100% 0);
+    opacity: 0;
     visibility: hidden;
   }
 }
