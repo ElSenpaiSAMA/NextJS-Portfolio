@@ -15,13 +15,16 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="mx-auto flex min-h-[80svh] max-w-[980px] flex-col items-center justify-center px-5 pt-24 text-center sm:px-8">
-      <h1 className="headline text-[clamp(2.5rem,7vw,4.5rem)]">Something went wrong.</h1>
-      <p className="mt-4 text-xl text-mute-dark">The error has been logged. You can retry or reload the page.</p>
+    <div className="mx-auto flex min-h-[80svh] max-w-6xl flex-col justify-center px-5 pt-24 sm:px-8">
+      <p aria-hidden="true" className="font-mono text-sm text-error">
+        Unhandled runtime error (logged)
+      </p>
+      <h1 className="display mt-6 text-[clamp(2.75rem,8vw,6rem)]">Something went wrong.</h1>
+      <p className="mt-4 text-lg text-fg-muted">The error has been logged. You can retry or reload the page.</p>
       <button
         type="button"
         onClick={() => unstable_retry()}
-        className="mt-8 rounded-full bg-blue px-6 py-2.5 text-[17px] text-white hover:bg-[#0077ed]"
+        className="mt-8 w-fit rounded-full bg-accent px-6 py-3 font-mono text-sm text-ink hover:bg-fg"
       >
         Try again
       </button>
