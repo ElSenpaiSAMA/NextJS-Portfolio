@@ -5,10 +5,10 @@
 
 ## layout.tsx
 
-- Fuente: `Inter` variable (`--font-inter`), una sola familia (lo más cercano abierto a SF Pro).
+- Fuentes: `Geist` (`--font-geist`) y `Geist_Mono` (`--font-geist-mono`).
 - `metadata`: `metadataBase` = `siteUrl`, título "Matias Speroni — Backend & DevOps Engineer", description,
   canonical `/`, Open Graph (`type: profile`), Twitter `summary_large_image`, robots.
-- `<script>` inline con `INTRO_INIT_SCRIPT` ("intro ya vista en esta sesión") → `<html suppressHydrationWarning>`. Tema oscuro único: `viewport` con `themeColor` `#000000` y `colorScheme: dark`. `<ScrollChoreography />` (capa 03) va antes del header: animaciones de scroll y Lenis.
+- `<script>` inline con `INTRO_INIT_SCRIPT` ("intro ya vista en esta sesión") → `<html suppressHydrationWarning>`. Tema oscuro único: `viewport` con `themeColor` `#07080b` y `colorScheme: dark`. `<ScrollChoreography />` y `<Cursor />` (capa 03) van antes del header.
 - `<IntroScreen />` es el primer hijo de `<body>` (capa 03).
 - Estructura: `SiteHeader` (sticky) → `<main id="main">` → `SiteFooter`.
 
@@ -21,11 +21,11 @@ Compone las secciones en orden y el JSON-LD `Person` (incluye la foto). **El ord
 
 | Archivo | Genera |
 |---------|--------|
-| `opengraph-image.tsx` | PNG 1200×630 estilo lanzamiento: fondo negro, nombre centrado, rol con el degradado firma |
-| `icon.svg` | favicon: "MS" con el degradado firma sobre negro |
+| `opengraph-image.tsx` | PNG 1200×630: banda de glifos de código (patrón determinista), ruta `~/matias/portfolio`, nombre y `<rol />` |
+| `icon.svg` | favicon: `{ }` en azul sobre tinta |
 | `sitemap.ts` | `/` (el CV se sirve estático en `/CV_Matias_Speroni_DO.pdf`) |
 | `robots.ts` | bloquea `/api/` |
-| `not-found.tsx` | 404 grande con el degradado + "This page does not exist." |
+| `not-found.tsx` | 404 como error de módulo (`Cannot find module './this-page'`) + "This page does not exist." |
 
 ## next.config.ts
 

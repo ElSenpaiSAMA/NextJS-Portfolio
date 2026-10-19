@@ -2,11 +2,9 @@ import { About } from "./components/sections/About";
 import { Contact } from "./components/sections/Contact";
 import { Experience } from "./components/sections/Experience";
 import { Hero } from "./components/sections/Hero";
-import { Highlights } from "./components/sections/Highlights";
 import { Projects } from "./components/sections/Projects";
 import { Stack } from "./components/sections/Stack";
-import { Statement } from "./components/sections/Statement";
-import { Story } from "./components/sections/Story";
+import { Source } from "./components/sections/Source";
 import { profile } from "./data/profile";
 import { siteUrl } from "./lib/site";
 
@@ -27,9 +25,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <Statement />
-      <Highlights />
-      <Story />
+      <Source />
       <Projects />
       <Experience />
       <Stack />

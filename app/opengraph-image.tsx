@@ -5,39 +5,34 @@ export const alt = `${profile.name} — ${profile.role}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-/** Generated at build time: the social preview card, product-launch style (black, centred, gradient role). */
+// Satori can't read CSS variables: these mirror the tokens in globals.css.
+const C = { ink: "#07080b", fg: "#ecebe6", subtle: "#858998", accent: "#5b8cff", pink: "#ff8cc3", violet: "#b69cff", line: "#252a36" };
+const RAMP = " .,:;-=+<>/{}[]()$#@";
+
+/** Generated at build time: the social card — the name over a band of code glyphs, like the hero. */
 export default function OpengraphImage() {
+  // A deterministic wave of glyphs (the hero renders real footage; here, a pattern).
+  const rows = Array.from({ length: 9 }, (_, y) =>
+    Array.from({ length: 64 }, (_, x) => RAMP[Math.floor(((Math.sin(x / 5 + y / 2) + Math.cos(y / 3 - x / 9) + 2) / 4) * (RAMP.length - 1))]).join(""),
+  );
   return new ImageResponse(
     (
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "#000000",
-          color: "#ffffff",
-        }}
-      >
-        <div style={{ display: "flex", fontSize: 120, fontWeight: 700, letterSpacing: "-0.04em" }}>{profile.name}</div>
-        <div
-          style={{
-            display: "flex",
-            fontSize: 60,
-            fontWeight: 700,
-            letterSpacing: "-0.03em",
-            marginTop: 12,
-            backgroundImage: "linear-gradient(90deg, #64d2ff 0%, #2997ff 45%, #a78bfa 100%)",
-            backgroundClip: "text",
-            color: "transparent",
-          }}
-        >
-          {profile.role}
+      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "56px 64px", background: C.ink, color: C.fg }}>
+        <div style={{ display: "flex", flexDirection: "column", fontFamily: "monospace", fontSize: 18, lineHeight: 1.2, color: C.accent, opacity: 0.55 }}>
+          {rows.map((row, i) => (
+            <div key={i} style={{ display: "flex", whiteSpace: "pre" }}>
+              {row}
+            </div>
+          ))}
         </div>
-        <div style={{ display: "flex", fontSize: 28, color: "#a1a1a6", marginTop: 36 }}>
-          CI/CD, Docker, Linux, .NET and Python. {profile.location}
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", fontSize: 24, color: C.subtle, fontFamily: "monospace" }}>~/matias/portfolio</div>
+          <div style={{ display: "flex", fontSize: 112, fontWeight: 700, letterSpacing: "-0.05em", lineHeight: 1, marginTop: 12 }}>{profile.name}</div>
+          <div style={{ display: "flex", fontSize: 40, color: C.accent, marginTop: 16, fontFamily: "monospace" }}>
+            {"<"}
+            {profile.role}
+            {" />"}
+          </div>
         </div>
       </div>
     ),
