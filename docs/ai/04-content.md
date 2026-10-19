@@ -1,6 +1,6 @@
 # 04 — Contenido (`content`)
 
-**Archivos:** `app/data/{types,profile,projects,stack,experience,pipeline}.ts`, `public/`
+**Archivos:** `app/data/{types,profile,projects,stack,experience,pipeline,shell}.ts`, `public/`
 
 Todo el texto del sitio vive acá. Idioma: **inglés**. **Fuente de verdad: el CV del autor**
 (`public/CV_Matias_Speroni_DO.pdf`). Rol en el sitio: **Backend & DevOps Engineer**. Imagine Group:
@@ -12,7 +12,8 @@ Todo el texto del sitio vive acá. Idioma: **inglés**. **Fuente de verdad: el C
 | `projects.ts` | `projects: Project[]` | slug, título, descripción, tech, imagen, github/siteLink, `inDevelopment` |
 | `experience.ts` | `experience`, `education`, `certifications` | empresas (varios roles por empresa, más reciente primero) con highlights del CV; formación y certificaciones |
 | `stack.ts` | `stack: StackGroup[]` | 9 grupos que siguen los "Technical skills" del CV; nombre + logo opcional + `detail` opcional (ej. servicios de AWS/Azure/GCP); sin niveles |
-| `pipeline.ts` | `STAGES` | las etapas del pipeline en orden de página: id de sección, `step` (checkout, install, build, test, release, deploy), título y qué significa. Los logs de cada etapa **no son copy**: se calculan de los datos en `lib/stage-logs.ts` |
+| `pipeline.ts` | `STAGES` | los comandos de la sesión en orden de página: id de sección, `command` (lo que se tipea en el prompt), `window` (nombre en la barra tmux), `step` (etapa de `make deploy`), título y qué significa. Lo que imprimen se calcula de los datos (`lib/shell.ts`, `lib/stage-logs.ts`) |
+| `shell.ts` | `PROMPT`, `BOOT_LINES`, `LOGO`, `SHELL_HINT`, `SHELL_COMMANDS` | copy de la terminal: usuario/host, líneas del boot, monograma ASCII de neofetch, ayuda de cada comando de la shell |
 
 ## `public/`
 
@@ -32,7 +33,7 @@ Todo el texto del sitio vive acá. Idioma: **inglés**. **Fuente de verdad: el C
 
 ## Integridad
 
-`app/data/data.test.ts` valida: URLs https, **que cada imagen/logo/avatar/CV exista en `public/`**, que las etapas cubran cada sección del header una vez,
+`app/data/data.test.ts` valida: URLs https, **que cada imagen/logo/avatar/CV exista en `public/`**, que los comandos cubran cada sección de la nav una vez, con comando y ventana tmux únicos,
 teléfono en E.164 y coherente con el formato visible, slugs únicos, descripciones y tech presentes,
 experiencia con roles y períodos, grupos del stack sin duplicados, about y facts cortos.
 
