@@ -59,7 +59,7 @@ server errors land in the same Vercel log stream. A per-page cap prevents error 
 Next.js 16 (App Router, static single page, `next/image`) · React 19 · TypeScript (strict) · Tailwind CSS 4 ·
 Formspree (contact) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel.
 
-"Source → Build" design: the portfolio reads as code compiling in front of you. Real data-center footage is rendered as live ASCII on a canvas. On desktop the scroll drives the clip, so you walk down a server aisle made of characters, and halfway through the ASCII "compiles" into the real video. Headings decode letter by letter. The profile appears as an `engineer.ts` file generated from the same data as the page, typing itself as you scroll next to a build log of the site's real CI stages. Projects run sideways with an RGB glitch, the experience draws as a git graph, and the portrait resolves from ASCII into the photo. A caret cursor and magnetic buttons complete the set. It is built with GSAP ScrollTrigger and Lenis, loaded on demand. Phones get light ASCII loops, and everything respects prefers-reduced-motion. The effects are documented for AI agents in `.claude/skills/code-effects`. The footage is Mixkit stock.
+"Ship it." design: you operate the portfolio the way a DevOps engineer would. A Deploy button runs the site's real CI stages, streams a log computed from the real content, and reports the measured time. An editable `portfolio.config.ts` restyles the whole page live (accent, light/dark theme, corner radius, font). It is parsed strictly (no eval), shows editor-style problems, and is saved per visitor. The stack is a physics toy (matter-js) whose blocks you can grab and throw. Projects read like a deployments dashboard, the experience like a CHANGELOG, and contact like opening an issue. The light dev-tool theme uses Geist and Geist Mono. GSAP, Lenis and matter-js load on demand, and everything respects prefers-reduced-motion. The interactions are documented for AI agents in `.claude/skills/ship-interactions`.
 
 ## Local development
 
@@ -96,10 +96,10 @@ app/
   error.tsx, global-error.tsx
   api/log/route.ts          browser log ingestion
   components/
-    layout/                 build screen, scroll choreography, header, footer
-    fx/                     ASCII renderer (video/image → glyphs), caret cursor
-    sections/               Hero, Source, Projects, Experience, Stack, About, Contact + ContactForm
-    ui/                     small primitives (Section, ButtonLink, AmbientVideo, icons)
+    layout/                 welcome screen, scroll choreography, header, footer
+    ship/                   DeployWidget, ConfigEditor, StackPlayground (matter-js)
+    sections/               Hero, Config, Projects, Experience, Stack, About, Contact + ContactForm
+    ui/                     small primitives (Section, ButtonLink, icons)
   data/                     all copy and content, typed — edit here, not in components
   lib/                      logger, client logger, log schema, contact, theme, site config
 public/

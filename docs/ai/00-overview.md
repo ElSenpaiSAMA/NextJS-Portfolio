@@ -7,14 +7,15 @@ Portfolio de **Matias Speroni**, **Backend & DevOps Engineer** en Barcelona. Vie
 
 **Single-page estática** en inglés, con la estructura original del autor: Hero (quién soy) → Projects
 (con imágenes) → Experience → Stack completo (con logos, sin niveles) → About (foto, bio, datos,
-educación, certificaciones) → Contact. **El contenido sale del CV del autor** (`public/CV_Matias_Speroni_DO.pdf`). Estética **"Source → Build"**
-(capa 02): el portfolio como código que se compila — el video del data center **renderizado en ASCII en
-tiempo real** (al bajar, el ASCII compila al video real), títulos que se decodifican, el perfil como
-`engineer.ts` generado de los datos que se tipea con el scroll, build con las etapas reales del CI, git log que
-se dibuja, retrato ASCII, cursor caret. Geist + Geist Mono, tinta y azul eléctrico. GSAP + ScrollTrigger + Lenis.
-Efectos documentados en la skill `code-effects`.
+educación, certificaciones) → Contact. **El contenido sale del CV del autor** (`public/CV_Matias_Speroni_DO.pdf`). Estética **"Ship it."**
+(capa 02): el visitante **opera** el sitio como un DevOps — botón **Deploy** que corre el pipeline real del
+sitio con logs calculados de los datos, editor en vivo de `portfolio.config.ts` que cambia acento, tema,
+radio y fuente de toda la página, y el stack como bloques con física (matter-js). Tema claro de herramienta
+de desarrollo (oscuro a una línea de config), Geist + Geist Mono. Interacciones documentadas en la skill
+`ship-interactions`.
 
-> También descartados: "Ops console" (terminal) con clúster 3D y con video, y "Product page" estilo Apple.
+> También descartados: "Ops console" (terminal) con clúster 3D y con video, "Product page" estilo Apple y
+> "Source → Build" (ASCII sobre video). El autor pidió "sorprendeme", sin video.
 
 > Direcciones descartadas por el autor: "Night Shift" con puerto 3D (Three.js) y luego con video real.
 > Pidió algo más relacionado con la informática.
@@ -29,28 +30,28 @@ El sitio además es evidencia de DevOps: CI completo, tests, accesibilidad, Ligh
 
 Next.js 16 (App Router) · React 19 · TypeScript strict · Tailwind CSS 4 · `next/image` · Formspree
 (fetch directo) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel · Node 22.
-Client components: `ContactForm`, `ScrollChoreography`, `Cursor`, `AsciiFootage`/`AsciiCanvas`, `AsciiPortrait` y los
-error boundaries. GSAP y Lenis se cargan bajo demanda.
+Client components: `ContactForm`, `ScrollChoreography`, `DeployWidget`, `ConfigEditor`, `StackPlayground` y los error
+boundaries. GSAP, Lenis y matter-js se cargan bajo demanda.
 
 ## Árbol de render
 
 ```
-RootLayout (server)       layout.tsx — Geist + Geist Mono, metadata, script de intro, IntroScreen / ScrollChoreography / Cursor / SiteHeader / <main> / SiteFooter
+RootLayout (server)       layout.tsx — Geist + Geist Mono, metadata, script de intro, IntroScreen / ScrollChoreography / SiteHeader / <main> / SiteFooter
 └─ HomePage (server)      page.tsx
-   ├─ Hero                #top — data center en ASCII (scrub → video real), nombre decodificado, rol, CTAs
-   ├─ Source              #source — intro + engineer.ts generado (se tipea con el scroll) + build con el CI real
-   ├─ Projects            #projects — carril horizontal, glitch y títulos que se decodifican
-   ├─ Experience          #experience — git log que se dibuja: empresas, roles y logros
-   ├─ Stack               #stack — cintas + lista por grupo con logos
-   ├─ About               #about — retrato ASCII → foto, bio, facts, educación, certificaciones
-   ├─ Contact             #contact — circuito en ASCII, canales + ContactForm (client)
+   ├─ Hero                #top — nombre, rol, intro, CTAs + DeployWidget (pipeline real, tiempo medido)
+   ├─ Config              #config — "Make it yours.": ConfigEditor (portfolio.config.ts en vivo)
+   ├─ Projects            #projects — dashboard de deployments (Ready / Building)
+   ├─ Experience          #experience — CHANGELOG: una release por empresa
+   ├─ Stack               #stack — StackPlayground (física) + lista agrupada con logos
+   ├─ About               #about — README: foto, bio, facts, educación, certificaciones
+   ├─ Contact             #contact — canales + "New issue" (ContactForm, client)
    └─ JSON-LD Person
 ```
 
 ## Flujo de datos
 
 ```
-app/data/{profile,projects,experience,stack,source,media}.ts ──► components/sections/* (presentación)
+app/data/{profile,projects,experience,stack,ship}.ts ──► components/sections/* (presentación)
 lib/site.ts  NAV_ITEMS (ids de sección), siteUrl, build info
 public/      avatar.jpg, CV_Matias_Speroni_DO.pdf, projects/*.{png,jpg}, stack/*.svg
 
