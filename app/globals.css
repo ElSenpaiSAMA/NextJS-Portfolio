@@ -1,46 +1,30 @@
 @import "tailwindcss";
 
 /*
- * "Ship it." — the portfolio as a developer tool you operate: a deploy
- * button, an editable config, a physics playground. Light by default (a
- * clean dev-tool surface over a faint blueprint grid), dark one config line
- * away. --accent and --r are set live by portfolio.config.ts (lib/site-config).
- * Every default text/background pair meets WCAG AA in both themes.
+ * "Companion" — a black, glowing portfolio with a guide at your side: a sticky
+ * panel that narrates what you're looking at, answers questions and deploys
+ * the site. Ink-black base, one electric blue for actions and glow, mint for
+ * live states, a handwritten voice for asides. Every text/background pair
+ * meets WCAG AA (axe in CI).
  */
 
 :root {
-  --accent: #2f5bff;
-  --r: 12px;
-  --bg: #fbfbfa;
-  --surface: #ffffff;
-  --surface-2: #f2f2ef;
-  --line: #e2e2dd;
-  --fg: #111113;
-  --fg-muted: #56565c;
-  --fg-subtle: #6b6b71;
-  --ok: #166534;
-  --warn: #b45309;
-  --error: #dc2626;
-  --grid: rgb(17 17 19 / 0.045);
-  /* Accent as text: the raw accent in light mode, lifted towards white in dark mode. */
-  --accent-text: var(--accent);
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  color-scheme: light;
-}
-
-:root[data-theme="dark"] {
-  --bg: #0b0b0c;
-  --surface: #141416;
-  --surface-2: #1c1c1f;
-  --line: #2a2a2e;
-  --fg: #f2f2f0;
-  --fg-muted: #a9a9ae;
-  --fg-subtle: #8c8c92;
-  --ok: #4ade80;
-  --warn: #fbbf24;
+  --bg: #060708; /* page */
+  --surface: #0d0f12; /* cards */
+  --surface-2: #15181d; /* chips, logs, insets */
+  --line: #23272e; /* hairlines */
+  --fg: #eef0f2;
+  --fg-muted: #a6abb6;
+  --fg-subtle: #878c98; /* ≥ 4.5:1 even on surface-2 */
+  --accent: #5b8cff; /* glow, outlines, accents on black */
+  --accent-strong: #3366ff; /* filled buttons with white text (4.7:1) */
+  --accent-text: #8aa9ff; /* accent used as text on black */
+  --ok: #4ade80; /* live / available / passed */
+  --warn: #fbbf24; /* building / in development */
   --error: #f87171;
-  --grid: rgb(255 255 255 / 0.04);
-  --accent-text: color-mix(in oklab, var(--accent) 60%, white);
+  --r: 18px; /* card radius */
+  --glow: 0 0 0 1px rgb(91 140 255 / 0.35), 0 0 40px -6px rgb(91 140 255 / 0.45);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   color-scheme: dark;
 }
 
@@ -53,41 +37,36 @@
   --color-fg-muted: var(--fg-muted);
   --color-fg-subtle: var(--fg-subtle);
   --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
   --color-accent-text: var(--accent-text);
   --color-ok: var(--ok);
   --color-warn: var(--warn);
   --color-error: var(--error);
   --radius-ui: var(--r);
 
-  /* Injected by next/font in app/layout.tsx; data-font="mono" swaps the whole UI to mono. */
+  /* Injected by next/font in app/layout.tsx */
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, Menlo, monospace;
-}
-
-:root[data-font="mono"] {
-  --font-sans: var(--font-geist-mono), ui-monospace, Menlo, monospace;
+  --font-hand: var(--font-caveat), "Segoe Print", cursive;
 }
 
 body {
   background-color: var(--bg);
-  /* Faint blueprint grid: the canvas of a dev tool. */
+  /* A faint blue glow from the top-left, like light on a dark desk. */
   background-image:
-    linear-gradient(to right, var(--grid) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
-  background-size: 56px 56px;
+    radial-gradient(60rem 40rem at 10% -10%, rgb(91 140 255 / 0.09), transparent 60%),
+    radial-gradient(50rem 30rem at 100% 0%, rgb(94 234 212 / 0.04), transparent 60%);
+  background-attachment: fixed;
   color: var(--fg);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition:
-    background-color 0.4s ease,
-    color 0.4s ease;
 }
 
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 ::selection {
@@ -97,26 +76,67 @@ body {
 
 /* Big tight display type. */
 @utility display {
-  font-weight: 600;
+  font-weight: 650;
   letter-spacing: -0.045em;
   line-height: 0.95;
   text-wrap: balance;
 }
 
-/* Syntax colours for the config editor (works on both themes). */
-.tok-key { color: var(--accent-text); }
-.tok-string { color: #c2410c; }
-:root[data-theme="dark"] .tok-string { color: #fdba74; }
-.tok-number { color: #7c3aed; }
-:root[data-theme="dark"] .tok-number { color: #c4b5fd; }
-.tok-keyword { color: #be185d; }
-:root[data-theme="dark"] .tok-keyword { color: #f9a8d4; }
-.tok-comment { color: var(--fg-subtle); font-style: italic; }
-.tok-punct { color: var(--fg-muted); }
+/* The handwritten voice: "hello, I'm", section taglines. */
+@utility hand {
+  font-family: var(--font-hand);
+  font-weight: 600;
+  letter-spacing: 0;
+}
 
-/* Pulsing status dot ("Building"). */
+/* Cards that light up their edge on hover. */
+@utility card {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: var(--r);
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+  &:hover {
+    border-color: rgb(91 140 255 / 0.45);
+    box-shadow: var(--glow);
+  }
+}
+
+/* The wavy underline under the name draws itself (stroke-dashoffset). */
+.squiggle path {
+  stroke-dasharray: 420;
+  stroke-dashoffset: 420;
+  animation: squiggle-draw 1.2s var(--ease-out) 0.4s forwards;
+}
+html:not([data-intro="seen"]) .squiggle path {
+  animation-delay: 3.3s;
+}
+@keyframes squiggle-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Typing caret for the companion's speech bubble. */
+.caret {
+  display: inline-block;
+  width: 0.5em;
+  height: 1.05em;
+  margin-left: 0.1em;
+  vertical-align: -0.15em;
+  background: var(--accent);
+  animation: caret-blink 0.9s steps(1) infinite;
+}
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Pulsing status dot (available / building). */
 .pulse-dot {
-  animation: pulse-dot 1.4s ease-in-out infinite;
+  animation: pulse-dot 1.6s ease-in-out infinite;
 }
 @keyframes pulse-dot {
   50% {
@@ -124,8 +144,24 @@ body {
   }
 }
 
+/* The companion's avatar breathes slowly. */
+.float {
+  animation: float 5s ease-in-out infinite;
+}
+@keyframes float {
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .pulse-dot {
+  .squiggle path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .caret,
+  .pulse-dot,
+  .float {
     animation: none;
   }
   *,
@@ -184,15 +220,6 @@ html[data-intro="seen"] .intro {
 .intro-welcome {
   animation: intro-type-welcome 1s steps(23) 1.65s forwards;
 }
-.intro-caret {
-  display: inline-block;
-  width: 0.55em;
-  height: 1em;
-  margin-left: 0.1em;
-  vertical-align: -0.1em;
-  background: var(--accent);
-  animation: intro-blink 0.9s steps(1) infinite;
-}
 @keyframes intro-type-hello {
   to {
     width: 13ch;
@@ -209,11 +236,6 @@ html[data-intro="seen"] .intro {
 @keyframes intro-type-welcome {
   to {
     width: 24ch;
-  }
-}
-@keyframes intro-blink {
-  50% {
-    opacity: 0;
   }
 }
 @keyframes intro-exit {

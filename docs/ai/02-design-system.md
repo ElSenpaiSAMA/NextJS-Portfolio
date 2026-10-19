@@ -2,58 +2,58 @@
 
 **Archivos:** `app/globals.css`
 
-## Dirección de arte: "Ship it."
+## Dirección de arte: "Companion"
 
-El visitante **opera** el portfolio como un DevOps:
-- aprieta **Deploy** y ve correr el pipeline real del sitio;
-- edita `portfolio.config.ts` y el sitio entero cambia (acento, tema claro/oscuro, radio, fuente);
-- juega con el stack como bloques con física.
+Un portfolio **negro con brillo azul** con un **compañero** al lado: un panel fijo que narra lo que estás
+leyendo, contesta preguntas del CV y despliega el sitio.
 
-Pedido del autor: "sorprendeme", sin video, enfocado a programación.
+Inspiración del autor: ignaciobrenas.vercel.app:
+- un sprite que narra;
+- secciones numeradas 01–05;
+- tarjetas ricas con estado y logos;
+- frase manuscrita y subrayado ondulado.
 
-Estética de **herramienta de desarrollo moderna** (Vercel, Linear, GitHub):
-- tema **claro** por defecto sobre una grilla técnica tenue, con el oscuro a una línea de config;
-- Geist + Geist Mono;
-- un acento configurable;
-- verde, ámbar y rojo solo para estados (Ready, Building, error).
+Pedido: mejorarla con los tonos negros de los diseños anteriores y lo ya construido (deploy, física,
+tipeo). El narrador es tu avatar real con texto generado de tus datos, en vez de un sprite con guion fijo.
 
-Historial: se descartaron "Night Shift", "Ops console", "Product page" (Apple) y "Source → Build" (ASCII
-sobre video).
+Historial descartado: "Night Shift", "Ops console", "Product page" (Apple), "Source → Build" (ASCII sobre
+video) y "Ship it." (tema claro).
 
-Interacciones: skill **`ship-interactions`** (`.claude/skills/ship-interactions/SKILL.md`).
+Interacciones: skill **`companion`** (`.claude/skills/companion/SKILL.md`).
 
-## Tokens (`:root`, y `:root[data-theme="dark"]`)
+## Tokens (`:root`)
 
-| Token | Claro | Oscuro | Uso |
-|-------|-------|--------|-----|
-| `bg` | `#fbfbfa` | `#0b0b0c` | página (con grilla `--grid`) |
-| `surface` / `surface-2` | `#ffffff` / `#f2f2ef` | `#141416` / `#1c1c1f` | tarjetas / logs, chips, paneles |
-| `line` | `#e2e2dd` | `#2a2a2e` | bordes |
-| `fg` / `fg-muted` / `fg-subtle` | `#111113` / `#56565c` / `#6b6b71` | `#f2f2f0` / `#a9a9ae` / `#8c8c92` | texto (≥ 4.5:1 sobre `surface-2`) |
-| `ok` / `warn` / `error` | `#166534` / `#b45309` / `#dc2626` | `#4ade80` / `#fbbf24` / `#f87171` | Ready y checks / Building / errores |
-| `accent` | `#2f5bff` (config) | igual | botones (texto blanco), barra del deploy |
-| `accent-text` | `= accent` | `color-mix(accent 60%, white)` | acento usado como texto, legible en ambos temas |
-| `--r` | `12px` (config) | igual | radio de todo (`rounded-ui`) |
+| Token | Valor | Uso |
+|-------|-------|-----|
+| `bg` | `#060708` | página (con dos brillos radiales fijos, azul y menta) |
+| `surface` / `surface-2` | `#0d0f12` / `#15181d` | tarjetas / chips, logs, insets |
+| `line` | `#23272e` | bordes |
+| `fg` / `fg-muted` / `fg-subtle` | `#eef0f2` / `#a6abb6` / `#878c98` | texto (≥ 4.5:1 sobre `surface-2`) |
+| `accent` | `#5b8cff` | brillo (`--glow`), bordes activos, puntos |
+| `accent-text` | `#8aa9ff` | acento como texto |
+| `accent-strong` | `#3366ff` | **botones llenos con texto blanco** (4.7:1) |
+| `ok` / `warn` / `error` | `#4ade80` / `#fbbf24` / `#f87171` | disponible, Shipped y checks / In development / errores |
+| `--r` | `18px` | radio de tarjetas (`rounded-ui`) |
+| `--glow` | sombra azul | hover de `.card`, pill activa de la nav |
 
-`data-font="mono"` en `<html>` cambia la fuente de toda la UI a Geist Mono.
+## Utilidades
 
-Clases de sintaxis del editor: `.tok-key|string|number|keyword|comment|punct`, con variantes oscuras.
-
-Excepciones de color fuera de tokens:
-- colores de sintaxis (`.tok-*`);
-- hover de bordes (`hover:border-fg-subtle`);
-- `opengraph-image.tsx` e `icon.svg`;
-- `viewport.themeColor`.
+- `display`: titulares (650, tracking -0.045em).
+- `hand`: voz manuscrita (Caveat), en "hello, I'm", las taglines y "so…".
+- `card`: borde + superficie, con borde y brillo azul al hover.
+- `.squiggle`: el subrayado del nombre se dibuja con `stroke-dashoffset`; espera a la bienvenida en la primera visita.
+- `.caret`: cursor del tipeo.
+- `.pulse-dot`: estados vivos.
+- `.float`: el avatar respira.
 
 ## Tipografía
 
-`Geist` + `Geist_Mono` (`next/font`). Titulares con la utilidad `display` (600, tracking -0.045em).
-Etiquetas de sección en mono, mayúsculas espaciadas y pequeñas.
+`Geist` (UI), `Geist_Mono` (etiquetas, código, narración) y `Caveat` 600 (manuscrita), vía `next/font`
+(`--font-geist`, `--font-geist-mono`, `--font-caveat`).
 
-## CSS
+## Bienvenida
 
-- **Bienvenida** (`.intro*`): `hello, world` se tipea (ancho en `ch` con `steps`), se borra y se tipea
-  "Welcome to my portfolio"; después la pantalla se desvanece. Una vez por sesión; `pointer-events: none`.
-- `.pulse-dot`: estado "Building".
-- `prefers-reduced-motion`: sin intro ni pulso, transiciones casi nulas. En JS: el deploy aparece
-  terminado, la física no carga y no hay revelados.
+`.intro*`: se tipea `hello, world`, se borra y se tipea "Welcome to my portfolio"; después la pantalla se
+desvanece. Una vez por sesión, sin bloquear clics, se omite con reduced motion.
+
+Con `prefers-reduced-motion` tampoco hay subrayado animado, caret, pulso ni flotado.
