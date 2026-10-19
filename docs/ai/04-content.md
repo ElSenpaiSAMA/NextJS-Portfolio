@@ -12,7 +12,7 @@ Todo el texto del sitio vive acá. Idioma: **inglés**. **Fuente de verdad: el C
 | `projects.ts` | `projects: Project[]` | slug, título, descripción, tech, imagen, github/siteLink, `inDevelopment` |
 | `experience.ts` | `experience`, `education`, `certifications` | empresas (varios roles por empresa, más reciente primero) con highlights del CV; formación y certificaciones |
 | `stack.ts` | `stack: StackGroup[]` | 9 grupos que siguen los "Technical skills" del CV; nombre + logo opcional + `detail` opcional (ej. servicios de AWS/Azure/GCP); sin niveles |
-| `ship.ts` | `PIPELINE`, `SECTION_LABELS` | pipeline del botón Deploy (**solo jobs de `ci.yml`**) y la etiqueta "de desarrollador" de cada sección (Deployments, CHANGELOG.md, node_modules…). Los logs del deploy no son copy: se calculan de los datos (`lib/deploy.ts`) |
+| `ship.ts` | `PIPELINE` | pipeline de la pestaña Deploy del compañero (**solo jobs de `ci.yml`**). La narración y las respuestas del compañero **no son copy**: se generan de estos datos en `lib/companion.ts` |
 
 ## `public/`
 
@@ -32,7 +32,7 @@ Todo el texto del sitio vive acá. Idioma: **inglés**. **Fuente de verdad: el C
 
 ## Integridad
 
-`app/data/data.test.ts` valida: URLs https, **que cada imagen/logo/avatar/CV exista en `public/`**, que cada sección tenga etiqueta y que **cada etapa del pipeline exista en `ci.yml`**,
+`app/data/data.test.ts` valida: URLs https, **que cada imagen/logo/avatar/CV exista en `public/`**, y que **cada etapa del pipeline exista en `ci.yml`**,
 teléfono en E.164 y coherente con el formato visible, slugs únicos, descripciones y tech presentes,
 experiencia con roles y períodos, grupos del stack sin duplicados, about y facts cortos.
 
