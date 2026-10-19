@@ -59,7 +59,7 @@ server errors land in the same Vercel log stream. A per-page cap prevents error 
 Next.js 16 (App Router, static single page, `next/image`) · React 19 · TypeScript (strict) · Tailwind CSS 4 ·
 Formspree (contact) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel.
 
-"Ops console" design: the site reads as a terminal session. Each section opens with the command that would print it (`ls ~/projects`, `git log --graph`, `cat stack.yml`, `cat README.md`), and the hero terminal pushes this very repo and runs its real CI stages, kept in sync with `ci.yml` by a unit test. IBM Plex Mono and Sans on a blue-slate console with amber and cyan accents. Behind the hero is real data-center footage. On desktop the hero pins and the scroll drives the video's playhead (a dense-keyframe H.264 clip), so scrolling walks you down a server aisle. A circuit-board loop sits behind the contact section. GSAP ScrollTrigger types each command and reveals the windows as you scroll, and Lenis smooths the scroll on desktop. GSAP and Lenis load on demand, and phones get a light muted loop. The footage is Mixkit stock (see docs/ai/04-content.md). Everything respects prefers-reduced-motion.
+"Product page" design: the portfolio is presented the way Apple presents a product. It uses huge, tight Inter headlines and sections that alternate black and light grey. In the hero, the scroll drives real data-center footage, so you walk down a server aisle while the name gives way to the tagline. The intro lights up word by word, followed by a "Get the highlights." bento and a pinned "Build. Ship. Run." chapter over circuit-board footage. Projects sit in a horizontal gallery and the stack reads like Apple's "Tech specs". The animations use GSAP ScrollTrigger, with Lenis smooth scrolling on desktop. GSAP, Lenis and the scrub clips load on demand, and phones get light muted loops. The footage is Mixkit stock (see docs/ai/04-content.md). Everything respects prefers-reduced-motion.
 
 ## Local development
 
@@ -96,9 +96,9 @@ app/
   error.tsx, global-error.tsx
   api/log/route.ts          browser log ingestion
   components/
-    layout/                 boot screen, header, footer
-    sections/               Hero, Projects + ProjectCard, Experience, Stack, About, Contact + ContactForm
-    ui/                     small primitives (Window, Section, HeroFootage, AmbientVideo, ButtonLink, ExternalLink, icons)
+    layout/                 welcome screen, scroll choreography, header, footer
+    sections/               Hero, Statement, Highlights, Story, Projects + ProjectsGallery, Experience, Stack, About, Contact + ContactForm
+    ui/                     small primitives (Section, ButtonLink, ScrubVideo, AmbientVideo, icons)
   data/                     all copy and content, typed — edit here, not in components
   lib/                      logger, client logger, log schema, contact, theme, site config
 public/

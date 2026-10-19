@@ -4,7 +4,7 @@
 
 - **Framework:** Next.js 16 (App Router), React 19, TypeScript strict, Node 22
 - **Estilos:** Tailwind CSS v4 (tokens CSS, tema oscuro único)
-- **Motion / video:** video real (data center, en `public/media/`) controlado por scroll con GSAP ScrollTrigger + Lenis (bajo demanda), CSS (terminal, boot)
+- **Motion / video:** video real (data center, placa de circuitos; `public/media/`) controlado por scroll con GSAP ScrollTrigger + Lenis (bajo demanda)
 - **Formularios:** Formspree (fetch directo)
 - **Tests:** Vitest + Testing Library, Playwright + axe, Lighthouse CI
 - **Deploy:** Vercel (preview por PR)
@@ -36,7 +36,7 @@ docs/ai/          # Contexto por capas para IA
 
 - No inventar métricas, fechas, empleadores, certificaciones ni uso de herramientas.
 - Lo que se está aprendiendo va como nota del grupo en `stack.ts`, no como tecnología usada.
-- Contenido del CV del autor con el diseño "Ops console" (terminal / CI, docs/ai/02): no cambiar estructura ni dirección de arte sin pedirlo.
+- Contenido del CV del autor con el diseño "Product page" estilo Apple (docs/ai/02): no cambiar estructura ni dirección de arte sin pedirlo.
 - Dato desconocido → `[COMPLETAR: …]` (listados por `npm run check:placeholders`).
 
 ## Contexto para IA (leer antes de tocar código)

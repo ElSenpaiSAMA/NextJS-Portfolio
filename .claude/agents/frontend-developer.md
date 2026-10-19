@@ -1,6 +1,6 @@
 ---
 name: frontend-developer
-description: Implementa cambios de UI — secciones de la single-page (Hero, Projects, Stack, About, Contact), header/footer, primitivas de ui/ (Window, Section…), video de fondo, animaciones de scroll (GSAP) y CSS, responsive y accesibilidad. No edita copy de negocio (eso es content-editor).
+description: Implementa cambios de UI — secciones de la single-page (Hero, Statement, Highlights, Story, Projects, Experience, Stack, About, Contact), header/footer, primitivas de ui/ (Section, ScrubVideo…), video por scroll, animaciones de scroll (GSAP) y CSS, responsive y accesibilidad. No edita copy de negocio (eso es content-editor).
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
 
@@ -15,10 +15,10 @@ Sos el desarrollador frontend del portfolio (Next.js 16, React 19, TypeScript st
 ## Reglas
 
 - Server Components por defecto; `"use client"` solo con interacción real.
-- Estilos con utilidades de token (`bg-panel`, `text-fg-muted`, `border-line`, `text-amber`…). **Nunca hex.**
+- Estilos con utilidades de token (`bg-paper`, `text-mute-light`, `border-hairline-light`, `bg-blue`…). **Nunca hex.**
 - El texto viene de `app/data/`; no escribas copy dentro de componentes (salvo labels de UI genéricos).
-- Estética "Ops console" (capa 02): cada sección es un comando de shell que corresponde a su contenido, ventanas `Window`, IBM Plex Mono/Sans, tokens `console`/`fg`/`amber`/`cyan`. Animaciones de scroll vía atributos `data-*` en `ScrollChoreography`; video del hero controlado por scroll (`HeroFootage` + `[data-hero-scrub]`), loops con `AmbientVideo`. El copy de la metáfora va en `app/data/console.ts`. Usar las skills `frontend-design`, `awwwards` y `gsap-scrolltrigger`.
-- Sección nueva: agregar su id a `NAV_ITEMS` (`lib/site.ts`), usar `<Section id eyebrow title>` y montarla en `page.tsx` en el mismo orden.
+- Estética "Product page" estilo Apple (capa 02): `<Section tone>` alternando negro / paper / white, titulares `headline` con punto final, azul solo para botones, degradado firma una vez por pantalla (`ink-gradient-deep` sobre claro). Animaciones vía atributos `data-*` en `ScrollChoreography`; video por scroll con `ScrubVideo`. El copy de las secciones de producto va en `app/data/highlights.ts`. Usar las skills `frontend-design`, `awwwards` y `gsap-scrolltrigger`.
+- Sección nueva: agregar su id a `NAV_ITEMS` (`lib/site.ts`), usar `<Section id title tone>` y montarla en `page.tsx` en el mismo orden.
 - Accesibilidad: un solo h1, `aria-labelledby`, labels en formularios, foco visible, iconos `aria-hidden`.
 - Links externos siempre con `ExternalLink`; anclas internas deben apuntar a ids existentes (`NAV_ITEMS`, `#top`, `#main`).
 - Mobile first: verificar a ~400px de ancho (sin overflow horizontal; header apilado).
