@@ -5,10 +5,10 @@
 
 ## layout.tsx
 
-- Fuentes: `Geist` (`--font-geist`), `Geist_Mono` (`--font-geist-mono`) y `Caveat` 600 (`--font-caveat`, voz manuscrita).
+- Fuentes: `Geist` (`--font-geist`) y `Geist_Mono` (`--font-geist-mono`).
 - `metadata`: `metadataBase` = `siteUrl`, título "Matias Speroni — Backend & DevOps Engineer", description,
   canonical `/`, Open Graph (`type: profile`), Twitter `summary_large_image`, robots.
-- `<script>` inline con `INTRO_INIT_SCRIPT` ("intro ya vista en esta sesión") → `<html suppressHydrationWarning>`. Tema oscuro único: `viewport` con `themeColor` `#060708` y `colorScheme: dark`. `<ScrollChoreography />` (capa 03) va antes del header. `<main>` deja lugar al header fijo (`pt-28`, `lg:pt-20`); `page.tsx` arma la grilla de dos columnas con el compañero.
+- `<script>` inline con `INTRO_INIT_SCRIPT` ("intro ya vista en esta sesión") → `<html suppressHydrationWarning>`. Tema oscuro único: `viewport` con `themeColor` `#060708` y `colorScheme: dark`. `<ScrollChoreography />` (capa 03) va antes del header. `<main>` deja lugar al header fijo (`pt-14`); `page.tsx` arma el pipeline (línea + una `Stage` por sección).
 - `<IntroScreen />` es el primer hijo de `<body>` (capa 03).
 - Estructura: `SiteHeader` (sticky) → `<main id="main">` → `SiteFooter`.
 

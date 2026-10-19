@@ -1,20 +1,18 @@
-import { Companion } from "./components/companion/Companion";
-import { About } from "./components/sections/About";
-import { Certifications } from "./components/sections/Certifications";
-import { Contact } from "./components/sections/Contact";
-import { Experience } from "./components/sections/Experience";
-import { Hero } from "./components/sections/Hero";
-import { Hub } from "./components/sections/Hub";
-import { Projects } from "./components/sections/Projects";
-import { Stack } from "./components/sections/Stack";
-import { certifications, education, experience } from "./data/experience";
+import { Spine } from "./components/pipeline/Spine";
+import { Stage } from "./components/pipeline/Stage";
+import { Build } from "./components/sections/Build";
+import { Checkout } from "./components/sections/Checkout";
+import { Deploy } from "./components/sections/Deploy";
+import { Install } from "./components/sections/Install";
+import { Release } from "./components/sections/Release";
+import { Test } from "./components/sections/Test";
+import { certifications, experience } from "./data/experience";
+import { STAGES } from "./data/pipeline";
 import { profile } from "./data/profile";
 import { projects } from "./data/projects";
-import { PIPELINE } from "./data/ship";
 import { stack } from "./data/stack";
-import { buildAnswers, buildNarration } from "./lib/companion";
-import { buildDeployScript } from "./lib/deploy";
 import { siteUrl } from "./lib/site";
+import { stageLogs } from "./lib/stage-logs";
 
 /** schema.org Person — helps search engines show the right name, role and profiles. */
 const PERSON_JSON_LD = {
@@ -29,30 +27,26 @@ const PERSON_JSON_LD = {
   sameAs: [profile.githubUrl, profile.linkedinUrl],
 };
 
-export default function HomePage() {
-  // Everything the companion says is assembled here, at build time, from the real content.
-  const content = { profile, projects, experience, stack, education, certifications };
-  const companion = {
-    name: profile.name,
-    avatar: profile.avatar,
-    narration: buildNarration(content),
-    answers: buildAnswers(content),
-    deploy: { steps: buildDeployScript(PIPELINE.stages, { projects, stack, experience }), command: PIPELINE.command },
-  };
+const CONTENT = {
+  top: <Checkout />,
+  stack: <Install />,
+  projects: <Build />,
+  experience: <Test />,
+  about: <Release />,
+  contact: <Deploy />,
+};
 
+/** The page is a pipeline: one stage per section, a spine on the left, logs computed from the real content. */
+export default function HomePage() {
+  const logs = stageLogs({ profile, stack, projects, experience, certifications });
   return (
-    <div className="mx-auto grid max-w-[90rem] gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:px-10 xl:grid-cols-[minmax(0,1fr)_25rem] xl:gap-14">
-      <div className="min-w-0">
-        <Hero />
-        <Hub />
-        <Experience />
-        <Projects />
-        <Stack />
-        <Certifications />
-        <About />
-        <Contact />
-      </div>
-      <Companion data={companion} />
+    <div className="relative mx-auto max-w-5xl pl-14 pr-5 sm:pl-24 sm:pr-8">
+      <Spine />
+      {STAGES.map((stage, i) => (
+        <Stage key={stage.id} stage={stage} index={i} total={STAGES.length} log={logs[stage.id]} titleAs={stage.id === "top" ? "h1" : "h2"}>
+          {CONTENT[stage.id]}
+        </Stage>
+      ))}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(PERSON_JSON_LD) }} />
     </div>
   );
