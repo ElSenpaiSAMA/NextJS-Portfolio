@@ -102,3 +102,27 @@ export function MoonIcon(props: IconProps) {
     </Icon>
   );
 }
+
+export function ChevronRightIcon(props: IconProps) {
+  return (
+    <Icon strokeWidth="2.25" {...props}>
+      <path d="m9 5 7 7-7 7" />
+    </Icon>
+  );
+}
+
+export function ChevronLeftIcon(props: IconProps) {
+  return (
+    <Icon strokeWidth="2.25" {...props}>
+      <path d="m15 5-7 7 7 7" />
+    </Icon>
+  );
+}
+
+export function CheckIcon(props: IconProps) {
+  return (
+    <Icon strokeWidth="2.5" {...props}>
+      <path d="m5 12 5 5L20 7" />
+    </Icon>
+  );
+}

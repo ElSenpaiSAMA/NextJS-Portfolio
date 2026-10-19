@@ -1,30 +1,36 @@
 import { profile } from "../../data/profile";
 import { getBuildInfo } from "../../lib/site";
 
-/** Status line: which build is live and the pipeline that shipped it. */
+/** Apple-style fine print: small grey text on paper, with the live build as quiet DevOps evidence. */
 export function SiteFooter() {
   const build = getBuildInfo(profile.repoUrl);
 
   return (
-    <footer className="border-t border-line bg-panel-bar">
-      <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-5 font-mono text-xs text-fg-subtle sm:flex-row sm:items-center sm:justify-between sm:px-8">
-        <p>
-          © {new Date().getFullYear()} {profile.name}, {profile.location}
+    <footer className="bg-paper text-xs text-mute-light">
+      <div className="mx-auto max-w-[980px] px-5 py-6 sm:px-8">
+        <p className="border-b border-hairline-light pb-4 leading-relaxed">
+          Background footage: Mixkit stock clips. This site is open source and every change goes through CI before it is deployed.
         </p>
-        <p data-testid="build-info" className="flex items-center gap-2">
-          <span aria-hidden="true" className="h-2 w-2 rounded-full bg-green" />
-          <a href={profile.ciWorkflowUrl} target="_blank" rel="noopener noreferrer" className="hover:text-fg">
-            Tested and deployed by CI
-          </a>
-          <span aria-hidden="true">|</span>
-          {build.commit && build.commitUrl ? (
-            <a href={build.commitUrl} target="_blank" rel="noopener noreferrer" className="hover:text-fg">
-              {build.environment} build {build.commit}
+        <div className="flex flex-col gap-2 pt-4 sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            Copyright © {new Date().getFullYear()} {profile.name}. {profile.location}.
+          </p>
+          <p data-testid="build-info">
+            <a href={profile.ciWorkflowUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
+              Tested and deployed by CI
             </a>
-          ) : (
-            <span>{build.environment} build</span>
-          )}
-        </p>
+            <span aria-hidden="true" className="mx-2 text-hairline-light">
+              |
+            </span>
+            {build.commit && build.commitUrl ? (
+              <a href={build.commitUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                {build.environment} build {build.commit}
+              </a>
+            ) : (
+              <span>{build.environment} build</span>
+            )}
+          </p>
+        </div>
       </div>
     </footer>
   );

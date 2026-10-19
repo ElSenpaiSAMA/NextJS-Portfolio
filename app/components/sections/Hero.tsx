@@ -1,177 +1,72 @@
-import type { CSSProperties, ReactNode } from "react";
-import { HERO_TAGLINE, PIPELINE } from "../../data/console";
+import { HERO_TAGLINE } from "../../data/highlights";
+import { heroFootage } from "../../data/media";
 import { profile } from "../../data/profile";
 import { ButtonLink } from "../ui/ButtonLink";
-import { HeroFootage } from "../ui/HeroFootage";
-import { DownloadIcon, GitHubIcon, LinkedInIcon } from "../ui/icons";
-import { Window } from "../ui/Window";
-
-/** Seconds: when the pipeline starts, the gap between stages and how long each one "runs". */
-const START = 0.9;
-const STAGE_GAP = 0.32;
-const STAGE_RUN = 0.4;
-const PIPELINE_END = START + PIPELINE.stages.length * STAGE_GAP + STAGE_RUN;
-
-const at = (seconds: number, extra: Record<string, string | number> = {}) =>
-  ({ "--at": `calc(var(--hero-offset, 0s) + ${seconds}s)`, ...extra }) as CSSProperties;
-
-function Prompt({ command, start }: { command: string; start: number }) {
-  return (
-    <p className="term-line" style={at(start)}>
-      <span className="text-cyan">~/portfolio</span> <span className="text-amber">$</span>{" "}
-      <span className="term-typed text-fg" style={at(start, { "--chars": command.length, "--type-for": `${command.length * 0.035}s` })}>
-        {command}
-      </span>
-    </p>
-  );
-}
-
-function YamlLine({ k, children, start }: { k: string; children: ReactNode; start: number }) {
-  return (
-    <p className="term-line" style={at(start)}>
-      <span className="text-cyan">{k}</span>
-      <span className="text-fg-subtle">:</span> <span className="text-violet">{children}</span>
-    </p>
-  );
-}
+import { ScrubVideo } from "../ui/ScrubVideo";
 
 /**
- * The terminal: pushes this very site and runs its real CI stages, then
- * prints the profile. Pure CSS timing (see `.term-*` in globals.css); with
- * reduced motion it shows the finished run. Decorative — the same facts are
- * in the hero copy — so it is hidden from assistive tech.
- */
-function PipelineTerminal() {
-  const profileStart = PIPELINE_END + 0.3;
-  const profileCommand = "cat profile.yml";
-  const yamlStart = profileStart + profileCommand.length * 0.035 + 0.2;
-
-  return (
-    <Window title="~/portfolio  (zsh)" translucent className="hero-term w-full" bodyClassName="p-5 font-mono text-[13px] leading-relaxed sm:p-6 sm:text-sm">
-      <div aria-hidden="true" data-testid="hero-terminal">
-        <Prompt command={PIPELINE.command} start={0} />
-        <p className="term-line mt-1 text-fg-subtle" style={at(START - 0.2)}>
-          → ci.yml triggered
-        </p>
-        <ol>
-          {PIPELINE.stages.map((stage, i) => {
-            const shown = START + i * STAGE_GAP;
-            return (
-              <li key={stage} className="term-line pl-3" style={at(shown)}>
-                <span className="term-status mr-3" style={{ "--done": `calc(var(--hero-offset, 0s) + ${shown + STAGE_RUN}s)` } as CSSProperties}>
-                  <span className="term-pending text-amber">•</span>
-                  <span className="term-done text-green">✓</span>
-                </span>
-                <span className="text-fg-muted">{stage}</span>
-              </li>
-            );
-          })}
-        </ol>
-        <p className="term-line mt-1 text-green" style={at(PIPELINE_END)}>
-          ✓ all checks passed
-        </p>
-
-        <div className="mt-4">
-          <Prompt command={profileCommand} start={profileStart} />
-          <YamlLine k="name" start={yamlStart}>
-            {profile.name}
-          </YamlLine>
-          <YamlLine k="role" start={yamlStart + 0.1}>
-            {profile.role}
-          </YamlLine>
-          <YamlLine k="location" start={yamlStart + 0.2}>
-            {profile.location}
-          </YamlLine>
-          <YamlLine k="status" start={yamlStart + 0.3}>
-            {profile.availability.toLowerCase()}
-          </YamlLine>
-          <p className="term-line mt-1" style={at(yamlStart + 0.45)}>
-            <span className="text-cyan">~/portfolio</span> <span className="text-amber">$</span>
-            <span className="cursor" />
-          </p>
-        </div>
-      </div>
-    </Window>
-  );
-}
-
-/**
- * Opening screen over real data-center footage: who I am on the left, the
- * site shipping itself on the right. On desktop the section pins and the
- * scroll walks the camera down the server aisle (ScrollChoreography).
+ * Opening shot, Apple keynote style: full-bleed data-center footage, the name
+ * and role centred over it. On desktop the section pins and the scroll walks
+ * the camera down the server aisle while the name recedes and the tagline
+ * takes its place (ScrollChoreography). Phones: a muted loop.
  */
 export function Hero() {
   return (
-    <section id="top" aria-labelledby="hero-heading" className="relative isolate overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-console">
-        <HeroFootage />
-        {/* Readability veil: dark under the copy, open over the aisle; fades into the page below */}
+    <section id="top" aria-labelledby="hero-heading" className="relative isolate h-[100svh] min-h-[38rem] overflow-hidden bg-black">
+      <div className="absolute inset-0 -z-10">
+        <ScrubVideo clip={heroFootage} name="hero" />
+        {/* Keeps the type readable: dark at the bottom (copy) and top (bar) */}
         <div
           aria-hidden="true"
           data-hero-veil
-          className="absolute inset-0 bg-[linear-gradient(180deg,rgb(10_15_26/0.55)_0%,rgb(10_15_26/0.85)_55%,var(--console)_100%)] md:bg-[linear-gradient(90deg,rgb(10_15_26/0.92)_20%,rgb(10_15_26/0.35)_65%),linear-gradient(180deg,rgb(10_15_26/0.4)_0%,transparent_30%,transparent_75%,var(--console)_100%)]"
+          className="absolute inset-0 bg-[linear-gradient(180deg,rgb(0_0_0/0.55)_0%,rgb(0_0_0/0.15)_35%,rgb(0_0_0/0.55)_62%,#000_100%)]"
         />
-        <div aria-hidden="true" className="bg-grid absolute inset-0 opacity-40 [mask-image:linear-gradient(90deg,black,transparent_60%)]" />
       </div>
 
-      {/* Revealed mid-scroll while the hero is pinned (desktop with motion only) */}
+      <div data-hero-copy className="flex h-full flex-col items-center justify-end px-5 pb-14 text-center sm:pb-20">
+        <p className="inline-flex items-center gap-2 text-sm text-mute-dark sm:text-base">
+          <span className="h-2 w-2 rounded-full bg-ok" aria-hidden="true" />
+          {profile.availability} in {profile.location}
+        </p>
+        <h1 id="hero-heading" className="headline mt-4 text-[clamp(3.25rem,11vw,8.5rem)] leading-[0.95]">
+          Matias Speroni
+        </h1>
+        <p className="headline ink-gradient mt-3 w-fit text-[clamp(1.6rem,4.4vw,3.4rem)]">{profile.role}</p>
+
+        <div className="mt-9 flex flex-wrap items-center justify-center gap-x-7 gap-y-4">
+          <ButtonLink href="#projects">View work</ButtonLink>
+          <ButtonLink href="#contact" variant="link">
+            Get in touch
+          </ButtonLink>
+          <ButtonLink href={profile.githubUrl} variant="link" external>
+            GitHub
+          </ButtonLink>
+          <ButtonLink href={profile.linkedinUrl} variant="link" external>
+            LinkedIn
+          </ButtonLink>
+          {profile.cvUrl && (
+            <ButtonLink href={profile.cvUrl} variant="link" download>
+              CV
+            </ButtonLink>
+          )}
+        </div>
+
+        <ul className="mt-12 flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm text-mute-dark">
+          {profile.highlights.map((highlight) => (
+            <li key={highlight}>{highlight}</li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Takes the name's place mid-scroll (desktop with motion only) */}
       <p
         aria-hidden="true"
         data-hero-tagline
-        className="pointer-events-none absolute inset-x-5 top-1/2 mx-auto hidden max-w-4xl -translate-y-1/2 text-center font-mono text-[clamp(2rem,4.5vw,3.75rem)] font-bold leading-tight tracking-tight text-fg opacity-0 [text-shadow:0_2px_30px_rgb(10_15_26/0.95),0_0_8px_rgb(10_15_26/0.8)] md:block motion-reduce:hidden"
+        className="headline pointer-events-none absolute inset-x-5 top-1/2 hidden -translate-y-1/2 text-center text-[clamp(2.5rem,6.5vw,5.5rem)] opacity-0 md:block motion-reduce:hidden"
       >
-        <span className="text-amber">$</span> echo &quot;{HERO_TAGLINE}&quot;
+        <span className="block">{HERO_TAGLINE[0]}</span>
+        <span className="ink-gradient mx-auto block w-fit">{HERO_TAGLINE[1]}</span>
       </p>
-      <div className="mx-auto grid min-h-[100svh] max-w-6xl items-center gap-12 px-5 pb-16 pt-28 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] lg:gap-12">
-        <div data-hero-copy>
-          <p className="inline-flex items-center gap-2 rounded border border-line bg-panel px-3 py-1.5 font-mono text-xs text-fg-muted">
-            <span className="h-2 w-2 rounded-full bg-green" aria-hidden="true" />
-            {profile.availability} in {profile.location}
-          </p>
-
-          <p aria-hidden="true" className="mt-8 font-mono text-sm text-fg-subtle">
-            <span className="text-amber">$</span> whoami
-          </p>
-          <h1 id="hero-heading" className="mt-2 font-mono text-[clamp(2.75rem,8vw,5.75rem)] font-bold leading-[0.95] tracking-tight text-fg">
-            Matias Speroni
-          </h1>
-          <p className="mt-5 font-mono text-lg font-medium text-amber sm:text-xl">{profile.role}</p>
-          <p className="mt-4 max-w-xl text-base leading-relaxed text-fg-muted sm:text-lg">{profile.intro}</p>
-
-          <ul className="mt-6 space-y-1.5 font-mono text-sm text-fg-muted">
-            {profile.highlights.map((highlight) => (
-              <li key={highlight}>
-                <span aria-hidden="true" className="mr-2 text-fg-subtle">
-                  #
-                </span>
-                {highlight}
-              </li>
-            ))}
-          </ul>
-
-          <div className="mt-9 flex flex-wrap gap-2.5">
-            <ButtonLink href="#projects" variant="primary">
-              View work
-            </ButtonLink>
-            <ButtonLink href="#contact">Get in touch</ButtonLink>
-            <ButtonLink href={profile.githubUrl} external>
-              <GitHubIcon /> GitHub
-            </ButtonLink>
-            <ButtonLink href={profile.linkedinUrl} external>
-              <LinkedInIcon /> LinkedIn
-            </ButtonLink>
-            {profile.cvUrl && (
-              <ButtonLink href={profile.cvUrl} download>
-                <DownloadIcon /> CV
-              </ButtonLink>
-            )}
-          </div>
-        </div>
-
-        <div data-hero-term>
-          <PipelineTerminal />
-        </div>
-      </div>
     </section>
   );
 }

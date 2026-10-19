@@ -1,9 +1,5 @@
-import { contactFootage } from "../../data/media";
 import { profile } from "../../data/profile";
-import { AmbientVideo } from "../ui/AmbientVideo";
 import { GitHubIcon, LinkedInIcon, MailIcon, PhoneIcon } from "../ui/icons";
-import { Section } from "../ui/Section";
-import { Window } from "../ui/Window";
 import { ContactForm } from "./ContactForm";
 
 const CHANNELS = [
@@ -14,53 +10,46 @@ const CHANNELS = [
   { label: "GitHub", value: profile.githubUrl.replace(/^https:\/\//, ""), href: profile.githubUrl, Icon: GitHubIcon, external: true },
 ] as const;
 
-/** Closing section over circuit-board footage: the direct channels, and a message form in its own window. */
+/** The closing call to action: one big line, the direct channels as tiles, and the form. */
 export function Contact() {
   return (
-    <Section
-      id="contact"
-      title="Let's ship something"
-      intro="Open to Platform / DevOps and backend roles. Email is the quickest way to reach me."
-      className="pb-24 pt-24 sm:pb-32 sm:pt-32"
-      background={
-        <>
-          <AmbientVideo sources={contactFootage.loop} poster={contactFootage.poster} className="h-full w-full object-cover opacity-80" />
-          {/* Fades in from the page above and keeps the channels readable */}
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 bg-[linear-gradient(180deg,var(--console)_0%,rgb(10_15_26/0.6)_30%,rgb(10_15_26/0.7)_80%,var(--console)_100%)]"
-          />
-        </>
-      }
-    >
-      <div className="mx-auto mt-12 grid max-w-6xl gap-8 px-5 sm:px-8 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-12">
-        <ul className="space-y-3">
+    <section id="contact" aria-labelledby="contact-heading" className="scroll-mt-12 bg-black py-28 text-white sm:py-40">
+      <div className="mx-auto max-w-[980px] px-5 text-center sm:px-8">
+        <h2 id="contact-heading" data-rise className="headline mx-auto text-[clamp(3rem,9vw,6.5rem)] leading-none">
+          Let&apos;s build
+          <span className="ink-gradient mx-auto block w-fit pb-2">what&apos;s next.</span>
+        </h2>
+        <p data-rise className="mx-auto mt-6 max-w-xl text-xl leading-snug text-mute-dark sm:text-2xl">
+          Open to Platform / DevOps and backend roles. Email is the quickest way to reach me.
+        </p>
+      </div>
+
+      <div className="mx-auto mt-16 grid max-w-[980px] gap-5 px-5 sm:px-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+        <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
           {CHANNELS.map(({ label, value, href, Icon, external }) => (
             <li key={label} data-reveal>
               <a
                 href={href}
                 {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className="group flex items-center gap-4 rounded-lg border border-line bg-panel px-5 py-4 transition-colors hover:border-amber"
+                className="group flex h-full items-center gap-4 rounded-[22px] bg-graphite px-6 py-5 transition-colors hover:bg-[#2a2a2d]"
               >
-                <Icon width={20} height={20} className="shrink-0 text-fg-subtle transition-colors group-hover:text-amber" />
+                <Icon width={22} height={22} className="shrink-0 text-mute-dark transition-colors group-hover:text-link-dark" />
                 <span className="min-w-0">
-                  <span className="block font-mono text-xs text-fg-subtle">{label}</span>
-                  <span className="block truncate font-mono text-base font-medium text-fg transition-colors group-hover:text-amber sm:text-lg">
-                    {value}
-                  </span>
+                  <span className="block text-[13px] text-mute-dark">{label}</span>
+                  <span className="block truncate text-[17px] font-semibold">{value}</span>
                 </span>
               </a>
             </li>
           ))}
         </ul>
 
-        <Window title={<span aria-hidden="true">~/portfolio/message.txt</span>} className="self-start" bodyClassName="p-6 sm:p-8">
-          <h3 className="font-mono text-lg font-bold text-fg">Send a message</h3>
+        <div data-reveal className="rounded-[28px] bg-graphite p-7 sm:p-9">
+          <h3 className="text-[21px] font-semibold tracking-tight">Send a message</h3>
           <div className="mt-6">
             <ContactForm formId={profile.formspreeId} />
           </div>
-        </Window>
+        </div>
       </div>
-    </Section>
+    </section>
   );
 }
