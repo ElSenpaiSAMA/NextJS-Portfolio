@@ -16,7 +16,7 @@ export function IntroScreen() {
           <span className="intro-welcome">Welcome to my portfolio</span>
         </span>
       </p>
-      <span className="intro-caret" />
+      <span className="caret" />
     </div>
   );
 }

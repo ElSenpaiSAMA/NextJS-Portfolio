@@ -16,12 +16,12 @@ const STYLES: Record<Variant, string> = {
   secondary: "border border-line bg-surface text-fg hover:border-fg-subtle",
 };
 
-/** Button-shaped link; its corners follow `radius` in portfolio.config.ts. */
+/** Pill-shaped link: white primary, outlined secondary. */
 export function ButtonLink({ href, children, variant = "secondary", external = false, download = false }: ButtonLinkProps) {
   return (
     <a
       href={href}
-      className={`inline-flex items-center gap-2 rounded-ui px-4 py-2.5 text-sm font-medium transition-[opacity,border-color] ${STYLES[variant]}`}
+      className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-[opacity,border-color] ${STYLES[variant]}`}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       {...(download ? { download: true } : {})}
     >

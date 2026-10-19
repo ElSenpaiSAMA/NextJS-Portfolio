@@ -120,7 +120,7 @@ export function ContactForm({ formId }: { formId: string }) {
       <button
         type="submit"
         disabled={submitting}
-        className="rounded-ui bg-accent px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+        className="rounded-ui bg-accent-strong px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
       >
         {submitting ? "Sending…" : "Send message"}
       </button>

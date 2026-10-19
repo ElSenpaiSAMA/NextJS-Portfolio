@@ -140,7 +140,7 @@ export function DeployWidget({ steps, command }: { steps: DeployStep[]; command:
           type="button"
           onClick={deploy}
           disabled={run === "running"}
-          className="rounded-ui bg-accent px-4 py-1.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+          className="rounded-ui bg-accent-strong px-4 py-1.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
         >
           {run === "running" ? "Deploying…" : run === "done" ? "Redeploy" : "Deploy"}
         </button>
@@ -156,7 +156,7 @@ export function DeployWidget({ steps, command }: { steps: DeployStep[]; command:
       </ol>
 
       <div aria-hidden="true" className="h-1 bg-surface-2">
-        <div className="h-full bg-accent transition-[width] duration-300 ease-out" style={{ width: `${(passed / steps.length) * 100}%` }} />
+        <div className="h-full bg-accent-strong transition-[width] duration-300 ease-out" style={{ width: `${(passed / steps.length) * 100}%` }} />
       </div>
 
       <ol ref={logBox} aria-hidden="true" className="h-44 overflow-y-auto bg-surface-2 p-4 font-mono text-[12px] leading-relaxed sm:h-52">
