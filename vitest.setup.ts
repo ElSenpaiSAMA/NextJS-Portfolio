@@ -8,7 +8,7 @@ afterEach(() => {
 
 /*
  * jsdom has no matchMedia. Inert stand-in: no query matches, so the
- * client-side motion (GSAP, Lenis, the WebGL cluster) never loads in unit
+ * client-side motion (GSAP, Lenis, video scrubbing) never runs in unit
  * tests — it's covered by E2E in a real browser.
  */
 Object.defineProperty(window, "matchMedia", {
@@ -24,3 +24,8 @@ Object.defineProperty(window, "matchMedia", {
     dispatchEvent: vi.fn(),
   })),
 });
+
+// jsdom doesn't implement media playback.
+HTMLMediaElement.prototype.play = vi.fn(() => Promise.resolve());
+HTMLMediaElement.prototype.pause = vi.fn();
+HTMLMediaElement.prototype.load = vi.fn();

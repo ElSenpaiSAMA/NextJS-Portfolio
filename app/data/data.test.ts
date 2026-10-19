@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { certifications, education, experience } from "./experience";
 import { NAV_ITEMS } from "../lib/site";
 import { BOOT_LINES, PIPELINE, SECTION_COMMANDS } from "./console";
+import { contactFootage, heroFootage } from "./media";
 import { profile } from "./profile";
 import { projects } from "./projects";
 import { stack } from "./stack";
@@ -100,6 +101,16 @@ describe("stack", () => {
       for (const item of group.items) {
         if (item.logo) expect(publicAssetExists(item.logo), `${item.name} logo ${item.logo}`).toBe(true);
       }
+    }
+  });
+});
+
+describe("media", () => {
+  it("ships every footage file it references, with credits", () => {
+    for (const clip of [heroFootage, contactFootage]) {
+      const files = [clip.poster, clip.loop.mp4, clip.loop.webm, clip.scrub?.mp4, clip.scrub?.webm].filter((f): f is string => Boolean(f));
+      for (const file of files) expect(publicAssetExists(file), file).toBe(true);
+      expect(isHttpsUrl(clip.source.url), clip.source.url).toBe(true);
     }
   });
 });

@@ -42,14 +42,20 @@ test.describe("home page", () => {
     await expect(page.getByText("all checks passed")).toBeVisible({ timeout: 10_000 });
   });
 
-  test("the hero cluster renders: WebGL on desktop, SVG on phones", async ({ page, isMobile }) => {
+  test("hero footage scrubs with the scroll on desktop and loops on phones", async ({ page }) => {
     await page.goto("/");
-    if (isMobile) {
-      await expect(page.getByTestId("cluster-svg")).toBeVisible();
-      await expect(page.getByTestId("hero-scene").locator("canvas")).toHaveCount(0);
+    const scrub = page.getByTestId("hero-scrub-video");
+    if (await scrub.count()) {
+      // Desktop choreography: the playhead follows the scroll position.
+      await expect.poll(() => scrub.evaluate((v: HTMLVideoElement) => v.readyState), { timeout: 15_000 }).toBeGreaterThanOrEqual(2);
+      for (let y = 0; y <= 900; y += 150) {
+        await page.evaluate((top) => window.scrollTo(0, top), y);
+        await page.waitForTimeout(80);
+      }
+      await expect.poll(() => scrub.evaluate((v: HTMLVideoElement) => v.currentTime)).toBeGreaterThan(1);
     } else {
-      // Mounted on idle, as its own chunk.
-      await expect(page.getByTestId("hero-scene").locator("canvas")).toBeVisible({ timeout: 10_000 });
+      const loop = page.getByTestId("ambient-video").first();
+      await expect.poll(() => loop.evaluate((v: HTMLVideoElement) => !v.paused && v.currentTime > 0), { timeout: 15_000 }).toBe(true);
     }
   });
 

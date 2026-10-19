@@ -26,12 +26,17 @@ describe("Home page", () => {
     for (const stage of PIPELINE.stages) expect(terminal).toHaveTextContent(stage);
   });
 
-  it("draws the decorative cluster behind the hero (SVG now, WebGL mounts client-side)", () => {
+  it("backs the hero and contact with muted, decorative footage", () => {
     render(<HomePage />);
-    expect(screen.getByTestId("cluster-svg")).toHaveAttribute("aria-hidden", "true");
-    expect(screen.getByTestId("hero-scene")).toHaveAttribute("aria-hidden", "true");
-    // matchMedia matches nothing in jsdom: the WebGL canvas never loads here.
-    expect(screen.getByTestId("hero-scene").querySelector("canvas")).toBeNull();
+    // matchMedia matches nothing in jsdom: the light loops render, never the scrub clip.
+    expect(screen.queryByTestId("hero-scrub-video")).toBeNull();
+    const videos = screen.getAllByTestId("ambient-video") as HTMLVideoElement[];
+    expect(videos).toHaveLength(2);
+    for (const video of videos) {
+      expect(video.muted).toBe(true);
+      expect(video).toHaveAttribute("aria-hidden", "true");
+      expect(video).toHaveAttribute("poster");
+    }
   });
 
   it("renders a section for every nav item", () => {
