@@ -1,6 +1,6 @@
 ---
 name: design-token
-description: Agrega o modifica un design token (color, utilidad de tipografía, easing) en app/globals.css del diseño "Product page" (estilo Apple), manteniendo contraste WCAG AA. Usar cuando se necesite un color nuevo o cambiar la paleta.
+description: Agrega o modifica un design token (color, utilidad de tipografía, easing) en app/globals.css del diseño "Source → Build", manteniendo contraste WCAG AA. Usar cuando se necesite un color nuevo o cambiar la paleta.
 ---
 
 # design-token
@@ -16,7 +16,7 @@ En `app/globals.css`:
 ## Reglas
 
 1. ¿Ya existe uno equivalente? Reutilizá antes de crear.
-2. Contraste: texto sobre `black`, `graphite`, `paper` y `white` ≥ 4.5:1 (axe mide también el texto `aria-hidden`). Degradados sobre claro: `ink-gradient-deep`.
+2. Contraste: texto sobre `ink`, `ink-2` e `ink-3` ≥ 4.5:1 (axe mide también el texto `aria-hidden`). Si el color también lo usa el canvas ASCII, actualizar `MID`/`HIGH` en `AsciiCanvas.tsx`.
 3. No crees una utilidad propia con prefijo `text-<color>` si existe `--color-<color>`: Tailwind genera la
    suya y la pisa (por eso una utilidad propia de texto no debe llamarse `text-<token>`).
 4. Si el color se usa en WebGL/SVG/OG (`CityScene.tsx`, `StaticSkyline.tsx`, `opengraph-image.tsx`,

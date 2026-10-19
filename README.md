@@ -59,7 +59,7 @@ server errors land in the same Vercel log stream. A per-page cap prevents error 
 Next.js 16 (App Router, static single page, `next/image`) · React 19 · TypeScript (strict) · Tailwind CSS 4 ·
 Formspree (contact) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel.
 
-"Product page" design: the portfolio is presented the way Apple presents a product. It uses huge, tight Inter headlines and sections that alternate black and light grey. In the hero, the scroll drives real data-center footage, so you walk down a server aisle while the name gives way to the tagline. The intro lights up word by word, followed by a "Get the highlights." bento and a pinned "Build. Ship. Run." chapter over circuit-board footage. Projects sit in a horizontal gallery and the stack reads like Apple's "Tech specs". The animations use GSAP ScrollTrigger, with Lenis smooth scrolling on desktop. GSAP, Lenis and the scrub clips load on demand, and phones get light muted loops. The footage is Mixkit stock (see docs/ai/04-content.md). Everything respects prefers-reduced-motion.
+"Source → Build" design: the portfolio reads as code compiling in front of you. Real data-center footage is rendered as live ASCII on a canvas. On desktop the scroll drives the clip, so you walk down a server aisle made of characters, and halfway through the ASCII "compiles" into the real video. Headings decode letter by letter. The profile appears as an `engineer.ts` file generated from the same data as the page, typing itself as you scroll next to a build log of the site's real CI stages. Projects run sideways with an RGB glitch, the experience draws as a git graph, and the portrait resolves from ASCII into the photo. A caret cursor and magnetic buttons complete the set. It is built with GSAP ScrollTrigger and Lenis, loaded on demand. Phones get light ASCII loops, and everything respects prefers-reduced-motion. The effects are documented for AI agents in `.claude/skills/code-effects`. The footage is Mixkit stock.
 
 ## Local development
 
@@ -96,9 +96,10 @@ app/
   error.tsx, global-error.tsx
   api/log/route.ts          browser log ingestion
   components/
-    layout/                 welcome screen, scroll choreography, header, footer
-    sections/               Hero, Statement, Highlights, Story, Projects + ProjectsGallery, Experience, Stack, About, Contact + ContactForm
-    ui/                     small primitives (Section, ButtonLink, ScrubVideo, AmbientVideo, icons)
+    layout/                 build screen, scroll choreography, header, footer
+    fx/                     ASCII renderer (video/image → glyphs), caret cursor
+    sections/               Hero, Source, Projects, Experience, Stack, About, Contact + ContactForm
+    ui/                     small primitives (Section, ButtonLink, AmbientVideo, icons)
   data/                     all copy and content, typed — edit here, not in components
   lib/                      logger, client logger, log schema, contact, theme, site config
 public/

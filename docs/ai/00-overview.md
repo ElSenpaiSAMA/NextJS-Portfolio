@@ -7,14 +7,14 @@ Portfolio de **Matias Speroni**, **Backend & DevOps Engineer** en Barcelona. Vie
 
 **Single-page estática** en inglés, con la estructura original del autor: Hero (quién soy) → Projects
 (con imágenes) → Experience → Stack completo (con logos, sin niveles) → About (foto, bio, datos,
-educación, certificaciones) → Contact. **El contenido sale del CV del autor** (`public/CV_Matias_Speroni_DO.pdf`). Estética **"Product page"**
-(capa 02): presentado como una página de producto de Apple — Inter enorme y apretada, secciones que alternan
-negro y gris claro, **video real de un data center** controlado por el scroll en el hero (caminás por el
-pasillo de racks), "Build. Ship. Run." sobre una placa de circuitos, bento "Get the highlights.", galería
-horizontal de proyectos y el stack como "Tech specs". Animaciones con GSAP ScrollTrigger + Lenis.
+educación, certificaciones) → Contact. **El contenido sale del CV del autor** (`public/CV_Matias_Speroni_DO.pdf`). Estética **"Source → Build"**
+(capa 02): el portfolio como código que se compila — el video del data center **renderizado en ASCII en
+tiempo real** (al bajar, el ASCII compila al video real), títulos que se decodifican, el perfil como
+`engineer.ts` generado de los datos que se tipea con el scroll, build con las etapas reales del CI, git log que
+se dibuja, retrato ASCII, cursor caret. Geist + Geist Mono, tinta y azul eléctrico. GSAP + ScrollTrigger + Lenis.
+Efectos documentados en la skill `code-effects`.
 
-> También descartados: "Ops console" (terminal) con un clúster 3D (Three.js) y con video; el autor pidió
-> "algo tipo Apple".
+> También descartados: "Ops console" (terminal) con clúster 3D y con video, y "Product page" estilo Apple.
 
 > Direcciones descartadas por el autor: "Night Shift" con puerto 3D (Three.js) y luego con video real.
 > Pidió algo más relacionado con la informática.
@@ -29,30 +29,28 @@ El sitio además es evidencia de DevOps: CI completo, tests, accesibilidad, Ligh
 
 Next.js 16 (App Router) · React 19 · TypeScript strict · Tailwind CSS 4 · `next/image` · Formspree
 (fetch directo) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel · Node 22.
-Client components: `ContactForm`, `ProjectsGallery`, `ScrollChoreography`, `ScrubVideo`, `AmbientVideo` y los
+Client components: `ContactForm`, `ScrollChoreography`, `Cursor`, `AsciiFootage`/`AsciiCanvas`, `AsciiPortrait` y los
 error boundaries. GSAP y Lenis se cargan bajo demanda.
 
 ## Árbol de render
 
 ```
-RootLayout (server)       layout.tsx — Inter, metadata, script de intro, IntroScreen / ScrollChoreography / SiteHeader / <main> / SiteFooter
+RootLayout (server)       layout.tsx — Geist + Geist Mono, metadata, script de intro, IntroScreen / ScrollChoreography / Cursor / SiteHeader / <main> / SiteFooter
 └─ HomePage (server)      page.tsx
-   ├─ Hero                #top — video del data center (scrub), nombre, rol, CTAs, highlights del perfil
-   ├─ Statement           intro que se ilumina palabra por palabra
-   ├─ Highlights          #highlights — bento "Get the highlights." + tile del pipeline real
-   ├─ Story               #how-i-work — Build. Ship. Run. sobre la placa de circuitos (scrub)
-   ├─ Projects            #projects — galería horizontal (ProjectsGallery, client)
-   ├─ Experience          #experience — una tarjeta por empresa: roles y logros
-   ├─ Stack               #stack — "Tech specs.": filas por grupo con logos
-   ├─ About               #about — foto, bio, facts, educación, certificaciones
-   ├─ Contact             #contact — canales + ContactForm (client)
+   ├─ Hero                #top — data center en ASCII (scrub → video real), nombre decodificado, rol, CTAs
+   ├─ Source              #source — intro + engineer.ts generado (se tipea con el scroll) + build con el CI real
+   ├─ Projects            #projects — carril horizontal, glitch y títulos que se decodifican
+   ├─ Experience          #experience — git log que se dibuja: empresas, roles y logros
+   ├─ Stack               #stack — cintas + lista por grupo con logos
+   ├─ About               #about — retrato ASCII → foto, bio, facts, educación, certificaciones
+   ├─ Contact             #contact — circuito en ASCII, canales + ContactForm (client)
    └─ JSON-LD Person
 ```
 
 ## Flujo de datos
 
 ```
-app/data/{profile,projects,experience,stack,highlights,media}.ts ──► components/sections/* (presentación)
+app/data/{profile,projects,experience,stack,source,media}.ts ──► components/sections/* (presentación)
 lib/site.ts  NAV_ITEMS (ids de sección), siteUrl, build info
 public/      avatar.jpg, CV_Matias_Speroni_DO.pdf, projects/*.{png,jpg}, stack/*.svg
 
