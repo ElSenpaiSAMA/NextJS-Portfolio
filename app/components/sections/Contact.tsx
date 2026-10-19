@@ -1,4 +1,6 @@
+import { contactFootage } from "../../data/media";
 import { profile } from "../../data/profile";
+import { AmbientVideo } from "../ui/AmbientVideo";
 import { GitHubIcon, LinkedInIcon, MailIcon, PhoneIcon } from "../ui/icons";
 import { Section } from "../ui/Section";
 import { Window } from "../ui/Window";
@@ -12,7 +14,7 @@ const CHANNELS = [
   { label: "GitHub", value: profile.githubUrl.replace(/^https:\/\//, ""), href: profile.githubUrl, Icon: GitHubIcon, external: true },
 ] as const;
 
-/** Closing section: the direct channels, and a message form in its own window. */
+/** Closing section over circuit-board footage: the direct channels, and a message form in its own window. */
 export function Contact() {
   return (
     <Section
@@ -20,6 +22,16 @@ export function Contact() {
       title="Let's ship something"
       intro="Open to Platform / DevOps and backend roles. Email is the quickest way to reach me."
       className="pb-24 pt-24 sm:pb-32 sm:pt-32"
+      background={
+        <>
+          <AmbientVideo sources={contactFootage.loop} poster={contactFootage.poster} className="h-full w-full object-cover opacity-80" />
+          {/* Fades in from the page above and keeps the channels readable */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-[linear-gradient(180deg,var(--console)_0%,rgb(10_15_26/0.6)_30%,rgb(10_15_26/0.7)_80%,var(--console)_100%)]"
+          />
+        </>
+      }
     >
       <div className="mx-auto mt-12 grid max-w-6xl gap-8 px-5 sm:px-8 lg:grid-cols-[minmax(0,6fr)_minmax(0,5fr)] lg:gap-12">
         <ul className="space-y-3">

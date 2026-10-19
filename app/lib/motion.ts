@@ -2,12 +2,13 @@
 
 import { useSyncExternalStore } from "react";
 
-/** Any motion at all (scroll reveals, 3D animation). */
+/** Any motion at all (scroll reveals, background video). */
 export const MOTION_QUERY = "(prefers-reduced-motion: no-preference)";
-/** Smooth (inertial) scrolling: desktop pointers only — touch is already inertial. */
-export const SMOOTH_SCROLL_QUERY = "(prefers-reduced-motion: no-preference) and (pointer: fine) and (min-width: 768px)";
-/** Where the WebGL cluster runs; phones get the SVG version. */
-export const WEBGL_SCENE_QUERY = "(min-width: 768px)";
+/**
+ * Desktop with motion: inertial scrolling (touch is already inertial) and the
+ * hero video scrubbed by the scroll. Phones get a light muted loop instead.
+ */
+export const DESKTOP_MOTION_QUERY = "(prefers-reduced-motion: no-preference) and (pointer: fine) and (min-width: 768px)";
 
 /** Subscribes to a media query; `false` on the server and in the first client render. */
 export function useMediaQuery(query: string): boolean {
@@ -29,12 +30,3 @@ export async function loadGsap() {
   return { gsap, ScrollTrigger };
 }
 
-/** True when the browser can create a WebGL context. */
-export function supportsWebGL(): boolean {
-  try {
-    const canvas = document.createElement("canvas");
-    return Boolean(canvas.getContext("webgl2") ?? canvas.getContext("webgl"));
-  } catch {
-    return false;
-  }
-}

@@ -1,9 +1,8 @@
 import type { CSSProperties, ReactNode } from "react";
-import { PIPELINE } from "../../data/console";
+import { HERO_TAGLINE, PIPELINE } from "../../data/console";
 import { profile } from "../../data/profile";
-import { ClusterSvg } from "../scene/ClusterSvg";
-import { HeroScene } from "../scene/HeroScene";
 import { ButtonLink } from "../ui/ButtonLink";
+import { HeroFootage } from "../ui/HeroFootage";
 import { DownloadIcon, GitHubIcon, LinkedInIcon } from "../ui/icons";
 import { Window } from "../ui/Window";
 
@@ -96,24 +95,33 @@ function PipelineTerminal() {
   );
 }
 
-/** Opening screen: who I am on the left, the site shipping itself on the right. */
+/**
+ * Opening screen over real data-center footage: who I am on the left, the
+ * site shipping itself on the right. On desktop the section pins and the
+ * scroll walks the camera down the server aisle (ScrollChoreography).
+ */
 export function Hero() {
   return (
     <section id="top" aria-labelledby="hero-heading" className="relative isolate overflow-hidden">
-      <div
-        aria-hidden="true"
-        className="bg-grid absolute inset-0 -z-20 [mask-image:radial-gradient(ellipse_at_70%_40%,black_20%,transparent_75%)]"
-      />
-      {/* The cluster: WebGL on tablets/desktops, SVG on phones */}
-      <div className="absolute inset-0 -z-10">
-        <HeroScene />
-        <ClusterSvg />
-        {/* Keeps the copy readable over the scene */}
+      <div className="absolute inset-0 -z-10 bg-console">
+        <HeroFootage />
+        {/* Readability veil: dark under the copy, open over the aisle; fades into the page below */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-[linear-gradient(180deg,transparent_25%,var(--console)_70%)] md:bg-[linear-gradient(90deg,var(--console)_15%,transparent_60%),linear-gradient(180deg,transparent_70%,var(--console)_100%)]"
+          data-hero-veil
+          className="absolute inset-0 bg-[linear-gradient(180deg,rgb(10_15_26/0.55)_0%,rgb(10_15_26/0.85)_55%,var(--console)_100%)] md:bg-[linear-gradient(90deg,rgb(10_15_26/0.92)_20%,rgb(10_15_26/0.35)_65%),linear-gradient(180deg,rgb(10_15_26/0.4)_0%,transparent_30%,transparent_75%,var(--console)_100%)]"
         />
+        <div aria-hidden="true" className="bg-grid absolute inset-0 opacity-40 [mask-image:linear-gradient(90deg,black,transparent_60%)]" />
       </div>
+
+      {/* Revealed mid-scroll while the hero is pinned (desktop with motion only) */}
+      <p
+        aria-hidden="true"
+        data-hero-tagline
+        className="pointer-events-none absolute inset-x-5 top-1/2 mx-auto hidden max-w-4xl -translate-y-1/2 text-center font-mono text-[clamp(2rem,4.5vw,3.75rem)] font-bold leading-tight tracking-tight text-fg opacity-0 [text-shadow:0_2px_30px_rgb(10_15_26/0.95),0_0_8px_rgb(10_15_26/0.8)] md:block motion-reduce:hidden"
+      >
+        <span className="text-amber">$</span> echo &quot;{HERO_TAGLINE}&quot;
+      </p>
       <div className="mx-auto grid min-h-[100svh] max-w-6xl items-center gap-12 px-5 pb-16 pt-28 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] lg:gap-12">
         <div data-hero-copy>
           <p className="inline-flex items-center gap-2 rounded border border-line bg-panel px-3 py-1.5 font-mono text-xs text-fg-muted">

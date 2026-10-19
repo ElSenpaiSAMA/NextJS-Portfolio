@@ -8,6 +8,8 @@ interface SectionProps {
   /** One plain sentence under the title. */
   intro?: ReactNode;
   className?: string;
+  /** Full-bleed layer behind the section (e.g. background footage). */
+  background?: ReactNode;
   children: ReactNode;
 }
 
@@ -15,10 +17,11 @@ interface SectionProps {
  * A page section opened by the shell command that "prints" it (decorative,
  * aria-hidden), then the real h2. Spacing is set per section on purpose.
  */
-export function Section({ id, title, intro, className = "", children }: SectionProps) {
+export function Section({ id, title, intro, className = "", background, children }: SectionProps) {
   const headingId = `${id}-heading`;
   return (
-    <section id={id} aria-labelledby={headingId} className={`scroll-mt-16 ${className}`}>
+    <section id={id} aria-labelledby={headingId} className={`relative isolate scroll-mt-16 ${background ? "overflow-hidden" : ""} ${className}`}>
+      {background && <div className="absolute inset-0 -z-10">{background}</div>}
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <p aria-hidden="true" data-command className="w-fit font-mono text-sm text-fg-subtle">
           <span className="text-amber">$</span> {SECTION_COMMANDS[id]}

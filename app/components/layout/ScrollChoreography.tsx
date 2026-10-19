@@ -1,16 +1,16 @@
 "use client";
 
 import { useEffect } from "react";
-import { heroScroll } from "../../lib/cluster-topology";
-import { MOTION_QUERY, SMOOTH_SCROLL_QUERY, loadGsap, useMediaQuery } from "../../lib/motion";
+import { DESKTOP_MOTION_QUERY, MOTION_QUERY, loadGsap, useMediaQuery } from "../../lib/motion";
 
 const REVEAL_FROM = { opacity: 0, y: 60, rotateX: 8, transformPerspective: 1200 };
 
 /**
  * Every scroll-driven animation on the page, in one place. Sections stay
  * server components and only mark what moves with data attributes:
- * - `#top` hero: copy and terminal drift at different speeds; the 3D cluster
- *   reads the hero's progress (`heroScroll`) to pull the camera back.
+ * - `#top` hero (desktop): pins while the scroll drives the data-center
+ *   video's playhead (`[data-hero-scrub]`), so scrolling walks down the server
+ *   aisle, as the copy and terminal clear out and the tagline shows.
  * - `[data-command]`: the shell command above a title types itself in.
  * - `[data-section-title]`: the title rises after its command.
  * - `[data-reveal]`: windows/cards enter with a slight 3D tilt, staggered.
@@ -21,23 +21,40 @@ const REVEAL_FROM = { opacity: 0, y: 60, rotateX: 8, transformPerspective: 1200 
  */
 export function ScrollChoreography() {
   const motion = useMediaQuery(MOTION_QUERY);
-  const smooth = useMediaQuery(SMOOTH_SCROLL_QUERY);
+  const desktop = useMediaQuery(DESKTOP_MOTION_QUERY);
 
   useEffect(() => {
     if (!motion) return;
     let cleanup: (() => void) | undefined;
     let cancelled = false;
+    let frame = 0;
 
-    Promise.all([loadGsap(), smooth ? import("lenis") : Promise.resolve(null)]).then(([{ gsap, ScrollTrigger }, lenisModule]) => {
+    Promise.all([loadGsap(), desktop ? import("lenis") : Promise.resolve(null)]).then(([{ gsap, ScrollTrigger }, lenisModule]) => {
       if (cancelled) return;
 
       const ctx = gsap.context(() => {
         const hero = document.getElementById("top");
-        if (hero) {
-          const heroRange = { trigger: hero, start: "top top", end: "bottom top", scrub: true };
-          ScrollTrigger.create({ ...heroRange, onUpdate: ({ progress }) => (heroScroll.progress = progress) });
-          gsap.to("[data-hero-copy]", { yPercent: -14, opacity: 0.2, ease: "none", scrollTrigger: heroRange });
-          gsap.to("[data-hero-term]", { y: -180, ease: "none", scrollTrigger: heroRange });
+        const video = document.querySelector<HTMLVideoElement>("[data-hero-scrub]");
+        if (hero && desktop) {
+          // At most one seek per frame: seeking is the expensive part.
+          const seek = (progress: number) => {
+            cancelAnimationFrame(frame);
+            frame = requestAnimationFrame(() => {
+              if (!video || !Number.isFinite(video.duration)) return;
+              const time = progress * (video.duration - 0.05);
+              if (Math.abs(video.currentTime - time) > 0.02) video.currentTime = time;
+            });
+          };
+          gsap
+            .timeline({
+              scrollTrigger: { trigger: hero, start: "top top", end: "+=160%", pin: true, scrub: 0.5, onUpdate: ({ progress }) => seek(progress) },
+            })
+            .fromTo("[data-hero-scrub]", { scale: 1.12 }, { scale: 1, ease: "none", duration: 1 }, 0)
+            .to("[data-hero-veil]", { opacity: 0.3, ease: "none", duration: 0.35 }, 0)
+            .to("[data-hero-copy]", { y: -60, opacity: 0, ease: "power2.in", duration: 0.3 }, 0)
+            .to("[data-hero-term]", { y: -100, opacity: 0, ease: "power2.in", duration: 0.3 }, 0.04)
+            .fromTo("[data-hero-tagline]", { opacity: 0, y: 40 }, { opacity: 1, y: 0, ease: "power2.out", duration: 0.2 }, 0.45)
+            .to("[data-hero-tagline]", { opacity: 0, y: -30, ease: "power2.in", duration: 0.15 }, 0.85);
         }
 
         for (const command of gsap.utils.toArray<HTMLElement>("[data-command]")) {
@@ -99,6 +116,7 @@ export function ScrollChoreography() {
       window.addEventListener("load", refresh);
 
       cleanup = () => {
+        cancelAnimationFrame(frame);
         window.removeEventListener("load", refresh);
         if (tick) gsap.ticker.remove(tick);
         lenis?.destroy();
@@ -110,7 +128,7 @@ export function ScrollChoreography() {
       cancelled = true;
       cleanup?.();
     };
-  }, [motion, smooth]);
+  }, [motion, desktop]);
 
   return null;
 }
