@@ -10,8 +10,12 @@ Portfolio de **Matias Speroni**, **Backend & DevOps Engineer** en Barcelona. Vie
 educación, certificaciones) → Contact. **El contenido sale del CV del autor** (`public/CV_Matias_Speroni_DO.pdf`). Estética **"Ops console"**
 (capa 02): el sitio como una sesión de terminal y su propio pipeline de CI — cada sección se abre con el
 comando que la muestra, IBM Plex Mono/Sans, base azul pizarra con ámbar y cian, tema oscuro único.
-Movimiento: clúster de servidores 3D (Three.js / R3F) en el hero, revelados con GSAP ScrollTrigger, Lenis
-en desktop y la terminal/boot screen en CSS.
+Movimiento: **video real de un data center** detrás del hero, controlado por el scroll en desktop (caminás por
+el pasillo de racks), video de una placa de circuitos detrás de Contact, revelados con GSAP ScrollTrigger,
+Lenis en desktop y la terminal/boot screen en CSS.
+
+> También descartado: un clúster 3D de servidores (Three.js). El autor prefirió video real de informática
+> a formas geométricas.
 
 > Direcciones descartadas por el autor: "Night Shift" con puerto 3D (Three.js) y luego con video real.
 > Pidió algo más relacionado con la informática.
@@ -26,15 +30,15 @@ El sitio además es evidencia de DevOps: CI completo, tests, accesibilidad, Ligh
 
 Next.js 16 (App Router) · React 19 · TypeScript strict · Tailwind CSS 4 · `next/image` · Formspree
 (fetch directo) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel · Node 22.
-Client components: `ContactForm`, `ScrollChoreography`, `HeroScene` → `ClusterScene` (diferido) y los error
-boundaries. GSAP, Lenis y three.js se cargan bajo demanda.
+Client components: `ContactForm`, `ScrollChoreography`, `HeroFootage`, `AmbientVideo` y los error boundaries.
+GSAP y Lenis se cargan bajo demanda.
 
 ## Árbol de render
 
 ```
 RootLayout (server)       layout.tsx — IBM Plex Mono + Sans, metadata, script de intro, IntroScreen / ScrollChoreography / SiteHeader / <main> / SiteFooter
 └─ HomePage (server)      page.tsx
-   ├─ Hero                #top — disponibilidad, nombre, rol, intro, highlights, CTAs + terminal con el pipeline (CSS) + clúster 3D de fondo
+   ├─ Hero                #top — disponibilidad, nombre, rol, intro, highlights, CTAs + terminal con el pipeline (CSS) + video del data center de fondo
    ├─ Projects            #projects — ventanas ProjectCard (path, imagen, descripción, tech, links)
    ├─ Experience          #experience — grafo tipo `git log`: empresas, roles y logros
    ├─ Stack               #stack — `stack.yml` con números de línea y logos

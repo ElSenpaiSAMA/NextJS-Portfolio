@@ -59,7 +59,7 @@ server errors land in the same Vercel log stream. A per-page cap prevents error 
 Next.js 16 (App Router, static single page, `next/image`) · React 19 · TypeScript (strict) · Tailwind CSS 4 ·
 Formspree (contact) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel.
 
-"Ops console" design: the site reads as a terminal session. Each section opens with the command that would print it (`ls ~/projects`, `git log --graph`, `cat stack.yml`, `cat README.md`), and the hero terminal pushes this very repo and runs its real CI stages, kept in sync with `ci.yml` by a unit test. IBM Plex Mono and Sans on a blue-slate console with amber and cyan accents. Behind the hero, a 3D cluster of servers (Three.js / React Three Fiber) passes data packets along its network cables. GSAP ScrollTrigger types each command and reveals the windows as you scroll, and Lenis smooths the scroll on desktop. three.js, GSAP and Lenis load on demand, and phones get an SVG version of the cluster. Everything respects prefers-reduced-motion.
+"Ops console" design: the site reads as a terminal session. Each section opens with the command that would print it (`ls ~/projects`, `git log --graph`, `cat stack.yml`, `cat README.md`), and the hero terminal pushes this very repo and runs its real CI stages, kept in sync with `ci.yml` by a unit test. IBM Plex Mono and Sans on a blue-slate console with amber and cyan accents. Behind the hero is real data-center footage. On desktop the hero pins and the scroll drives the video's playhead (a dense-keyframe H.264 clip), so scrolling walks you down a server aisle. A circuit-board loop sits behind the contact section. GSAP ScrollTrigger types each command and reveals the windows as you scroll, and Lenis smooths the scroll on desktop. GSAP and Lenis load on demand, and phones get a light muted loop. The footage is Mixkit stock (see docs/ai/04-content.md). Everything respects prefers-reduced-motion.
 
 ## Local development
 
@@ -98,8 +98,7 @@ app/
   components/
     layout/                 boot screen, header, footer
     sections/               Hero, Projects + ProjectCard, Experience, Stack, About, Contact + ContactForm
-    scene/                  3D cluster (ClusterScene, R3F) and its phone SVG
-    ui/                     small primitives (Window, Section, ButtonLink, ExternalLink, icons)
+    ui/                     small primitives (Window, Section, HeroFootage, AmbientVideo, ButtonLink, ExternalLink, icons)
   data/                     all copy and content, typed — edit here, not in components
   lib/                      logger, client logger, log schema, contact, theme, site config
 public/
