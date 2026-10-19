@@ -5,16 +5,13 @@ export const metadata: Metadata = { title: "Not found" };
 
 export default function NotFound() {
   return (
-    <div className="mx-auto flex min-h-[80svh] max-w-6xl flex-col justify-center px-5 pt-24 font-mono sm:px-8">
-      <p aria-hidden="true" className="text-sm text-fg-subtle">
-        <span className="text-amber">$</span> cd ./this-page
+    <div className="mx-auto flex min-h-[80svh] max-w-[980px] flex-col items-center justify-center px-5 pt-24 text-center sm:px-8">
+      <p aria-hidden="true" className="headline ink-gradient w-fit text-[clamp(6rem,22vw,12rem)] leading-none">
+        404
       </p>
-      <p aria-hidden="true" className="mt-2 text-sm text-red">
-        cd: no such file or directory (404)
-      </p>
-      <h1 className="mt-6 text-3xl font-bold tracking-tight text-fg sm:text-5xl">This page does not exist.</h1>
-      <Link href="/" className="mt-8 w-fit text-cyan underline decoration-cyan/30 underline-offset-4 hover:text-amber">
-        cd ~ (back to the homepage)
+      <h1 className="headline mt-6 text-[clamp(2rem,5vw,3rem)]">This page does not exist.</h1>
+      <Link href="/" className="mt-6 text-[17px] text-link-dark hover:underline">
+        Back to the homepage
       </Link>
     </div>
   );

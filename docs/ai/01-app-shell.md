@@ -5,10 +5,10 @@
 
 ## layout.tsx
 
-- Fuentes: `IBM_Plex_Mono` (títulos, prompts, código; `--font-plex-mono`) e `IBM_Plex_Sans` (texto; `--font-plex-sans`).
+- Fuente: `Inter` variable (`--font-inter`), una sola familia (lo más cercano abierto a SF Pro).
 - `metadata`: `metadataBase` = `siteUrl`, título "Matias Speroni — Backend & DevOps Engineer", description,
   canonical `/`, Open Graph (`type: profile`), Twitter `summary_large_image`, robots.
-- `<script>` inline con `INTRO_INIT_SCRIPT` ("intro ya vista en esta sesión") → `<html suppressHydrationWarning>`. Tema oscuro único: `viewport` con `themeColor` `#0a0f1a` y `colorScheme: dark`. `<ScrollChoreography />` (capa 03) va antes del header: animaciones de scroll y Lenis.
+- `<script>` inline con `INTRO_INIT_SCRIPT` ("intro ya vista en esta sesión") → `<html suppressHydrationWarning>`. Tema oscuro único: `viewport` con `themeColor` `#000000` y `colorScheme: dark`. `<ScrollChoreography />` (capa 03) va antes del header: animaciones de scroll y Lenis.
 - `<IntroScreen />` es el primer hijo de `<body>` (capa 03).
 - Estructura: `SiteHeader` (sticky) → `<main id="main">` → `SiteFooter`.
 
@@ -21,11 +21,11 @@ Compone las secciones en orden y el JSON-LD `Person` (incluye la foto). **El ord
 
 | Archivo | Genera |
 |---------|--------|
-| `opengraph-image.tsx` | PNG 1200×630: ventana de terminal con `$ whoami`, nombre, rol y las etapas reales del pipeline (`PIPELINE`) |
-| `icon.svg` | favicon: prompt `>_` (ámbar + cian) sobre el fondo `console` |
+| `opengraph-image.tsx` | PNG 1200×630 estilo lanzamiento: fondo negro, nombre centrado, rol con el degradado firma |
+| `icon.svg` | favicon: "MS" con el degradado firma sobre negro |
 | `sitemap.ts` | `/` (el CV se sirve estático en `/CV_Matias_Speroni_DO.pdf`) |
 | `robots.ts` | bloquea `/api/` |
-| `not-found.tsx` | 404 como error de shell (`cd: no such file or directory`) |
+| `not-found.tsx` | 404 grande con el degradado + "This page does not exist." |
 
 ## next.config.ts
 

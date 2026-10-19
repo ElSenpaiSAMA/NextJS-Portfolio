@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { IntroScreen } from "./components/layout/IntroScreen";
 import { ScrollChoreography } from "./components/layout/ScrollChoreography";
@@ -9,9 +9,8 @@ import { profile } from "./data/profile";
 import { INTRO_INIT_SCRIPT } from "./lib/intro";
 import { siteUrl } from "./lib/site";
 
-// IBM Plex: Mono for headings, prompts and code; Sans for reading text.
-const plexMono = IBM_Plex_Mono({ variable: "--font-plex-mono", subsets: ["latin"], weight: ["400", "500", "700"], display: "swap" });
-const plexSans = IBM_Plex_Sans({ variable: "--font-plex-sans", subsets: ["latin"], weight: ["400", "500", "600"], display: "swap" });
+// Inter (variable): the closest open face to Apple's SF Pro; one family, tight for headlines.
+const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" });
 
 const TITLE = `${profile.name} — ${profile.role}`;
 const DESCRIPTION =
@@ -38,7 +37,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0f1a",
+  themeColor: "#000000",
   colorScheme: "dark",
 };
 
@@ -46,7 +45,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     // data-intro is set by INTRO_INIT_SCRIPT before hydration, so React must
     // not warn about the attribute differing from the server markup.
-    <html lang="en" suppressHydrationWarning className={`${plexMono.variable} ${plexSans.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: INTRO_INIT_SCRIPT }} />
       </head>
