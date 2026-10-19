@@ -1,6 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { PIPELINE } from "./data/source";
+import { PIPELINE } from "./data/ship";
 import { profile } from "./data/profile";
 import { experience } from "./data/experience";
 import { projects } from "./data/projects";
@@ -17,27 +17,19 @@ describe("Home page", () => {
     expect(screen.getByText(new RegExp(profile.availability))).toBeInTheDocument();
   });
 
-  it("shows the real CI stages in the build log", () => {
+  it("lists the real CI stages in the deploy widget", () => {
     render(<HomePage />);
-    const tile = screen.getByTestId("build-log");
-    expect(tile).toHaveTextContent(PIPELINE.command);
-    for (const stage of PIPELINE.stages) expect(within(tile).getByText(stage)).toBeInTheDocument();
+    const deploy = screen.getByTestId("deploy");
+    for (const stage of PIPELINE.stages) expect(within(deploy).getByText(stage)).toBeInTheDocument();
+    expect(within(deploy).getByRole("button", { name: /deploy/i })).toBeInTheDocument();
   });
 
-  it("renders the footage as decorative ASCII (still frame without motion)", () => {
-    const { container } = render(<HomePage />);
-    // matchMedia matches nothing in jsdom = reduced motion: posters feed the canvases, no video loads.
-    expect(container.querySelector("video")).toBeNull();
-    const canvases = container.querySelectorAll("canvas");
-    expect(canvases.length).toBeGreaterThanOrEqual(3); // hero, contact, portrait
-    for (const canvas of canvases) expect(canvas).toHaveAttribute("aria-hidden", "true");
-  });
-
-  it("generates the source file from the real profile and stack", () => {
-    const { container } = render(<HomePage />);
-    const code = container.querySelector("pre")!.textContent ?? "";
-    expect(code).toContain(JSON.stringify(profile.name));
-    for (const group of stack) for (const item of group.items) expect(code).toContain(JSON.stringify(item.name));
+  it("ships an editable portfolio.config with the defaults and no problems", () => {
+    render(<HomePage />);
+    const editor = screen.getByRole("textbox", { name: /portfolio\.config\.ts/ }) as HTMLTextAreaElement;
+    expect(editor.value).toContain("export default {");
+    expect(editor.value).toContain('theme: "light"');
+    expect(screen.getByText(/No problems/)).toBeInTheDocument();
   });
 
   it("renders a section for every nav item", () => {

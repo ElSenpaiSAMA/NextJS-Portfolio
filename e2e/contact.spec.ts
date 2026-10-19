@@ -40,7 +40,7 @@ test.describe("contact page", () => {
     await page.getByRole("button", { name: "Send message" }).click();
 
     // Scoped: Next.js also renders a route announcer with a live role.
-    await expect(page.locator("main").getByRole("status")).toContainText("Message sent.");
+    await expect(page.locator("#contact").getByRole("status")).toContainText("Message sent.");
   });
 
   test("shows an error and ships a log when Formspree fails", async ({ page, errors }) => {
@@ -51,7 +51,7 @@ test.describe("contact page", () => {
     await fillValid(page);
     await page.getByRole("button", { name: "Send message" }).click();
 
-    await expect(page.locator("main").getByRole("alert")).toContainText("could not be sent");
+    await expect(page.locator("#contact").getByRole("alert")).toContainText("could not be sent");
     const log = await logRequest;
     expect(log.postDataJSON()).toMatchObject({ level: "error", event: "contact.failure", context: { status: 500 } });
   });

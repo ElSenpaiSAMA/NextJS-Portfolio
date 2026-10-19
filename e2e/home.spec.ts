@@ -37,52 +37,40 @@ test.describe("home page", () => {
     expect(await page.locator("#projects img").count()).toBe(6);
   });
 
-  test("the build log lists every CI stage and finishes", async ({ page }) => {
+  test("the deploy button ships the site through every stage", async ({ page }) => {
     await page.goto("/");
-    const log = page.getByTestId("build-log");
-    await log.scrollIntoViewIfNeeded();
-    // The steps tick while the source types itself: scroll past to finish the build.
-    await page.evaluate(() => window.scrollBy(0, 1200));
-    await expect(log.getByText("deploy to vercel")).toBeVisible();
-    await expect(log.getByText("Compiled successfully.")).toBeVisible({ timeout: 10_000 });
+    const deploy = page.getByTestId("deploy");
+    // It runs once on its own; wait for it, then deploy again by hand.
+    await expect(deploy.getByRole("status")).toContainText("Deployed to production", { timeout: 15_000 });
+    await deploy.getByRole("button", { name: "Redeploy" }).click();
+    await expect(deploy.getByRole("button", { name: "Deploying…" })).toBeDisabled();
+    await expect(deploy.getByRole("status")).toContainText(/Deployed to production in \d+\.\d s/, { timeout: 15_000 });
   });
 
-  test("the hero footage is drawn as ASCII on a canvas", async ({ page }) => {
+  test("editing portfolio.config restyles the page and reports problems", async ({ page }) => {
     await page.goto("/");
-    const canvas = page.locator("#top canvas");
-    await expect(canvas).toBeVisible();
-    // Something got drawn: the canvas has non-transparent pixels once the video decodes.
-    await expect
-      .poll(
-        () =>
-          canvas.evaluate((c: HTMLCanvasElement) => {
-            const ctx = c.getContext("2d");
-            if (!ctx || !c.width) return 0;
-            const data = ctx.getImageData(0, 0, c.width, c.height).data;
-            let lit = 0;
-            for (let i = 3; i < data.length; i += 4 * 97) if (data[i] > 0) lit++;
-            return lit;
-          }),
-        { timeout: 15_000 },
-      )
-      .toBeGreaterThan(0);
+    const editor = page.getByRole("textbox", { name: /portfolio\.config\.ts/ });
+    await editor.scrollIntoViewIfNeeded();
+    const text = await editor.inputValue();
+    await editor.fill(text.replace('theme: "light"', 'theme: "dark"').replace("radius: 12", "radius: 0"));
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await expect.poll(() => page.evaluate(() => document.documentElement.style.getPropertyValue("--r"))).toBe("0px");
+
+    await editor.fill(text.replace('theme: "light"', 'theme: "neon"'));
+    await expect(page.getByText(/theme must be "light" or "dark"/)).toBeVisible();
+
+    // Saved for this visitor: a reload keeps the last valid config.
+    await editor.fill(text.replace('theme: "light"', 'theme: "dark"'));
+    await page.reload();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   });
 
-  test("hero footage scrubs with the scroll on desktop and loops on phones", async ({ page }) => {
+  test("the stack drops into the physics box", async ({ page }) => {
     await page.goto("/");
-    const video = page.getByTestId("hero-video");
-    const scrub = page.locator("[data-scrub='hero']");
-    if (await scrub.count()) {
-      // Desktop choreography: the playhead follows the scroll position.
-      await expect.poll(() => scrub.evaluate((v: HTMLVideoElement) => v.readyState), { timeout: 15_000 }).toBeGreaterThanOrEqual(2);
-      for (let y = 0; y <= 900; y += 150) {
-        await page.evaluate((top) => window.scrollTo(0, top), y);
-        await page.waitForTimeout(80);
-      }
-      await expect.poll(() => scrub.evaluate((v: HTMLVideoElement) => v.currentTime)).toBeGreaterThan(1);
-    } else {
-      await expect.poll(() => video.evaluate((v: HTMLVideoElement) => !v.paused && v.currentTime > 0), { timeout: 15_000 }).toBe(true);
-    }
+    const box = page.getByTestId("stack-playground");
+    await box.scrollIntoViewIfNeeded();
+    // Once the engine runs, every block is positioned by a transform.
+    await expect.poll(() => box.locator("span[style*='translate']").count(), { timeout: 10_000 }).toBeGreaterThan(10);
   });
 
   test("scroll reveals end fully visible", async ({ page }) => {
