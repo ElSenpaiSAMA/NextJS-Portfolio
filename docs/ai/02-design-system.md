@@ -2,56 +2,67 @@
 
 **Archivos:** `app/globals.css`
 
-## Dirección de arte: "Product page" (estilo Apple)
+## Dirección de arte: "Source → Build"
 
-El portfolio presentado como Apple presenta un producto (pedido del autor: "algo tipo Apple"). Rasgos:
-titulares enormes y apretados en Inter, mucho aire, contenido centrado en 980px, secciones que **alternan
-negro y gris claro**, video real de informática controlado por el scroll, un azul reservado para acciones y
-un único degradado frío como firma.
+El portfolio es **código que se compila delante del visitante**. Pedido del autor: algo "enfocado a
+programación a nivel diseño", con efectos y animaciones, que reúna todo lo pedido antes:
+- contenido del CV;
+- stack completo sin niveles;
+- pantalla de bienvenida;
+- video real de informática con scroll;
+- animaciones.
 
-Historial: se descartaron "Night Shift" (puerto 3D / video de puerto), "Ops console" (terminal) con un
-clúster 3D y con video. Lo que el autor pidió a lo largo de todo y se conserva: contenido del CV, stack
-completo sin niveles, pantalla de bienvenida, video real de informática con scroll, animaciones con GSAP.
+Le dio libertad creativa.
 
-Reglas (skills `frontend-design`, `awwwards`, `gsap-scrolltrigger`):
-- Una sola familia (Inter). Titulares con la utilidad `headline` y punto final ("Selected work.").
-- Azul `blue` solo para botones; links en `link-dark`/`link-light` con chevron ("Get in touch ›").
-- El degradado va en **una** línea por pantalla (rol del hero, tagline, "what's next.", figuras del bento).
-- Movimiento: GSAP + ScrollTrigger (capa 03) y CSS (bienvenida). Una sola librería de animación JS.
+La pieza firma: el **video del data center renderizado en ASCII en tiempo real**. Al bajar se avanza por
+el pasillo hecho de caracteres y, a mitad del scroll, el ASCII "compila" y se vuelve el video real.
+
+Historial de direcciones descartadas:
+- "Night Shift" (puerto 3D, video de puerto);
+- "Ops console" (terminal, clúster 3D, video);
+- "Product page" (estilo Apple).
+
+Reglas (skills `frontend-design`, `awwwards`, `gsap-scrolltrigger` y la propia **`code-effects`**):
+- Cada efecto significa algo del mundo del código: compilar, tipear, decodificar, renderizar.
+- Geist para titulares y texto, Geist Mono para todo lo "de código" (rutas, etiquetas, botones, código).
+- Un azul (`accent`) para acciones; los colores de sintaxis solo dentro de código.
+- Detalle de efectos, reglas y depuración: `.claude/skills/code-effects/SKILL.md`.
 
 ## Tokens (`:root` en `globals.css`)
 
 | Token | Valor | Uso |
 |-------|-------|-----|
-| `black` | `#000000` | secciones oscuras (hero, statement, story, about, contact) |
-| `graphite` | `#1d1d1f` | tiles sobre negro; texto sobre claro |
-| `paper` | `#f5f5f7` | secciones claras (highlights, experience), footer |
-| `white` | `#ffffff` | tiles sobre paper; secciones projects y stack |
-| `mute-dark` | `#a1a1a6` | texto secundario sobre negro/graphite (≥ 6:1) |
-| `mute-light` | `#6e6e73` | texto secundario sobre paper/white (≥ 4.7:1) |
-| `hairline-dark` / `hairline-light` | `#424245` / `#d2d2d7` | líneas finas |
-| `blue` | `#0071e3` | botones (texto blanco ≥ 4.5:1) |
-| `link-dark` / `link-light` | `#2997ff` / `#0066cc` | links sobre oscuro / claro; foco |
-| `ok` / `warn` / `error` | `#30d158` / `#b64400` / `#ff453a` | disponible y checks / "In development" sobre claro / errores de formulario |
+| `ink` / `ink-2` / `ink-3` | `#07080b` / `#0e1015` / `#161922` | página / paneles y editor / chips e inputs |
+| `line` | `#252a36` | líneas finas, bordes |
+| `fg` | `#ecebe6` | texto principal |
+| `fg-muted` / `fg-subtle` | `#a2a5b3` / `#858998` | secundario / terciario, comentarios, gutters (≥ 4.5:1 incluso sobre `ink-3`) |
+| `accent` | `#5b8cff` | botones, links, foco, rutas, glifos medios del ASCII |
+| `violet` / `pink` / `mint` / `amber` | `#b69cff` / `#ff8cc3` / `#5eead4` / `#fbbf24` | sintaxis: keywords / strings / funciones y ✓ / tipos y "in development" |
+| `error` | `#ff6b6b` | errores |
 
-Utilidades propias (`@utility`):
-- `headline` — 600, tracking -0.035em, interlineado 1.04, `text-wrap: balance`.
-- `ink-gradient` — degradado firma (cian → azul → violeta) en el texto, **solo sobre fondos oscuros**. Usar con `w-fit`.
-- `ink-gradient-deep` — la misma idea en azul → índigo → violeta, con contraste AA **sobre fondos claros**.
-- `gallery` — scroll horizontal con snap y sin scrollbar (galería de proyectos).
-- `[data-scrubbing] [data-story-caption]` — en desktop las tres frases de Build/Ship/Run comparten una celda de grid.
+Clases de sintaxis `.tok-<kind>` para los tokens de `lib/source-code.ts`. Utilidad `display`
+(600, tracking -0.045em, interlineado 0.92).
 
-Excepciones de color fuera de tokens: hovers de botón (`#0077ed`, `#2a2a2d`), los velos de legibilidad sobre
-video (`rgb(0 0 0 / α)`), `opengraph-image.tsx` e `icon.svg` (Satori/SVG no leen variables CSS),
-`viewport.themeColor` (`#000000`).
+Excepciones de color fuera de tokens:
+- `AsciiCanvas.tsx` (`MID`/`HIGH`): el canvas no lee variables CSS por cuadro;
+- velos `rgb(7 8 11 / α)` sobre el video;
+- `opengraph-image.tsx` e `icon.svg`;
+- `viewport.themeColor` (`#07080b`).
 
 ## Tipografía
 
-**Inter** variable (`next/font`, `--font-inter` → `font-sans`), lo más cercano abierto a SF Pro. Pila de
-respaldo con `-apple-system` / SF Pro Display. Tamaños fluidos con `clamp()`; texto de lectura a 17–21px.
+`Geist` + `Geist_Mono` (`next/font`, `--font-geist` / `--font-geist-mono` → `font-sans` / `font-mono`):
+la familia de Vercel/Next.js, las herramientas con las que el sitio se construye y despliega.
 
-## Animaciones CSS
+## CSS
 
-- **Bienvenida** (`.intro*`): el nombre entra en foco (blur → nítido), aparece "Welcome to my portfolio" con
-  el degradado y la pantalla se disuelve. Una vez por sesión; `pointer-events: none`.
-- `prefers-reduced-motion`: sin bienvenida, transiciones casi nulas (y en JS: sin GSAP/Lenis, videos en su poster).
+- **Pantalla de build** (`.intro*`):
+  - `$ next build`, los módulos reales "compilando" uno por uno;
+  - un contador 0→100 % (`@property --build` entero + `counter()`), la barra y "Welcome to my portfolio";
+  - después el panel se recorta hacia arriba.
+  - Una vez por sesión; `pointer-events: none`.
+- `.glitch`: split RGB de los screenshots al hover (dos copias con filtros rojo/azul que tiemblan).
+- `.tape`: cintas infinitas del stack.
+- `html[data-custom-cursor]` oculta el cursor nativo solo donde está montado el caret (desktop con movimiento).
+- `prefers-reduced-motion`: sin intro, cintas y glitch quietos, transiciones casi nulas. En JS: sin GSAP,
+  Lenis ni cursor; el ASCII dibuja un cuadro del poster.

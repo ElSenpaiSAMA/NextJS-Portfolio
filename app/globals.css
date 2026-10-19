@@ -1,141 +1,192 @@
 @import "tailwindcss";
 
 /*
- * "Product page" — the portfolio presented the way Apple presents a product:
- * huge, tight Inter headlines, generous white space, sections alternating
- * black and light grey, real footage driven by the scroll, a blue reserved
- * for actions and one cool gradient for the signature line.
- * Every text/background pair meets WCAG AA (axe checks it in CI).
+ * "Source → Build" — the portfolio as code that compiles in front of you.
+ * Ink background, Geist + Geist Mono, one electric blue for actions, and the
+ * syntax-highlighting colours (violet keywords, pink strings, mint functions)
+ * as the only other accents. Every text/background pair meets WCAG AA.
  */
 
 :root {
-  --black: #000000; /* dark sections */
-  --graphite: #1d1d1f; /* tiles on black, text on light */
-  --paper: #f5f5f7; /* light sections */
-  --white: #ffffff; /* tiles on paper */
-  --mute-dark: #a1a1a6; /* secondary text on black / graphite */
-  --mute-light: #6e6e73; /* secondary text on paper / white */
-  --hairline-dark: #424245;
-  --hairline-light: #d2d2d7;
-  --blue: #0071e3; /* buttons */
-  --link-dark: #2997ff; /* links on black */
-  --link-light: #0066cc; /* links on light */
-  --ok: #30d158;
-  --warn: #b64400; /* "In development" on light tiles */
-  --error: #ff453a;
-  --gradient-signature: linear-gradient(90deg, #64d2ff 0%, #2997ff 45%, #a78bfa 100%);
-  /* Same idea, deep enough for AA on white/paper. */
-  --gradient-signature-deep: linear-gradient(90deg, #0071e3 0%, #4f46e5 55%, #7c3aed 100%);
-  --ease-apple: cubic-bezier(0.28, 0.11, 0.32, 1);
+  --ink: #07080b; /* page */
+  --ink-2: #0e1015; /* panels, editor */
+  --ink-3: #161922; /* raised: chips, inputs */
+  --line: #252a36; /* hairlines */
+  --fg: #ecebe6; /* primary text */
+  --fg-muted: #a2a5b3; /* secondary text */
+  --fg-subtle: #858998; /* tertiary, comments, gutters (≥ 4.5:1 on ink-2) */
+  --accent: #5b8cff; /* actions, links, focus, cursor */
+  --violet: #b69cff; /* syntax: keywords */
+  --pink: #ff8cc3; /* syntax: strings */
+  --mint: #5eead4; /* syntax: functions · passed checks */
+  --amber: #fbbf24; /* syntax: types · "in development" */
+  --error: #ff6b6b;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-black: var(--black);
-  --color-graphite: var(--graphite);
-  --color-paper: var(--paper);
-  --color-white: var(--white);
-  --color-mute-dark: var(--mute-dark);
-  --color-mute-light: var(--mute-light);
-  --color-hairline-dark: var(--hairline-dark);
-  --color-hairline-light: var(--hairline-light);
-  --color-blue: var(--blue);
-  --color-link-dark: var(--link-dark);
-  --color-link-light: var(--link-light);
-  --color-ok: var(--ok);
-  --color-warn: var(--warn);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-accent: var(--accent);
+  --color-violet: var(--violet);
+  --color-pink: var(--pink);
+  --color-mint: var(--mint);
+  --color-amber: var(--amber);
   --color-error: var(--error);
 
   /* Injected by next/font in app/layout.tsx */
-  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "SF Pro Display", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "Cascadia Code", Menlo, monospace;
 }
 
 body {
-  background-color: var(--black);
-  color: var(--white);
+  background-color: var(--ink);
+  color: var(--fg);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 :focus-visible {
-  outline: 2px solid var(--link-dark);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 ::selection {
-  background: var(--blue);
-  color: var(--white);
+  background: var(--accent);
+  color: var(--ink);
 }
 
-/* Section headlines: big, semibold, tight — the Apple product-page voice. */
-@utility headline {
+/* Big tight display type. */
+@utility display {
   font-weight: 600;
-  letter-spacing: -0.035em;
-  line-height: 1.04;
-  text-wrap: balance;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
 }
 
-/* The signature gradient, clipped into type. Use with w-fit on blocks. */
-@utility ink-gradient {
-  background-image: var(--gradient-signature);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+/* Syntax colours for generated code (lib/source-code.ts TokenKind). */
+.tok-keyword { color: var(--violet); }
+.tok-type { color: var(--amber); }
+.tok-prop { color: var(--accent); }
+.tok-string { color: var(--pink); }
+.tok-number { color: var(--amber); }
+.tok-fn { color: var(--mint); }
+.tok-comment { color: var(--fg-subtle); font-style: italic; }
+.tok-punct { color: var(--fg-muted); }
+.tok-plain { color: var(--fg); }
+
+/* Custom caret cursor (components/fx/Cursor): only where it's mounted. */
+html[data-custom-cursor] body,
+html[data-custom-cursor] a,
+html[data-custom-cursor] button,
+html[data-custom-cursor] input,
+html[data-custom-cursor] textarea {
+  cursor: none;
 }
 
-/* Desktop scrub: the Build/Ship/Run captions share one grid cell and swap in place. */
-[data-scrubbing] [data-story-caption] {
-  grid-area: 1 / 1;
+/*
+ * RGB-split glitch on project screenshots: two tinted copies of the image
+ * (::before/::after, CSS-filtered red and blue) jitter apart on hover.
+ */
+.glitch {
+  position: relative;
+}
+.glitch::before,
+.glitch::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--glitch-image) center top / cover no-repeat;
+  opacity: 0;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+.glitch::before {
+  filter: sepia(1) saturate(6) hue-rotate(-45deg);
+}
+.glitch::after {
+  filter: sepia(1) saturate(6) hue-rotate(175deg);
+}
+.group:hover .glitch::before {
+  opacity: 0.8;
+  animation: glitch-x 0.35s steps(2) 3;
+}
+.group:hover .glitch::after {
+  opacity: 0.8;
+  animation: glitch-x 0.35s steps(2) 3 reverse;
+}
+@keyframes glitch-x {
+  0% { transform: translate(-6px, 0); clip-path: inset(10% 0 60% 0); }
+  50% { transform: translate(6px, 2px); clip-path: inset(55% 0 15% 0); }
+  100% { transform: translate(0, 0); clip-path: inset(0 0 0 0); opacity: 0; }
 }
 
-/* The signature gradient for light backgrounds. */
-@utility ink-gradient-deep {
-  background-image: var(--gradient-signature-deep);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* Horizontal gallery (Projects): native scroll with snapping, no scrollbar. */
-@utility gallery {
+/* Infinite tape of stack names. */
+.tape {
   display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  overscroll-behavior-x: contain;
+  width: max-content;
+  animation: tape var(--tape-duration, 50s) linear infinite;
+}
+.tape[data-direction="reverse"] {
+  animation-direction: reverse;
+}
+@keyframes tape {
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .tape,
+  .group:hover .glitch::before,
+  .group:hover .glitch::after {
+    animation: none;
+  }
   *,
   *::before,
   *::after {
     transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
 }
 
 /*
- * Welcome screen (app/components/layout/IntroScreen.tsx): the name comes into
- * focus (0.2–1.2s), the welcome line fades in (1.0–1.6s), then the screen
- * dissolves (2.1–2.8s). CSS only; once per session; skipped with reduced
- * motion; pointer-events: none so it never blocks the page.
+ * Build screen (components/layout/IntroScreen): "compiling portfolio…" with
+ * a 0→100 counter (@property integer), the site's real modules resolving one
+ * by one, "Welcome to my portfolio", then the panel wipes up. CSS only; once
+ * per session; skipped with reduced motion; never blocks clicks.
  */
+@property --build {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 0;
+}
+
 .intro {
   position: fixed;
   inset: 0;
   z-index: 100;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  padding: 1.5rem;
-  background: var(--black);
-  color: var(--white);
-  text-align: center;
+  justify-content: flex-end;
+  padding: 2rem 1.5rem;
+  background: var(--ink);
+  color: var(--fg);
+  font-family: var(--font-mono);
   pointer-events: none;
-  animation: intro-exit 0.7s var(--ease-apple) 2.1s forwards;
+  animation: intro-exit 0.7s var(--ease-in-out) 2.3s forwards;
+}
+@media (min-width: 640px) {
+  .intro {
+    padding: 3rem;
+  }
 }
 
 html[data-intro="seen"] .intro {
@@ -147,39 +198,67 @@ html[data-intro="seen"] .intro {
   }
 }
 
-.intro-name {
-  font-size: clamp(2.75rem, 9vw, 6.5rem);
-  font-weight: 600;
-  letter-spacing: -0.04em;
-  line-height: 1;
+.intro-line {
+  font-size: 0.875rem;
+  line-height: 1.8;
+  color: var(--fg-muted);
   opacity: 0;
-  filter: blur(14px);
-  transform: scale(1.06);
-  animation: intro-focus 1s var(--ease-apple) 0.2s forwards;
+  animation: intro-show 0.01s linear calc(var(--i) * 170ms + 0.15s) forwards;
+}
+
+.intro-counter {
+  margin-top: 1.25rem;
+  font-size: clamp(3.5rem, 14vw, 10rem);
+  font-weight: 600;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+  counter-reset: build var(--build);
+  animation: intro-count 1.6s var(--ease-out) 0.1s forwards;
+}
+.intro-counter::before {
+  content: counter(build);
+}
+.intro-counter::after {
+  content: "%";
+  color: var(--accent);
+}
+
+.intro-bar {
+  margin-top: 1rem;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: intro-bar 1.6s var(--ease-out) 0.1s forwards;
 }
 
 .intro-welcome {
-  font-size: clamp(1.125rem, 2.4vw, 1.5rem);
+  margin-top: 1rem;
+  font-family: var(--font-sans);
+  font-size: clamp(1.25rem, 3vw, 2rem);
   font-weight: 500;
   opacity: 0;
-  animation: intro-fade 0.6s ease-out 1s forwards;
+  animation: intro-show 0.01s linear 1.7s forwards;
 }
 
-@keyframes intro-focus {
+@keyframes intro-show {
   to {
     opacity: 1;
-    filter: blur(0);
-    transform: scale(1);
   }
 }
-@keyframes intro-fade {
+@keyframes intro-count {
   to {
-    opacity: 1;
+    --build: 100;
+  }
+}
+@keyframes intro-bar {
+  to {
+    transform: scaleX(1);
   }
 }
 @keyframes intro-exit {
   to {
-    opacity: 0;
+    clip-path: inset(0 0 100% 0);
     visibility: hidden;
   }
 }
