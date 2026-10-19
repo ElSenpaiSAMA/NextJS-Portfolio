@@ -1,6 +1,6 @@
 # 04 — Contenido (`content`)
 
-**Archivos:** `app/data/{types,profile,projects,stack,experience,console,media}.ts`, `public/`
+**Archivos:** `app/data/{types,profile,projects,stack,experience,highlights,media}.ts`, `public/`
 
 Todo el texto del sitio vive acá. Idioma: **inglés**. **Fuente de verdad: el CV del autor**
 (`public/CV_Matias_Speroni_DO.pdf`). Rol en el sitio: **Backend & DevOps Engineer**. Imagine Group:
@@ -12,8 +12,8 @@ Todo el texto del sitio vive acá. Idioma: **inglés**. **Fuente de verdad: el C
 | `projects.ts` | `projects: Project[]` | slug, título, descripción, tech, imagen, github/siteLink, `inDevelopment` |
 | `experience.ts` | `experience`, `education`, `certifications` | empresas (varios roles por empresa, más reciente primero) con highlights del CV; formación y certificaciones |
 | `stack.ts` | `stack: StackGroup[]` | 9 grupos que siguen los "Technical skills" del CV; nombre + logo opcional + `detail` opcional (ej. servicios de AWS/Azure/GCP); sin niveles |
-| `media.ts` | `heroFootage`, `contactFootage` | video de fondo: poster, loop (mp4/webm), scrub opcional y `source` (crédito) |
-| `console.ts` | `BOOT_LINES`, `PIPELINE`, `SECTION_COMMANDS` | copy de la metáfora de terminal: boot screen, pipeline del hero (**solo jobs reales de `ci.yml`**), comando sobre cada sección |
+| `media.ts` | `heroFootage`, `storyFootage` | video de fondo: poster, loop (mp4/webm), scrub (keyframes densos) y `source` (crédito) |
+| `highlights.ts` | `HERO_TAGLINE`, `HIGHLIGHTS`, `PIPELINE`, `STORY` | copy de la página de producto: tagline del hero, bento (figura + título + texto, **todo sacado del CV**), pipeline real (**solo jobs de `ci.yml`**), Build/Ship/Run |
 
 ## `public/`
 
@@ -23,7 +23,7 @@ Todo el texto del sitio vive acá. Idioma: **inglés**. **Fuente de verdad: el C
 | `projects/<slug>.{png,jpg}` | screenshot de cada proyecto (nombre = slug) |
 | `stack/<tecnología>.svg` | logos del stack (kebab-case). Los nuevos vienen de Simple Icons (CC0, `cdn.jsdelivr.net/npm/simple-icons@13/icons/<slug>.svg`) con `fill` del color de marca |
 | `CV_Matias_Speroni_DO.pdf` | CV descargable (lo sube el autor); reemplazarlo con el mismo nombre cuando cambie el CV |
-| `media/` | video de fondo (declarado en `media.ts`): `datacenter-scrub`, `datacenter-loop`, `circuit-loop` (`.mp4` + `.webm`) y posters `.jpg` |
+| `media/` | video de fondo (declarado en `media.ts`): `datacenter-scrub`, `datacenter-loop`, `circuit-scrub`, `circuit-loop` (`.mp4` + `.webm`) y posters `.jpg` |
 
 ## Video (`media.ts` + `public/media/`)
 
@@ -33,7 +33,7 @@ debe confirmar los términos vigentes en mixkit.co/license). Cada `FootageClip` 
 | Clip | Origen | Uso |
 |------|--------|-----|
 | `datacenter-*` | Mixkit 23219 "Long hallway in data center" (primeros 13 s / 9 s el loop) | Hero |
-| `circuit-*` | Mixkit 47051 "High tech circuit board with processor" (10 s) | Contact |
+| `circuit-*` | Mixkit 47051 "High tech circuit board with processor" (10 s) | Build / Ship / Run |
 
 Re-encodear (ffmpeg; `npm i --no-save ffmpeg-static` da un binario):
 
@@ -47,7 +47,7 @@ ffmpeg -i in.mp4 -t 9 -vf scale=854:-2 -c:v libx264 -preset slow -crf 30 -pix_fm
 ffmpeg -i in.mp4 -frames:v 1 -vf scale=1280:-2 -q:v 6 datacenter-poster.jpg
 ```
 
-Presupuesto: scrub ≤ 2.5 MB, loops ≤ 700 KB, posters ≤ 100 KB.
+Presupuesto: scrub ≤ 2.5 MB (hero) / ≤ 1.2 MB (story), loops ≤ 700 KB, posters ≤ 100 KB.
 
 ## Reglas
 
@@ -58,7 +58,7 @@ Presupuesto: scrub ≤ 2.5 MB, loops ≤ 700 KB, posters ≤ 100 KB.
 
 ## Integridad
 
-`app/data/data.test.ts` valida: URLs https, **que cada imagen/logo/avatar/CV y cada video/poster de `media.ts` exista en `public/`**, que cada sección tenga su comando y que **cada etapa del pipeline exista en `ci.yml`**,
+`app/data/data.test.ts` valida: URLs https, **que cada imagen/logo/avatar/CV y cada video/poster de `media.ts` exista en `public/`**, que cada tile tenga figura/título/texto y que **cada etapa del pipeline exista en `ci.yml`**,
 teléfono en E.164 y coherente con el formato visible, slugs únicos, descripciones y tech presentes,
 experiencia con roles y períodos, grupos del stack sin duplicados, about y facts cortos.
 
