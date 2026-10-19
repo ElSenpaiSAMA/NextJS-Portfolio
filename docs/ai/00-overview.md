@@ -7,15 +7,15 @@ Portfolio de **Matias Speroni**, **Backend & DevOps Engineer** en Barcelona. Vie
 
 **Single-page estática** en inglés, con la estructura original del autor: Hero (quién soy) → Projects
 (con imágenes) → Experience → Stack completo (con logos, sin niveles) → About (foto, bio, datos,
-educación, certificaciones) → Contact. **El contenido sale del CV del autor** (`public/CV_Matias_Speroni_DO.pdf`). Estética **"Companion"**
-(capa 02): negro con brillo azul y un **panel compañero fijo** a la derecha — tu avatar narra la sección que
-estás leyendo (texto generado de los datos), contesta preguntas del CV y despliega el sitio con el pipeline
-real. Nav numerada 01–05 que se ilumina, "hello, I'm" manuscrito con subrayado que se dibuja, tarjetas con
-etiquetas detectadas, stack con física, contacto con Gmail/Outlook/copiar. Inspirado en ignaciobrenas.vercel.app.
-Interacciones documentadas en la skill `companion`.
+educación, certificaciones) → Contact. **El contenido sale del CV del autor** (`public/CV_Matias_Speroni_DO.pdf`). Estética **"Pipeline"**
+(capa 02): la página es un pipeline de CI/CD — una línea luminosa con un job que viaja mientras leés, cada
+sección es una etapa (checkout → install → build → test → release → deploy) que pasa de pending a running a
+passed e imprime un log calculado de los datos, y el header muestra el estado en vivo. Negro con brillo azul.
+Detalle en la skill `pipeline-page`.
 
-> También descartados: "Ops console" (terminal) con clúster 3D y con video, "Product page" estilo Apple,
-> "Source → Build" (ASCII sobre video) y "Ship it." (tema claro con config editable).
+> También descartados: "Ops console", "Product page" (Apple), "Source → Build" (ASCII sobre video), "Ship it."
+> (tema claro) y "Companion" (calcaba ignaciobrenas.vercel.app: no reintroducir su panel narrador, pastillas
+> 01–05, letra manuscrita ni hub).
 
 > Direcciones descartadas por el autor: "Night Shift" con puerto 3D (Three.js) y luego con video real.
 > Pidió algo más relacionado con la informática.
@@ -30,23 +30,28 @@ El sitio además es evidencia de DevOps: CI completo, tests, accesibilidad, Ligh
 
 Next.js 16 (App Router) · React 19 · TypeScript strict · Tailwind CSS 4 · `next/image` · Formspree
 (fetch directo) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel · Node 22.
-Client components: `Companion` (+ `CompanionPanel`, `Typewriter`, `DeployWidget`), `SiteHeader`, `StackPlayground`,
-`CopyButton`, `ContactForm`, `ScrollChoreography` y los error boundaries. GSAP, Lenis y matter-js se cargan bajo demanda.
+Client components: `Spine`, `StageNode`, `StageLog`, `PipelineBadge`, `StackPlayground`, `CopyButton`, `ContactForm`,
+`ScrollChoreography` y los error boundaries. GSAP, Lenis y matter-js se cargan bajo demanda.
 
 ## Árbol de render
 
 ```
 RootLayout (server)       layout.tsx — Geist + Geist Mono, metadata, script de intro, IntroScreen / ScrollChoreography / SiteHeader / <main> / SiteFooter
 └─ HomePage (server)      page.tsx
-   ├─ (columna izquierda) Hero, Hub, 01 Experience, 02 Projects, 03 Stack, 04 Certifications, 05 About, Contact
-   ├─ (columna derecha, ≥ lg) Companion — narración por sección, Ask, Deploy; en móvil, botón + <dialog>
+   ├─ Spine               línea + relleno + job (sticky a la línea de lectura)
+   ├─ Stage checkout      #top — Checkout (h1 = nombre)
+   ├─ Stage install       #stack — Install (chips + física)
+   ├─ Stage build         #projects — Build (artifacts)
+   ├─ Stage test          #experience — Test (suites + certificaciones)
+   ├─ Stage release       #about — Release
+   ├─ Stage deploy        #contact — Deploy (canales + formulario)
    └─ JSON-LD Person
 ```
 
 ## Flujo de datos
 
 ```
-app/data/{profile,projects,experience,stack,ship}.ts ──► lib/companion.ts (narración + respuestas) ──► components/sections/* (presentación)
+app/data/{profile,projects,experience,stack,pipeline}.ts ──► lib/stage-logs.ts (logs por etapa) ──► components/sections/* (presentación)
 lib/site.ts  NAV_ITEMS (ids de sección), siteUrl, build info
 public/      avatar.jpg, CV_Matias_Speroni_DO.pdf, projects/*.{png,jpg}, stack/*.svg
 

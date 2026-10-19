@@ -59,7 +59,7 @@ server errors land in the same Vercel log stream. A per-page cap prevents error 
 Next.js 16 (App Router, static single page, `next/image`) · React 19 · TypeScript (strict) · Tailwind CSS 4 ·
 Formspree (contact) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel.
 
-"Companion" design: a black, blue-glow portfolio with a guide at your side. On desktop a sticky panel shows the author's avatar, and it narrates the section you're reading with a typewriter effect, from text generated out of the CV data, not invented. It answers quick questions (where he worked, stack, availability) from the same data, and has a Deploy tab that runs the site's real CI stages. On phones it becomes a floating "Ask Matias" button that opens a native dialog. Other details: numbered 01–05 section pills that light up as you scroll, a handwritten "hello, I'm" with a self-drawing squiggle, and experience cards whose tech tags (with logos) are detected from their own text. The stack is a physics toy (matter-js), and contact offers Gmail, Outlook, the mail app or copying the address. Inspired by ignaciobrenas.vercel.app. The interactions are documented for AI agents in `.claude/skills/companion`.
+"Pipeline" design: the page is a CI/CD run. A glowing line runs down the left and every section is a stage: checkout (who I am), install (stack), build (projects), test (experience and certifications), release (about) and deploy (contact). As you read, a job rides the line, each stage goes pending, then running (amber), then passed (green), and prints a log computed from the real content (technologies, projects, companies, roles). The header shows the live status, from "running 3/6 · build" to "passed 6/6". The stack also comes as a physics toy (matter-js). Everything respects prefers-reduced-motion, and the concept is documented for AI agents in `.claude/skills/pipeline-page`.
 
 ## Local development
 
@@ -97,9 +97,8 @@ app/
   api/log/route.ts          browser log ingestion
   components/
     layout/                 welcome screen, scroll choreography, header, footer
-    companion/              Companion (sticky panel / mobile dialog), CompanionPanel, Typewriter
-    ship/                   DeployWidget, StackPlayground (matter-js)
-    sections/               Hero, Hub, Experience, Projects, Stack, Certifications, About, Contact + ContactForm
+    pipeline/               Stage, StageNode, StageLog, Spine, PipelineBadge, StackPlayground (matter-js)
+    sections/               Checkout, Install, Build, Test, Release, Deploy + ContactForm
     ui/                     small primitives (Section, ButtonLink, TechTag, icons)
   data/                     all copy and content, typed — edit here, not in components
   lib/                      logger, client logger, log schema, contact, theme, site config
