@@ -15,18 +15,11 @@ test.describe("home page", () => {
 
   test("every image loads (projects, portrait, stack logos)", async ({ page }) => {
     await page.goto("/");
-    // Lazy images only load near the viewport, so walk the page in small steps —
-    // and slide the projects gallery sideways, as its cards sit off to the right.
+    // Lazy images only load near the viewport, so walk the page in small steps
+    // (on desktop the projects run sideways while the page scrolls through them).
     const height = await page.evaluate(() => document.documentElement.scrollHeight);
-    for (let y = 0; y <= height; y += 400) {
+    for (let y = 0; y <= height; y += 300) {
       await page.evaluate((top) => window.scrollTo(0, top), y);
-      await page.waitForTimeout(60);
-    }
-    const gallery = page.getByTestId("projects-gallery");
-    await gallery.scrollIntoViewIfNeeded();
-    const width = await gallery.evaluate((el) => el.scrollWidth);
-    for (let x = 0; x <= width; x += 300) {
-      await gallery.evaluate((el, left) => el.scrollTo({ left }), x);
       await page.waitForTimeout(60);
     }
 
@@ -44,16 +37,41 @@ test.describe("home page", () => {
     expect(await page.locator("#projects img").count()).toBe(6);
   });
 
-  test("the pipeline tile lists every CI stage", async ({ page }) => {
+  test("the build log lists every CI stage and finishes", async ({ page }) => {
     await page.goto("/");
-    // The checks pop in one by one as the tile scrolls into view.
-    await page.getByTestId("pipeline-tile").scrollIntoViewIfNeeded();
-    await expect(page.getByTestId("pipeline-tile").getByText("deploy to vercel")).toBeVisible({ timeout: 10_000 });
+    const log = page.getByTestId("build-log");
+    await log.scrollIntoViewIfNeeded();
+    // The steps tick while the source types itself: scroll past to finish the build.
+    await page.evaluate(() => window.scrollBy(0, 1200));
+    await expect(log.getByText("deploy to vercel")).toBeVisible();
+    await expect(log.getByText("Compiled successfully.")).toBeVisible({ timeout: 10_000 });
+  });
+
+  test("the hero footage is drawn as ASCII on a canvas", async ({ page }) => {
+    await page.goto("/");
+    const canvas = page.locator("#top canvas");
+    await expect(canvas).toBeVisible();
+    // Something got drawn: the canvas has non-transparent pixels once the video decodes.
+    await expect
+      .poll(
+        () =>
+          canvas.evaluate((c: HTMLCanvasElement) => {
+            const ctx = c.getContext("2d");
+            if (!ctx || !c.width) return 0;
+            const data = ctx.getImageData(0, 0, c.width, c.height).data;
+            let lit = 0;
+            for (let i = 3; i < data.length; i += 4 * 97) if (data[i] > 0) lit++;
+            return lit;
+          }),
+        { timeout: 15_000 },
+      )
+      .toBeGreaterThan(0);
   });
 
   test("hero footage scrubs with the scroll on desktop and loops on phones", async ({ page }) => {
     await page.goto("/");
-    const scrub = page.getByTestId("hero-scrub-video");
+    const video = page.getByTestId("hero-video");
+    const scrub = page.locator("[data-scrub='hero']");
     if (await scrub.count()) {
       // Desktop choreography: the playhead follows the scroll position.
       await expect.poll(() => scrub.evaluate((v: HTMLVideoElement) => v.readyState), { timeout: 15_000 }).toBeGreaterThanOrEqual(2);
@@ -63,8 +81,7 @@ test.describe("home page", () => {
       }
       await expect.poll(() => scrub.evaluate((v: HTMLVideoElement) => v.currentTime)).toBeGreaterThan(1);
     } else {
-      const loop = page.getByTestId("ambient-video").first();
-      await expect.poll(() => loop.evaluate((v: HTMLVideoElement) => !v.paused && v.currentTime > 0), { timeout: 15_000 }).toBe(true);
+      await expect.poll(() => video.evaluate((v: HTMLVideoElement) => !v.paused && v.currentTime > 0), { timeout: 15_000 }).toBe(true);
     }
   });
 

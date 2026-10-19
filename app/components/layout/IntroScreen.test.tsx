@@ -1,13 +1,14 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { profile } from "../../data/profile";
+import { BUILD_MODULES } from "../../data/source";
 import { IntroScreen } from "./IntroScreen";
 
 describe("IntroScreen", () => {
-  it("brings the name into focus, then the welcome line", () => {
+  it("compiles every module, then welcomes", () => {
     render(<IntroScreen />);
-    expect(document.querySelector(".intro-name")).toHaveTextContent(profile.name);
+    for (const file of BUILD_MODULES) expect(screen.getByTestId("intro")).toHaveTextContent(`compiled ${file}`);
     expect(document.querySelector(".intro-welcome")).toHaveTextContent("Welcome to my portfolio");
+    expect(document.querySelector(".intro-counter")).not.toBeNull();
   });
 
   it("is decorative: hidden from assistive tech and never adds a heading", () => {

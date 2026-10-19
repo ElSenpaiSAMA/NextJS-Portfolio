@@ -8,8 +8,8 @@ afterEach(() => {
 
 /*
  * jsdom has no matchMedia. Inert stand-in: no query matches, so the
- * client-side motion (GSAP, Lenis, video scrubbing) never runs in unit
- * tests — it's covered by E2E in a real browser.
+ * client-side motion (GSAP, Lenis, video scrubbing, the cursor) never runs
+ * in unit tests — it's covered by E2E in a real browser.
  */
 Object.defineProperty(window, "matchMedia", {
   writable: true,
@@ -29,3 +29,6 @@ Object.defineProperty(window, "matchMedia", {
 HTMLMediaElement.prototype.play = vi.fn(() => Promise.resolve());
 HTMLMediaElement.prototype.pause = vi.fn();
 HTMLMediaElement.prototype.load = vi.fn();
+
+// jsdom has no 2D canvas: the ASCII renderer bails out quietly.
+HTMLCanvasElement.prototype.getContext = (() => null) as typeof HTMLCanvasElement.prototype.getContext;

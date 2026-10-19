@@ -1,6 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { PIPELINE } from "./data/highlights";
+import { PIPELINE } from "./data/source";
 import { profile } from "./data/profile";
 import { experience } from "./data/experience";
 import { projects } from "./data/projects";
@@ -13,29 +13,31 @@ describe("Home page", () => {
     render(<HomePage />);
     expect(screen.getAllByRole("heading", { level: 1 })).toHaveLength(1);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(profile.name);
-    // The terminal repeats the role (aria-hidden); the hero copy is the <p>.
     expect(screen.getByText(profile.role, { selector: "p" })).toBeInTheDocument();
     expect(screen.getByText(new RegExp(profile.availability))).toBeInTheDocument();
   });
 
-  it("shows the real CI stages in the pipeline tile", () => {
+  it("shows the real CI stages in the build log", () => {
     render(<HomePage />);
-    const tile = screen.getByTestId("pipeline-tile");
+    const tile = screen.getByTestId("build-log");
     expect(tile).toHaveTextContent(PIPELINE.command);
     for (const stage of PIPELINE.stages) expect(within(tile).getByText(stage)).toBeInTheDocument();
   });
 
-  it("backs the hero and contact with muted, decorative footage", () => {
-    render(<HomePage />);
-    // matchMedia matches nothing in jsdom: the light loops render, never the scrub clip.
-    expect(screen.queryByTestId("hero-scrub-video")).toBeNull();
-    const videos = screen.getAllByTestId("ambient-video") as HTMLVideoElement[];
-    expect(videos).toHaveLength(2);
-    for (const video of videos) {
-      expect(video.muted).toBe(true);
-      expect(video).toHaveAttribute("aria-hidden", "true");
-      expect(video).toHaveAttribute("poster");
-    }
+  it("renders the footage as decorative ASCII (still frame without motion)", () => {
+    const { container } = render(<HomePage />);
+    // matchMedia matches nothing in jsdom = reduced motion: posters feed the canvases, no video loads.
+    expect(container.querySelector("video")).toBeNull();
+    const canvases = container.querySelectorAll("canvas");
+    expect(canvases.length).toBeGreaterThanOrEqual(3); // hero, contact, portrait
+    for (const canvas of canvases) expect(canvas).toHaveAttribute("aria-hidden", "true");
+  });
+
+  it("generates the source file from the real profile and stack", () => {
+    const { container } = render(<HomePage />);
+    const code = container.querySelector("pre")!.textContent ?? "";
+    expect(code).toContain(JSON.stringify(profile.name));
+    for (const group of stack) for (const item of group.items) expect(code).toContain(JSON.stringify(item.name));
   });
 
   it("renders a section for every nav item", () => {
@@ -55,7 +57,7 @@ describe("Home page", () => {
 
   it("lists every job with its roles and periods", () => {
     render(<HomePage />);
-    const section = screen.getByRole("region", { name: "Experience." });
+    const section = screen.getByRole("region", { name: "Experience" });
     for (const item of experience) {
       expect(within(section).getByRole("heading", { name: item.company })).toBeInTheDocument();
       for (const role of item.roles) {
@@ -67,7 +69,7 @@ describe("Home page", () => {
 
   it("shows the full stack, grouped", () => {
     render(<HomePage />);
-    const section = screen.getByRole("region", { name: "Tech specs." });
+    const section = screen.getByRole("region", { name: "Stack" });
     for (const group of stack) {
       expect(within(section).getByRole("heading", { name: group.title })).toBeInTheDocument();
       for (const item of group.items) expect(within(section).getAllByText(item.name).length).toBeGreaterThan(0);
@@ -76,7 +78,7 @@ describe("Home page", () => {
 
   it("shows the portrait, bio facts and direct contact channels", () => {
     render(<HomePage />);
-    const about = screen.getByRole("region", { name: "Who I am." });
+    const about = screen.getByRole("region", { name: "Who I am" });
     expect(within(about).getByRole("img", { name: `Portrait of ${profile.name}` })).toBeInTheDocument();
     // jsdom doesn't map <dt> wrapped in <div> to role "term", so query the list directly.
     const facts = about.querySelector("dl")!;

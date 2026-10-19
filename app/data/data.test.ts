@@ -2,10 +2,10 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { certifications, education, experience } from "./experience";
-import { HIGHLIGHTS, PIPELINE, STORY } from "./highlights";
-import { heroFootage, storyFootage } from "./media";
+import { circuitFootage, heroFootage } from "./media";
 import { profile } from "./profile";
 import { projects } from "./projects";
+import { BUILD_MODULES, PIPELINE, SECTION_PATHS } from "./source";
 import { stack } from "./stack";
 
 /** Content integrity: catches broken data and missing assets before they reach the page. */
@@ -106,7 +106,7 @@ describe("stack", () => {
 
 describe("media", () => {
   it("ships every footage file it references, with credits", () => {
-    for (const clip of [heroFootage, storyFootage]) {
+    for (const clip of [heroFootage, circuitFootage]) {
       const files = [clip.poster, clip.loop.mp4, clip.loop.webm, clip.scrub?.mp4, clip.scrub?.webm].filter((f): f is string => Boolean(f));
       for (const file of files) expect(publicAssetExists(file), file).toBe(true);
       expect(isHttpsUrl(clip.source.url), clip.source.url).toBe(true);
@@ -114,14 +114,10 @@ describe("media", () => {
   });
 });
 
-describe("product-page copy", () => {
-  it("has a figure, title and body on every highlight, and three story chapters", () => {
-    for (const tile of HIGHLIGHTS) {
-      expect(tile.figure, tile.title).toMatch(/\S/);
-      expect(tile.title).toMatch(/\S/);
-      expect(tile.body.length, tile.title).toBeGreaterThan(20);
-    }
-    expect(STORY.map((chapter) => chapter.title)).toEqual(["Build.", "Ship.", "Run."]);
+describe("source copy", () => {
+  it("only 'compiles' modules that exist in the repo, and labels every section", () => {
+    for (const file of BUILD_MODULES) expect(existsSync(join(process.cwd(), file)), file).toBe(true);
+    for (const [section, path] of Object.entries(SECTION_PATHS)) expect(path, section).toMatch(/\S/);
   });
 
   it("only shows pipeline stages the real CI runs", () => {
