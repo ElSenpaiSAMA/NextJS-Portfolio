@@ -19,7 +19,7 @@ const FIELDS: { name: ContactField; label: string; type: "text" | "email" | "tex
 ];
 
 const INPUT_CLASS =
-  "mt-1.5 w-full rounded-ui border border-line bg-bg px-4 py-2.5 text-fg placeholder:text-fg-subtle focus:border-accent aria-[invalid=true]:border-error";
+  "mt-1.5 w-full rounded-ui border border-line bg-bg px-4 py-2.5 text-fg placeholder:text-fg-subtle focus:border-ok aria-[invalid=true]:border-error";
 
 function readValues(form: HTMLFormElement): ContactValues {
   const data = new FormData(form);
@@ -69,7 +69,7 @@ export function ContactForm({ formId }: { formId: string }) {
       <div role="status" className="rounded-ui border border-ok/40 bg-bg p-5">
         <p className="font-semibold text-ok">Message sent.</p>
         <p className="mt-1 text-sm text-fg-muted">Thanks — I will get back to you soon.</p>
-        <button type="button" onClick={() => setStatus("idle")} className="mt-4 text-sm font-medium text-accent-text hover:underline">
+        <button type="button" onClick={() => setStatus("idle")} className="mt-4 text-sm font-bold text-accent-text hover:underline">
           Send another message
         </button>
       </div>
@@ -120,7 +120,7 @@ export function ContactForm({ formId }: { formId: string }) {
       <button
         type="submit"
         disabled={submitting}
-        className="rounded-ui bg-accent-strong px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+        className="rounded-md bg-ok px-5 py-2.5 text-sm font-bold text-bg transition-opacity hover:opacity-90 disabled:opacity-60"
       >
         {submitting ? "Sending…" : "Send message"}
       </button>

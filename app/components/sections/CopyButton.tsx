@@ -17,7 +17,7 @@ export function CopyButton({ value, label }: { value: string; label: string }) {
           /* Clipboard blocked: the address is visible right next to the button. */
         }
       }}
-      className="rounded-full border border-line px-4 py-2 text-sm font-semibold transition-colors hover:border-fg-subtle"
+      className="rounded-md border border-line px-4 py-2 text-sm font-bold transition-colors hover:border-ok"
     >
       <span aria-live="polite">{copied ? "Copied ✓" : label}</span>
     </button>

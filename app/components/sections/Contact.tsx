@@ -1,4 +1,6 @@
 import { profile } from "../../data/profile";
+import type { LogLine } from "../../lib/stage-logs";
+import { DeployRun } from "../terminal/DeployRun";
 import { GitHubIcon, LinkedInIcon, MailIcon, PhoneIcon } from "../ui/icons";
 import { ContactForm } from "./ContactForm";
 import { CopyButton } from "./CopyButton";
@@ -11,12 +13,13 @@ const CHANNELS = [
   { label: "GitHub", value: profile.githubUrl.replace(/^https:\/\//, ""), href: profile.githubUrl, Icon: GitHubIcon, external: true },
 ] as const;
 
-/** Stage 06 · deploy — the last step needs an approval: the direct channels and the form. */
-export function Deploy() {
+/** `make deploy` — every stage of the session has run; the last one needs an approval: the direct channels and the form. */
+export function Contact({ logs }: { logs: Record<string, LogLine[]> }) {
   return (
     <>
-      <p className="mt-6 max-w-2xl text-lg leading-relaxed text-fg-muted">
-        Open to Platform / DevOps and backend roles. The pipeline is green; the last step needs your approval. Email is the quickest way to reach me.
+      <DeployRun logs={logs} />
+      <p className="mt-8 max-w-2xl text-lg leading-relaxed text-fg-muted">
+        Open to Platform / DevOps and backend roles. Everything above has run; the last step needs your approval. Email is the quickest way to reach me.
       </p>
       <div className="mt-10 grid gap-5 xl:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
         <div className="space-y-3">
@@ -24,10 +27,10 @@ export function Deploy() {
             {CHANNELS.map(({ label, value, href, Icon, external }) => (
               <li key={label} data-reveal>
                 <a href={href} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})} className="card group flex items-center gap-4 px-5 py-4">
-                  <Icon width={20} height={20} className="shrink-0 text-fg-subtle transition-colors group-hover:text-accent-text" />
+                  <Icon width={20} height={20} className="shrink-0 text-fg-subtle transition-colors group-hover:text-ok" />
                   <span className="min-w-0">
-                    <span className="block font-mono text-xs text-fg-subtle">{label}</span>
-                    <span className="block truncate font-medium">{value}</span>
+                    <span className="block text-xs text-fg-subtle">{label}</span>
+                    <span className="block truncate font-bold">{value}</span>
                   </span>
                 </a>
               </li>
@@ -35,11 +38,16 @@ export function Deploy() {
           </ul>
           <CopyButton value={profile.email} label="Copy email address" />
         </div>
-        <div data-reveal className="card p-5 sm:p-6">
-          <h3 className="font-semibold">Approve the deploy</h3>
-          <p className="mt-1 text-sm text-fg-muted">Send a message and I&apos;ll reply by email.</p>
-          <div className="mt-5">
-            <ContactForm formId={profile.formspreeId} />
+        <div data-reveal className="card overflow-hidden">
+          <p aria-hidden="true" className="border-b border-line bg-surface-2 px-4 py-2 text-xs text-fg-subtle">
+            approve-deploy.sh
+          </p>
+          <div className="p-5 sm:p-6">
+            <h3 className="font-bold">Approve the deploy</h3>
+            <p className="mt-1 text-sm text-fg-muted">Send a message and I&apos;ll reply by email.</p>
+            <div className="mt-5">
+              <ContactForm formId={profile.formspreeId} />
+            </div>
           </div>
         </div>
       </div>

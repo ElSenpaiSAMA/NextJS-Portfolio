@@ -166,10 +166,10 @@ export function StackPlayground({ items }: { items: StackItem[] }) {
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
           <p className="font-mono text-xs text-fg-subtle">{fine ? "Grab a block and throw it." : "Tap the box to shake it."}</p>
           <div className="flex gap-2">
-            <button type="button" onClick={shake} className="rounded-ui border border-line bg-surface px-3 py-1.5 text-xs font-medium hover:border-accent">
+            <button type="button" onClick={shake} className="rounded-ui border border-line bg-surface px-3 py-1.5 text-xs font-medium hover:border-ok">
               Shake
             </button>
-            <button type="button" onClick={drop} className="rounded-ui border border-line bg-surface px-3 py-1.5 text-xs font-medium hover:border-accent">
+            <button type="button" onClick={drop} className="rounded-ui border border-line bg-surface px-3 py-1.5 text-xs font-medium hover:border-ok">
               Drop again
             </button>
           </div>

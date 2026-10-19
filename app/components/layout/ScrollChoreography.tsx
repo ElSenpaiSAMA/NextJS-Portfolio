@@ -5,7 +5,7 @@ import { DESKTOP_MOTION_QUERY, MOTION_QUERY, loadGsap, useMediaQuery } from "../
 
 /**
  * The page's quiet scroll motion, in one place — the loud moments are
- * interactive (Deploy, the config editor, the physics stack), not scroll-jacked.
+ * interactive (the shell, the physics stack), not scroll-jacked.
  * - `[data-rise]`: headings rise into place when they scroll in.
  * - `[data-reveal]`: blocks fade up, staggered (`ScrollTrigger.batch`, once).
  * Lenis smooths the scroll on desktop. Nothing loads with reduced motion, and
@@ -39,7 +39,7 @@ export function ScrollChoreography() {
       let tick: ((time: number) => void) | undefined;
       if (lenisModule) {
         // anchors: in-page links glide instead of jumping (offset = fixed bar).
-        lenis = new lenisModule.default({ lerp: 0.12, anchors: { offset: -56 } });
+        lenis = new lenisModule.default({ lerp: 0.12, anchors: { offset: -44 } });
         lenis.on("scroll", ScrollTrigger.update);
         tick = (time: number) => lenis!.raf(time * 1000);
         gsap.ticker.add(tick);
