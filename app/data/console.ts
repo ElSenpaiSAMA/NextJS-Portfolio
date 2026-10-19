@@ -21,6 +21,9 @@ export const PIPELINE = {
   stages: ["lint", "typecheck", "unit tests", "build", "e2e (playwright + axe)", "lighthouse ci", "deploy to vercel"],
 } as const;
 
+/** Shown mid-scroll over the data-center footage while the hero is pinned (desktop). */
+export const HERO_TAGLINE = "I ship the software and the pipelines behind it";
+
 /** Shell command printed above each section title (decorative, aria-hidden). */
 export const SECTION_COMMANDS: Record<SectionId, string> = {
   projects: "ls ~/projects",
