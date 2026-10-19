@@ -1,16 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { IntroScreen } from "./components/layout/IntroScreen";
 import { ScrollChoreography } from "./components/layout/ScrollChoreography";
 import { SiteFooter } from "./components/layout/SiteFooter";
 import { SiteHeader } from "./components/layout/SiteHeader";
+import { StatusBar } from "./components/terminal/StatusBar";
 import { profile } from "./data/profile";
 import { INTRO_INIT_SCRIPT } from "./lib/intro";
 import { siteUrl } from "./lib/site";
 
-// Geist for the UI, Geist Mono for the pipeline: stage labels, logs, code.
-const geist = Geist({ variable: "--font-geist", subsets: ["latin"], display: "swap" });
+// One monospace face for everything: it's a terminal.
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" });
 
 const TITLE = `${profile.name} — ${profile.role}`;
@@ -46,18 +46,19 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     // data-intro is set by INTRO_INIT_SCRIPT before hydration, so React must
     // not warn about the attribute differing from the server markup.
-    <html lang="en" suppressHydrationWarning className={`${geist.variable} ${geistMono.variable}`}>
+    <html lang="en" suppressHydrationWarning className={geistMono.variable}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: INTRO_INIT_SCRIPT }} />
       </head>
-      <body className="min-h-screen antialiased">
+      <body className="min-h-screen pb-8 antialiased">
         <IntroScreen />
         <ScrollChoreography />
         <SiteHeader />
-        <main id="main" className="pt-14">
+        <main id="main" className="pt-11">
           {children}
         </main>
         <SiteFooter />
+        <StatusBar />
       </body>
     </html>
   );

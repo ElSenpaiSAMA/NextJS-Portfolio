@@ -1,11 +1,10 @@
-import { Spine } from "./components/pipeline/Spine";
-import { Stage } from "./components/pipeline/Stage";
-import { Build } from "./components/sections/Build";
-import { Checkout } from "./components/sections/Checkout";
-import { Deploy } from "./components/sections/Deploy";
-import { Install } from "./components/sections/Install";
-import { Release } from "./components/sections/Release";
-import { Test } from "./components/sections/Test";
+import { About } from "./components/sections/About";
+import { Contact } from "./components/sections/Contact";
+import { Experience } from "./components/sections/Experience";
+import { Projects } from "./components/sections/Projects";
+import { Stack } from "./components/sections/Stack";
+import { Whoami } from "./components/sections/Whoami";
+import { Command } from "./components/terminal/Command";
 import { certifications, experience } from "./data/experience";
 import { STAGES } from "./data/pipeline";
 import { profile } from "./data/profile";
@@ -27,25 +26,26 @@ const PERSON_JSON_LD = {
   sameAs: [profile.githubUrl, profile.linkedinUrl],
 };
 
-const CONTENT = {
-  top: <Checkout />,
-  stack: <Install />,
-  projects: <Build />,
-  experience: <Test />,
-  about: <Release />,
-  contact: <Deploy />,
-};
-
-/** The page is a pipeline: one stage per section, a spine on the left, logs computed from the real content. */
+/**
+ * The page is a terminal session: one command per section, in order (each a
+ * stage of `make deploy`), inside a terminal pane.
+ */
 export default function HomePage() {
   const logs = stageLogs({ profile, stack, projects, experience, certifications });
+  const output = {
+    top: <Whoami />,
+    stack: <Stack />,
+    projects: <Projects />,
+    experience: <Experience />,
+    about: <About />,
+    contact: <Contact logs={logs} />,
+  };
   return (
-    <div className="relative mx-auto max-w-5xl pl-14 pr-5 sm:pl-24 sm:pr-8">
-      <Spine />
-      {STAGES.map((stage, i) => (
-        <Stage key={stage.id} stage={stage} index={i} total={STAGES.length} log={logs[stage.id]} titleAs={stage.id === "top" ? "h1" : "h2"}>
-          {CONTENT[stage.id]}
-        </Stage>
+    <div className="mx-auto max-w-5xl px-4 sm:border-x sm:border-line sm:bg-surface/40 sm:px-10">
+      {STAGES.map((stage) => (
+        <Command key={stage.id} stage={stage} heading={stage.id !== "top"}>
+          {output[stage.id]}
+        </Command>
       ))}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(PERSON_JSON_LD) }} />
     </div>
