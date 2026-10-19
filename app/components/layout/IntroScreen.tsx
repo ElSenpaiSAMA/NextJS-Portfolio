@@ -1,10 +1,7 @@
-import type { CSSProperties } from "react";
-import { BUILD_MODULES } from "../../data/source";
-
 /**
- * Build screen: the site's real modules "compile" one by one while a counter
- * runs 0→100%, then "Welcome to my portfolio" and the panel wipes up.
- * Everything is CSS (see `.intro` in globals.css):
+ * Welcome screen: `hello, world` types itself, gets erased, and "Welcome to my
+ * portfolio" types in its place; then the screen fades. Everything is CSS
+ * (see `.intro` in globals.css):
  * - plays once per browser session (INTRO_INIT_SCRIPT sets html[data-intro="seen"]);
  * - skipped entirely with prefers-reduced-motion;
  * - pointer-events: none, so it never blocks the page underneath.
@@ -13,17 +10,13 @@ import { BUILD_MODULES } from "../../data/source";
 export function IntroScreen() {
   return (
     <div className="intro" aria-hidden="true" data-testid="intro">
-      <p className="intro-line" style={{ "--i": 0 } as CSSProperties}>
-        <span className="text-accent">$</span> next build
+      <p>
+        <span className="intro-stage">
+          <span className="intro-hello">hello, world</span>
+          <span className="intro-welcome">Welcome to my portfolio</span>
+        </span>
       </p>
-      {BUILD_MODULES.map((module, i) => (
-        <p key={module} className="intro-line" style={{ "--i": i + 1 } as CSSProperties}>
-          <span className="text-mint">✓</span> compiled {module}
-        </p>
-      ))}
-      <p className="intro-counter" />
-      <span className="intro-bar" />
-      <p className="intro-welcome">Welcome to my portfolio</p>
+      <span className="intro-caret" />
     </div>
   );
 }

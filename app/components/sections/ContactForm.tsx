@@ -19,7 +19,7 @@ const FIELDS: { name: ContactField; label: string; type: "text" | "email" | "tex
 ];
 
 const INPUT_CLASS =
-  "mt-1.5 w-full rounded-lg border border-line bg-ink px-4 py-3 font-mono text-sm text-fg placeholder:text-fg-subtle focus:border-accent aria-[invalid=true]:border-error";
+  "mt-1.5 w-full rounded-ui border border-line bg-bg px-4 py-2.5 text-fg placeholder:text-fg-subtle focus:border-accent aria-[invalid=true]:border-error";
 
 function readValues(form: HTMLFormElement): ContactValues {
   const data = new FormData(form);
@@ -66,10 +66,10 @@ export function ContactForm({ formId }: { formId: string }) {
 
   if (status === "success") {
     return (
-      <div role="status" className="rounded-lg border border-mint/40 bg-ink p-6">
-        <p className="font-mono text-mint">Message sent.</p>
+      <div role="status" className="rounded-ui border border-ok/40 bg-bg p-5">
+        <p className="font-semibold text-ok">Message sent.</p>
         <p className="mt-1 text-sm text-fg-muted">Thanks — I will get back to you soon.</p>
-        <button type="button" onClick={() => setStatus("idle")} className="mt-4 font-mono text-sm text-accent hover:underline">
+        <button type="button" onClick={() => setStatus("idle")} className="mt-4 text-sm font-medium text-accent-text hover:underline">
           Send another message
         </button>
       </div>
@@ -95,7 +95,7 @@ export function ContactForm({ formId }: { formId: string }) {
         };
         return (
           <div key={name}>
-            <label htmlFor={common.id} className="font-mono text-xs text-fg-muted">
+            <label htmlFor={common.id} className="text-sm font-medium">
               {label}
             </label>
             {type === "textarea" ? <textarea {...common} rows={5} /> : <input {...common} type={type} />}
@@ -120,7 +120,7 @@ export function ContactForm({ formId }: { formId: string }) {
       <button
         type="submit"
         disabled={submitting}
-        className="rounded-full bg-accent px-6 py-3 font-mono text-sm text-ink transition-colors hover:bg-fg disabled:opacity-60"
+        className="rounded-ui bg-accent px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
       >
         {submitting ? "Sending…" : "Send message"}
       </button>

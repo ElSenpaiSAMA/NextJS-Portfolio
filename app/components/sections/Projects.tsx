@@ -1,75 +1,95 @@
 import Image from "next/image";
-import type { CSSProperties } from "react";
 import { projects } from "../../data/projects";
-import { SECTION_PATHS } from "../../data/source";
+import { SECTION_LABELS } from "../../data/ship";
 import type { Project } from "../../data/types";
 import { Section } from "../ui/Section";
 
-function ProjectCard({ project, index, total }: { project: Project; index: number; total: number }) {
-  const pad = (n: number) => String(n).padStart(2, "0");
+function Status({ inDevelopment }: { inDevelopment?: boolean }) {
+  return inDevelopment ? (
+    <span className="inline-flex items-center gap-1.5 text-xs font-medium text-warn">
+      <span aria-hidden="true" className="pulse-dot h-2 w-2 rounded-full bg-warn" />
+      Building
+      <span className="sr-only"> (in development)</span>
+    </span>
+  ) : (
+    <span className="inline-flex items-center gap-1.5 text-xs font-medium text-ok">
+      <span aria-hidden="true" className="h-2 w-2 rounded-full bg-ok" />
+      Ready
+    </span>
+  );
+}
+
+function Deployment({ project, priority }: { project: Project; priority: boolean }) {
   return (
     <article
       id={project.slug}
       aria-labelledby={`${project.slug}-title`}
-      data-cursor="view"
-      className="group flex w-[86vw] shrink-0 flex-col sm:w-[70vw] lg:w-[46vw]"
+      data-reveal
+      className="group grid gap-5 rounded-ui border border-line bg-surface p-4 transition-colors hover:border-fg-subtle sm:p-5 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-7"
     >
-      <div className="glitch relative aspect-[16/10] overflow-hidden rounded-xl border border-line bg-ink-2" style={{ "--glitch-image": `url(${project.image})` } as CSSProperties}>
+      <div className="relative aspect-[16/10] overflow-hidden rounded-[calc(var(--r)*0.6)] border border-line bg-surface-2">
         <Image
           src={project.image}
           alt={`Screenshot of ${project.title}`}
           fill
-          sizes="(min-width: 1024px) 46vw, (min-width: 640px) 70vw, 86vw"
-          className="object-cover object-top transition-transform duration-700 [transition-timing-function:var(--ease-out)] group-hover:scale-[1.03]"
+          priority={priority}
+          sizes="(min-width: 768px) 440px, 92vw"
+          className="object-cover object-top transition-transform duration-700 [transition-timing-function:var(--ease-out)] group-hover:scale-[1.04]"
         />
       </div>
-      <div className="mt-5 flex items-baseline justify-between gap-4 font-mono text-xs text-fg-subtle">
-        <span aria-hidden="true">
-          {pad(index + 1)} / {pad(total)}
-        </span>
-        {project.inDevelopment && <span className="rounded-full border border-amber/40 px-2 py-0.5 text-amber">in development</span>}
+      <div className="flex flex-col">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <h3 id={`${project.slug}-title`} className="text-2xl font-semibold tracking-tight">
+            {project.title}
+          </h3>
+          <Status inDevelopment={project.inDevelopment} />
+        </div>
+        <p className="mt-1 font-mono text-xs text-fg-subtle">{project.siteLink ? new URL(project.siteLink).host : `github.com${new URL(project.github ?? "https://github.com").pathname}`}</p>
+        <p className="mt-4 leading-relaxed text-fg-muted">{project.description}</p>
+        <ul aria-label="Technologies" className="mt-4 flex flex-wrap gap-1.5">
+          {project.tech.map((tech) => (
+            <li key={tech} className="rounded-[calc(var(--r)*0.5)] bg-surface-2 px-2 py-1 font-mono text-[11px] text-fg-muted">
+              {tech}
+            </li>
+          ))}
+        </ul>
+        {(project.github || project.siteLink) && (
+          <p className="mt-auto flex flex-wrap gap-2 pt-5">
+            {project.siteLink && (
+              <a
+                href={project.siteLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-ui bg-fg px-3 py-1.5 text-sm font-medium text-bg hover:opacity-85"
+              >
+                Live site<span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            )}
+            {project.github && (
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-ui border border-line px-3 py-1.5 text-sm font-medium hover:border-fg-subtle"
+              >
+                Code<span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            )}
+          </p>
+        )}
       </div>
-      <h3 id={`${project.slug}-title`} aria-label={project.title} className="display mt-2 text-[clamp(2rem,4vw,3.25rem)]">
-        <span aria-hidden="true" data-scramble-hover>
-          {project.title}
-        </span>
-      </h3>
-      <p className="mt-3 max-w-xl leading-relaxed text-fg-muted">{project.description}</p>
-      <ul aria-label="Technologies" className="mt-4 flex flex-wrap gap-2 font-mono text-xs">
-        {project.tech.map((tech) => (
-          <li key={tech} className="rounded-full border border-line px-2.5 py-1 text-fg-muted">
-            {tech}
-          </li>
-        ))}
-      </ul>
-      {(project.github || project.siteLink) && (
-        <p className="mt-5 flex flex-wrap gap-5 font-mono text-sm">
-          {project.github && (
-            <a href={project.github} target="_blank" rel="noopener noreferrer" data-cursor="code" className="text-accent underline-offset-4 hover:underline">
-              Code ↗<span className="sr-only"> (opens in a new tab)</span>
-            </a>
-          )}
-          {project.siteLink && (
-            <a href={project.siteLink} target="_blank" rel="noopener noreferrer" data-cursor="open" className="text-accent underline-offset-4 hover:underline">
-              Live site ↗<span className="sr-only"> (opens in a new tab)</span>
-            </a>
-          )}
-        </p>
-      )}
     </article>
   );
 }
 
-/** Pinned horizontal run on desktop (ScrollChoreography `[data-track]`); a vertical list elsewhere. */
+/** Projects as a deployments dashboard: preview, status (Ready / Building), domain, stack and links. */
 export function Projects() {
   return (
-    <Section id="projects" path={SECTION_PATHS.projects} title="Selected work" className="bg-ink">
-      <div data-track-viewport className="mt-14 overflow-hidden">
-        <div data-track className="flex flex-col gap-16 px-5 sm:px-8 md:w-max md:flex-row md:gap-10 md:pl-[max(2rem,calc((100vw-72rem)/2+2rem))] md:pr-[10vw]">
-          {projects.map((project, i) => (
-            <ProjectCard key={project.slug} project={project} index={i} total={projects.length} />
-          ))}
-        </div>
+    <Section id="projects" label={SECTION_LABELS.projects} title="Selected work">
+      <div className="mx-auto mt-12 grid max-w-6xl gap-4 px-5 sm:px-8">
+        {projects.map((project, i) => (
+          <Deployment key={project.slug} project={project} priority={i === 0} />
+        ))}
       </div>
     </Section>
   );

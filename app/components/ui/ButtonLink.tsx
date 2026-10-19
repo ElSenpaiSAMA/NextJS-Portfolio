@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-type Variant = "primary" | "ghost";
+type Variant = "primary" | "secondary";
 
 interface ButtonLinkProps {
   href: string;
@@ -9,23 +9,19 @@ interface ButtonLinkProps {
   /** Opens in a new tab with rel="noopener noreferrer". */
   external?: boolean;
   download?: boolean;
-  /** Label the custom cursor shows over this link. */
-  cursor?: string;
 }
 
 const STYLES: Record<Variant, string> = {
-  primary: "bg-accent text-ink hover:bg-fg",
-  ghost: "border border-line bg-ink-2/60 text-fg backdrop-blur hover:border-accent hover:text-accent",
+  primary: "bg-fg text-bg hover:opacity-85",
+  secondary: "border border-line bg-surface text-fg hover:border-fg-subtle",
 };
 
-/** Mono pill link. `data-magnetic`: it leans towards the pointer (ScrollChoreography). */
-export function ButtonLink({ href, children, variant = "ghost", external = false, download = false, cursor }: ButtonLinkProps) {
+/** Button-shaped link; its corners follow `radius` in portfolio.config.ts. */
+export function ButtonLink({ href, children, variant = "secondary", external = false, download = false }: ButtonLinkProps) {
   return (
     <a
       href={href}
-      data-magnetic
-      data-cursor={cursor}
-      className={`inline-flex items-center gap-2 rounded-full px-5 py-3 font-mono text-sm transition-colors ${STYLES[variant]}`}
+      className={`inline-flex items-center gap-2 rounded-ui px-4 py-2.5 text-sm font-medium transition-[opacity,border-color] ${STYLES[variant]}`}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       {...(download ? { download: true } : {})}
     >

@@ -1,44 +1,39 @@
 import { profile } from "../../data/profile";
 import { NAV_ITEMS } from "../../lib/site";
 
-/** Mono bar: the repo-style name on the left, sections (they scramble on hover) and the CV on the right. */
+/** Dev-tool top bar: project name with a status dot, sections, and the CV. */
 export function SiteHeader() {
   return (
-    <header className="fixed inset-x-0 top-0 z-40 mix-blend-normal">
+    <header className="fixed inset-x-0 top-0 z-40 border-b border-line bg-bg/80 backdrop-blur-md">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-ink"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-2.5 focus:z-50 focus:rounded-ui focus:bg-fg focus:px-4 focus:py-1.5 focus:text-bg"
       >
         Skip to content
       </a>
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 font-mono text-[13px] sm:px-8">
-        <a href="#top" className="shrink-0 rounded-full bg-ink/70 px-3 py-1.5 text-fg backdrop-blur-md">
-          <span className="text-accent">●</span> <span className="max-[479px]:hidden">matias</span>
-          <span className="text-fg-subtle max-[479px]:hidden">/</span>
-          <span className="max-[479px]:hidden">portfolio</span>
-          <span className="sr-only">Matias Speroni, back to top</span>
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 sm:px-8">
+        <a href="#top" className="flex shrink-0 items-center gap-2 text-sm font-semibold tracking-tight">
+          <span aria-hidden="true" className="h-2 w-2 rounded-full bg-ok" />
+          <span className="max-[459px]:hidden">{profile.name}</span>
+          <span aria-hidden="true" className="min-[460px]:hidden">
+            MS
+          </span>
+          <span className="sr-only min-[460px]:hidden">{profile.name}</span>
         </a>
-        <nav aria-label="Sections" className="flex min-w-0 items-center gap-1 rounded-full bg-ink/70 px-1.5 py-1 backdrop-blur-md">
+        <nav aria-label="Sections" className="flex min-w-0 items-center gap-1">
           {/* Scrolls sideways on narrow phones instead of wrapping */}
           <ul className="flex min-w-0 items-center overflow-x-auto [scrollbar-width:none]">
             {NAV_ITEMS.map(({ id, label, hideOnNarrow }) => (
               <li key={id} className={hideOnNarrow ? "max-[399px]:hidden" : undefined}>
-                <a
-                  href={`#${id}`}
-                  aria-label={label}
-                  className="block whitespace-nowrap rounded-full px-2 py-1.5 text-fg-muted transition-colors hover:text-fg sm:px-3"
-                >
-                  <span aria-hidden="true" data-scramble-hover>
-                    {label.toLowerCase()}
-                  </span>
+                <a href={`#${id}`} className="block whitespace-nowrap px-2 py-2 text-[13px] text-fg-muted transition-colors hover:text-fg sm:px-3">
+                  {label}
                 </a>
               </li>
             ))}
           </ul>
           {profile.cvUrl && (
-            <a href={profile.cvUrl} download className="shrink-0 rounded-full bg-accent px-3 py-1.5 text-ink transition-colors hover:bg-fg">
-              cv
-              <span className="sr-only"> (download CV)</span>
+            <a href={profile.cvUrl} download className="shrink-0 rounded-ui bg-fg px-3 py-1.5 text-[13px] font-medium text-bg hover:opacity-85">
+              CV
             </a>
           )}
         </nav>
