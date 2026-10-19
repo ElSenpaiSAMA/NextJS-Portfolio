@@ -59,7 +59,7 @@ server errors land in the same Vercel log stream. A per-page cap prevents error 
 Next.js 16 (App Router, static single page, `next/image`) · React 19 · TypeScript (strict) · Tailwind CSS 4 ·
 Formspree (contact) · Vitest + Testing Library · Playwright + axe · Lighthouse CI · Vercel.
 
-"Ship it." design: you operate the portfolio the way a DevOps engineer would. A Deploy button runs the site's real CI stages, streams a log computed from the real content, and reports the measured time. An editable `portfolio.config.ts` restyles the whole page live (accent, light/dark theme, corner radius, font). It is parsed strictly (no eval), shows editor-style problems, and is saved per visitor. The stack is a physics toy (matter-js) whose blocks you can grab and throw. Projects read like a deployments dashboard, the experience like a CHANGELOG, and contact like opening an issue. The light dev-tool theme uses Geist and Geist Mono. GSAP, Lenis and matter-js load on demand, and everything respects prefers-reduced-motion. The interactions are documented for AI agents in `.claude/skills/ship-interactions`.
+"Companion" design: a black, blue-glow portfolio with a guide at your side. On desktop a sticky panel shows the author's avatar, and it narrates the section you're reading with a typewriter effect, from text generated out of the CV data, not invented. It answers quick questions (where he worked, stack, availability) from the same data, and has a Deploy tab that runs the site's real CI stages. On phones it becomes a floating "Ask Matias" button that opens a native dialog. Other details: numbered 01–05 section pills that light up as you scroll, a handwritten "hello, I'm" with a self-drawing squiggle, and experience cards whose tech tags (with logos) are detected from their own text. The stack is a physics toy (matter-js), and contact offers Gmail, Outlook, the mail app or copying the address. Inspired by ignaciobrenas.vercel.app. The interactions are documented for AI agents in `.claude/skills/companion`.
 
 ## Local development
 
@@ -97,9 +97,10 @@ app/
   api/log/route.ts          browser log ingestion
   components/
     layout/                 welcome screen, scroll choreography, header, footer
-    ship/                   DeployWidget, ConfigEditor, StackPlayground (matter-js)
-    sections/               Hero, Config, Projects, Experience, Stack, About, Contact + ContactForm
-    ui/                     small primitives (Section, ButtonLink, icons)
+    companion/              Companion (sticky panel / mobile dialog), CompanionPanel, Typewriter
+    ship/                   DeployWidget, StackPlayground (matter-js)
+    sections/               Hero, Hub, Experience, Projects, Stack, Certifications, About, Contact + ContactForm
+    ui/                     small primitives (Section, ButtonLink, TechTag, icons)
   data/                     all copy and content, typed — edit here, not in components
   lib/                      logger, client logger, log schema, contact, theme, site config
 public/

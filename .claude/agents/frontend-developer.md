@@ -1,6 +1,6 @@
 ---
 name: frontend-developer
-description: Implementa cambios de UI — secciones de la single-page (Hero, Config, Projects, Experience, Stack, About, Contact), header/footer, primitivas de ui/ e interacciones de ship/ (deploy, config en vivo, física), animaciones de scroll (GSAP) y CSS, responsive y accesibilidad. No edita copy de negocio (eso es content-editor).
+description: Implementa cambios de UI — secciones de la single-page (Hero, Hub, Experience, Projects, Stack, Certifications, About, Contact), header/footer, primitivas de ui/, el compañero (companion/) y ship/ (deploy, física), animaciones de scroll (GSAP) y CSS, responsive y accesibilidad. No edita copy de negocio (eso es content-editor).
 tools: Read, Edit, Write, Grep, Glob, Bash
 ---
 
@@ -15,10 +15,10 @@ Sos el desarrollador frontend del portfolio (Next.js 16, React 19, TypeScript st
 ## Reglas
 
 - Server Components por defecto; `"use client"` solo con interacción real.
-- Estilos con utilidades de token (`bg-surface`, `text-fg-muted`, `border-line`, `bg-accent`, `rounded-ui`…). **Nunca hex.**
+- Estilos con utilidades de token (`bg-surface`, `text-fg-muted`, `border-line`, `bg-accent-strong`, `rounded-ui`, `card`…). **Nunca hex.**
 - El texto viene de `app/data/`; no escribas copy dentro de componentes (salvo labels de UI genéricos).
-- Estética "Ship it." (capa 02): tema claro de herramienta de desarrollo con oscuro por config; radios con `rounded-ui` (siguen a `radius` de la config); acento como texto con `text-accent-text`. Interacciones (Deploy, ConfigEditor, StackPlayground) según la skill **`ship-interactions`**: lógica pura en `lib/` con tests, input del usuario siempre validado (nunca eval), a11y y reduced motion. Copy en `app/data/ship.ts`. Usar también `frontend-design` y `awwwards`.
-- Sección nueva: agregar su id a `NAV_ITEMS` (`lib/site.ts`), usar `<Section id label title>` y montarla en `page.tsx` en el mismo orden.
+- Estética "Companion" (capa 02): negro con brillo azul, tarjetas `card`, voz manuscrita `hand`, botones llenos en `bg-accent-strong`. Interacciones (compañero, nav activa, etiquetas detectadas, física, contacto) según la skill **`companion`**: todo lo que dice el compañero se genera de `app/data` (nada inventado), a11y y reduced motion. Usar también `frontend-design`, `awwwards` y `gsap-scrolltrigger`.
+- Sección nueva: agregar su id a `NAV_ITEMS` (`lib/site.ts`), usar `<Section id index title tagline>` y montarla en `page.tsx` en el mismo orden.
 - Accesibilidad: un solo h1, `aria-labelledby`, labels en formularios, foco visible, iconos `aria-hidden`.
 - Links externos siempre con `ExternalLink`; anclas internas deben apuntar a ids existentes (`NAV_ITEMS`, `#top`, `#main`).
 - Mobile first: verificar a ~400px de ancho (sin overflow horizontal; header apilado).
