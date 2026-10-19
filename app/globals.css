@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 /*
- * "Companion" — a black, glowing portfolio with a guide at your side: a sticky
- * panel that narrates what you're looking at, answers questions and deploys
- * the site. Ink-black base, one electric blue for actions and glow, mint for
- * live states, a handwritten voice for asides. Every text/background pair
+ * "Pipeline" — the page is a CI/CD run. A glowing spine runs down the left;
+ * each section is a stage that goes pending → running → passed as you read,
+ * printing its log. Ink-black base, electric blue for the job and actions,
+ * amber while a stage runs, green once it passes. Every text/background pair
  * meets WCAG AA (axe in CI).
  */
 
@@ -47,7 +47,6 @@
   /* Injected by next/font in app/layout.tsx */
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, Menlo, monospace;
-  --font-hand: var(--font-caveat), "Segoe Print", cursive;
 }
 
 body {
@@ -82,13 +81,6 @@ body {
   text-wrap: balance;
 }
 
-/* The handwritten voice: "hello, I'm", section taglines. */
-@utility hand {
-  font-family: var(--font-hand);
-  font-weight: 600;
-  letter-spacing: 0;
-}
-
 /* Cards that light up their edge on hover. */
 @utility card {
   border: 1px solid var(--line);
@@ -103,22 +95,7 @@ body {
   }
 }
 
-/* The wavy underline under the name draws itself (stroke-dashoffset). */
-.squiggle path {
-  stroke-dasharray: 420;
-  stroke-dashoffset: 420;
-  animation: squiggle-draw 1.2s var(--ease-out) 0.4s forwards;
-}
-html:not([data-intro="seen"]) .squiggle path {
-  animation-delay: 3.3s;
-}
-@keyframes squiggle-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-/* Typing caret for the companion's speech bubble. */
+/* Typing caret (welcome screen). */
 .caret {
   display: inline-block;
   width: 0.5em;
@@ -144,24 +121,9 @@ html:not([data-intro="seen"]) .squiggle path {
   }
 }
 
-/* The companion's avatar breathes slowly. */
-.float {
-  animation: float 5s ease-in-out infinite;
-}
-@keyframes float {
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .squiggle path {
-    animation: none;
-    stroke-dashoffset: 0;
-  }
   .caret,
-  .pulse-dot,
-  .float {
+  .pulse-dot {
     animation: none;
   }
   *,
