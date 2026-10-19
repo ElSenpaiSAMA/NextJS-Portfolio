@@ -31,11 +31,10 @@ export const heroFootage: FootageClip = {
   },
 };
 
-/** Build / Ship / Run: a circuit board — the scroll moves the camera across it. */
-export const storyFootage: FootageClip = {
+/** Contact: a circuit board with amber lights, rendered as ASCII behind the closing section. */
+export const circuitFootage: FootageClip = {
   poster: "/media/circuit-poster.jpg",
   loop: { mp4: "/media/circuit-loop.mp4", webm: "/media/circuit-loop.webm" },
-  scrub: { mp4: "/media/circuit-scrub.mp4", webm: "/media/circuit-scrub.webm" },
   source: {
     title: "High tech circuit board with processor (Mixkit 47051)",
     url: "https://mixkit.co/free-stock-video/high-tech-circuit-board-with-processor-47051/",
