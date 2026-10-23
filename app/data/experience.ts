@@ -3,6 +3,16 @@ import type { Certification, EducationItem, ExperienceItem } from "./types";
 /** From the CV, most recent first. */
 export const experience: ExperienceItem[] = [
   {
+    company: "DIPLONAUTIC",
+    location: "Barcelona, Spain",
+    roles: [{ title: "Software Developer", period: "10/2026 – Present" }],
+    highlights: [
+      "Develop the company's software end to end: I choose the technology, architecture and design, and build with AI coding agents (Claude Code), verifying every change with tests.",
+      "Administer the company's systems and IT infrastructure.",
+      "Provide helpdesk support to the team, solving day-to-day IT issues.",
+    ],
+  },
+  {
     company: "Imagine Group",
     location: "Barcelona, Spain",
     roles: [{ title: "Software Developer", period: "05/2026 – 07/2026" }],
@@ -30,12 +40,13 @@ export const experience: ExperienceItem[] = [
 ];
 
 export const education: EducationItem[] = [
-  { title: "Degree in Applied Data Science", institution: "UOC (Universitat Oberta de Catalunya)", period: "Expected 09/2026" },
-  { title: "CFGS in Multiplatform App Development (DAM)", institution: "Prat Educació, Barcelona", period: "09/2023 – 05/2025" },
+  { title: "Degree in Applied Data Science (in progress)", institution: "UOC (Universitat Oberta de Catalunya)", period: "09/2026 – 05/2030" },
+  { title: "CFGS in Multiplatform App Development (DAM)", institution: "Prat Educació, Barcelona", period: "09/2023 – 06/2025" },
   { title: "Electronic Technician", institution: "Instituto Leonardo Murialdo, Buenos Aires", period: "03/2019 – 12/2022" },
 ];
 
 export const certifications: Certification[] = [
+  { issuer: "Anthropic", name: "Claude Code in Action", date: "03/2026" },
   { issuer: "IBM", name: "Python for Data Science, AI & Development", date: "03/2026" },
   { issuer: "IBM", name: "Introduction to Data Engineering", date: "03/2026" },
   { issuer: "UTN.BA", name: "Python 3, Beginner Level", date: "2023" },
