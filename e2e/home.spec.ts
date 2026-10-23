@@ -1,3 +1,4 @@
+import { projects } from "../app/data/projects";
 import { expect, test } from "./fixtures";
 
 const SECTIONS = ["stack", "projects", "experience", "about", "contact"];
@@ -34,7 +35,7 @@ test.describe("home page", () => {
         { timeout: 15_000 },
       )
       .toEqual([]);
-    expect(await page.locator(`#projects img[alt^="Screenshot"]`).count()).toBe(6);
+    expect(await page.locator(`#projects img[alt^="Screenshot"]`).count()).toBe(projects.length);
   });
 
   test("the session runs as you read: commands type out and the status bar follows", async ({ page }) => {

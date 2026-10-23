@@ -7,6 +7,7 @@ import { SHELL_COMMANDS } from "../data/shell";
 import { stack } from "../data/stack";
 import { complete, runCommand, shortHash, since } from "./shell";
 
+const bySlug = (slug: string) => projects.find((p) => p.slug === slug)!;
 const content = { profile, stack, projects, experience, education, certifications, stages: STAGES };
 const text = (input: string) =>
   runCommand(input, content)
@@ -28,7 +29,7 @@ describe("runCommand", () => {
   it("prints files from the real content", () => {
     expect(text("cat about.md")).toContain(profile.about[0]);
     expect(text("cat ~/stack.yaml")).toContain("  - Kubernetes  # Pods, Deployments, Services, Ingress");
-    expect(text("cat projects/mira")).toContain(projects[0].description);
+    expect(text("cat projects/mira")).toContain(bySlug("mira").description);
     expect(text("cat ./projects/portfolio/README.md")).toContain("# Portfolio");
     expect(text("ls projects")).toBe(projects.map((p) => `${p.slug}/`).join("  "));
     expect(text("git log")).toContain(`${experience[0].roles[0].period}  ${experience[0].roles[0].title}`);
@@ -46,8 +47,8 @@ describe("runCommand", () => {
     expect(runCommand("cd", content).action).toEqual({ type: "scroll", id: "top" });
     expect(runCommand("cd ~/about.md", content).action).toEqual({ type: "scroll", id: "about" });
     expect(runCommand("make deploy", content).action).toEqual({ type: "scroll", id: "contact" });
-    expect(runCommand("open mira", content).action).toEqual({ type: "open", url: projects[0].siteLink });
-    expect(runCommand("open spotify-pipeline", content).action).toEqual({ type: "open", url: projects[1].github });
+    expect(runCommand("open mira", content).action).toEqual({ type: "open", url: bySlug("mira").siteLink });
+    expect(runCommand("open spotify-pipeline", content).action).toEqual({ type: "open", url: bySlug("spotify-pipeline").github });
     expect(runCommand("cv", content).action).toEqual({ type: "download", url: profile.cvUrl });
     expect(runCommand("clear", content).action).toEqual({ type: "clear" });
   });
