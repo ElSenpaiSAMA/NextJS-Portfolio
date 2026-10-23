@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/ElSenpaiSAMA/NextJS-Portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/ElSenpaiSAMA/NextJS-Portfolio/actions/workflows/ci.yml)
 
-Personal site of **Matias Speroni**, Backend & DevOps Engineer based in Barcelona.
+Personal site of **Matias Speroni**, Software Developer (Backend & DevOps) based in Barcelona.
 Live: **https://matias-nicolas-speroni.vercel.app**
 
 The site is small on purpose; the engineering around it is the point. Every change goes
