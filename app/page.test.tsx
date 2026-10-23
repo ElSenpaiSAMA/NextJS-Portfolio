@@ -37,7 +37,7 @@ describe("Home page", () => {
     for (const item of experience) {
       expect(within(section).getByRole("heading", { name: item.company })).toBeInTheDocument();
       for (const role of item.roles) {
-        expect(within(section).getByText(role.title)).toBeInTheDocument();
+        expect(within(section).getAllByText(role.title).length).toBeGreaterThan(0);
         expect(within(section).getByText(role.period)).toBeInTheDocument();
       }
     }

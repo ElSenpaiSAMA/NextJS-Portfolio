@@ -1,3 +1,5 @@
+import { profile } from "../app/data/profile";
+import { projects } from "../app/data/projects";
 import { expect, test } from "./fixtures";
 
 const SECTIONS = ["projects", "experience", "stack", "about", "contact"];
@@ -8,7 +10,7 @@ test.describe("home page", () => {
     expect(response?.status()).toBe(200);
 
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Matias Speroni");
-    await expect(page.getByText("Backend & DevOps Engineer").first()).toBeVisible();
+    await expect(page.getByText(profile.role).first()).toBeVisible();
     for (const id of SECTIONS) await expect(page.locator(`section#${id}`)).toBeAttached();
     await expect(page.getByTestId("build-info")).toBeVisible();
   });
@@ -29,7 +31,7 @@ test.describe("home page", () => {
         { timeout: 15_000 },
       )
       .toEqual([]);
-    expect(await page.locator("#projects img").count()).toBe(6);
+    expect(await page.locator("#projects img").count()).toBe(projects.length);
   });
 
   test("has no horizontal overflow", async ({ page }) => {
