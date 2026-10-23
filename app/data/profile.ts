@@ -4,14 +4,14 @@ const REPO_URL = "https://github.com/ElSenpaiSAMA/NextJS-Portfolio";
 
 export const profile: Profile = {
   name: "Matias Speroni",
-  role: "Backend & DevOps Engineer",
+  role: "Software Developer · Backend & DevOps",
   location: "Barcelona, Spain",
   availability: "Open to new opportunities",
   intro:
     "Software developer moving into Platform / DevOps: CI/CD pipelines with GitHub Actions, Docker images and self-hosted deployments with isolated development and production environments.",
   highlights: ["Software Developer & SysAdmin at DIPLONAUTIC", "Previously at Imagine Group & Novicell", "Applied Data Science at UOC"],
   about: [
-    "Backend & DevOps-minded software developer. Today I'm a Software Developer at DIPLONAUTIC, where I also run systems administration and helpdesk. Before that, at Imagine I set up CI/CD pipelines with GitHub Actions that build and ship Docker images automatically, and kept dev and production running as separate, isolated environments for every app we deployed.",
+    "Backend & DevOps-minded software developer. Today I'm a Software Developer at DIPLONAUTIC, where I also back up the IT team on systems administration and helpdesk. Before that, at Imagine I set up CI/CD pipelines with GitHub Actions that build and ship Docker images automatically, and kept dev and production running as separate, isolated environments for every app we deployed.",
     "In production since 11/2024 with .NET/C#, PostgreSQL and Python automation — promoted from intern to developer in under six months. I also build and manage AI agents and agentic workflows, use AI coding agents daily, and I'm growing into infrastructure as code, Kubernetes and cloud.",
     "Outside of work: technology, cinema and music — and travelling to discover new cultures.",
   ],

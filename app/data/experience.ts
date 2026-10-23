@@ -8,8 +8,7 @@ export const experience: ExperienceItem[] = [
     roles: [{ title: "Software Developer", period: "10/2026 – Present" }],
     highlights: [
       "Develop the company's software end to end: I choose the technology, architecture and design, and build with AI coding agents (Claude Code), verifying every change with tests.",
-      "Administer the company's systems and IT infrastructure.",
-      "Provide helpdesk support to the team, solving day-to-day IT issues.",
+      "Also cover systems administration and helpdesk, backing up the IT team when they're short-handed.",
     ],
   },
   {
