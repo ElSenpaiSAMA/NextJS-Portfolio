@@ -14,7 +14,7 @@ const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "sw
 
 const TITLE = `${profile.name} — ${profile.role}`;
 const DESCRIPTION =
-  "Backend & DevOps engineer in Barcelona. CI/CD with GitHub Actions, Docker images and self-hosted deployments (Coolify, Pomerium Zero Trust), Linux, and .NET, Python and TypeScript backends.";
+  "Software developer in Barcelona focused on backend and DevOps: CI/CD with GitHub Actions, Docker images and self-hosted deployments (Coolify, Pomerium Zero Trust), Linux, and .NET, Python and TypeScript backends.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
