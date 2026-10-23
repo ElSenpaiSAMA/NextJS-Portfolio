@@ -3,7 +3,7 @@ import { expect, test } from "./fixtures";
 test.describe("SEO & metadata", () => {
   test("home exposes title, description, Open Graph and JSON-LD", async ({ page }) => {
     await page.goto("/");
-    await expect(page).toHaveTitle("Matias Speroni — Backend & DevOps Engineer");
+    await expect(page).toHaveTitle("Matias Speroni — Software Developer · Backend & DevOps");
 
     const meta = (selector: string) => page.locator(selector).first().getAttribute("content");
     expect(await meta('meta[name="description"]')).toBeTruthy();

@@ -1,3 +1,4 @@
+import { profile } from "../app/data/profile";
 import { projects } from "../app/data/projects";
 import { expect, test } from "./fixtures";
 
@@ -9,7 +10,7 @@ test.describe("home page", () => {
     expect(response?.status()).toBe(200);
 
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Matias Speroni");
-    await expect(page.getByText("Backend & DevOps Engineer").first()).toBeVisible();
+    await expect(page.getByText(profile.role).first()).toBeVisible();
     for (const id of SECTIONS) await expect(page.locator(`section#${id}`)).toBeAttached();
     await expect(page.getByTestId("build-info")).toBeVisible();
   });
