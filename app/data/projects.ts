@@ -7,7 +7,7 @@ export const projects: Project[] = [
     slug: "diplonautic",
     title: "Diplonautic",
     description:
-      "Started as the technical test for DIPLONAUTIC and now in production with real users, maintained by me: a corporate website and staff intranet for a Barcelona marine-repair company. Permissions live in PostgreSQL (Row Level Security, triggers, invite-only sign-up); the intranet has a forum, time tracking, work orders, holidays and reports, plus an AI assistant that answers with real data and the asker's permissions. ~175 pgTAP, ~190 Vitest and Playwright E2E tests run on GitHub Actions, with staging and production on Vercel.",
+      "Built as the technical test for DIPLONAUTIC: a corporate website and staff intranet for a Barcelona marine-repair company. Permissions live in PostgreSQL (Row Level Security, triggers, invite-only sign-up); the intranet has a forum, time tracking, work orders, holidays and reports, plus an AI assistant that answers with real data and the asker's permissions. ~175 pgTAP, ~190 Vitest and Playwright E2E tests run on GitHub Actions, with staging and production on Vercel.",
     tech: ["Next.js 16", "Supabase", "PostgreSQL", "GitHub Actions", "LLM APIs"],
     github: `${GITHUB}/PSA-SAAS`,
     siteLink: "https://diplonautic.vercel.app",
